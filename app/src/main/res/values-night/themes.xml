@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Kuhokini" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+         <item name="colorPrimary">@color/white</item>
+    </style>
+
+    <style name="Theme.Kuhokini" parent="Base.Theme.Kuhokini" />
+    <style name="Theme.KuhokiniAdmin" parent="Base.Theme.Kuhokini" />
+    <style name="TabLayout" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">@dimen/_10font_mdp</item>
+    </style>
+</resources>

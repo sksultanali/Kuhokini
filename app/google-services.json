@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "346314401071",
+    "firebase_url": "https://kuhokini-ca990-default-rtdb.firebaseio.com",
+    "project_id": "kuhokini-ca990",
+    "storage_bucket": "kuhokini-ca990.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346314401071:android:f24b828a63c0e41499adda",
+        "android_client_info": {
+          "package_name": "com.developerali.kuhokiniadmin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkv558lBmhh97Femy-ti7T6-WIbfs715A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346314401071:android:e297ffc7161b5d2999adda",
+        "android_client_info": {
+          "package_name": "com.kuhokini"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkv558lBmhh97Femy-ti7T6-WIbfs715A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
