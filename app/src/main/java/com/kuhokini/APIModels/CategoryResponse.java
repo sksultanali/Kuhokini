@@ -1,6 +1,7 @@
 package com.kuhokini.APIModels;
 
-import com.developerali.Models.CategoryModel;
+
+import com.kuhokini.Models.CategoryModel;
 
 import java.util.List;
 

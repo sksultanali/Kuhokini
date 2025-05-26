@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="@dimen/_5mdp"
+    android:background="@drawable/back_white_border_grey_corner">
+
+    <TextView
+        android:id="@+id/expireDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6mdp"
+        android:background="@drawable/text_background"
+        android:paddingStart="@dimen/_10mdp"
+        android:paddingTop="@dimen/_2mdp"
+        android:paddingEnd="@dimen/_5mdp"
+        android:paddingBottom="@dimen/_2mdp"
+        android:text="Expire: 20 April"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_9font_mdp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/codeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Code"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:layout_marginEnd="@dimen/_10mdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/_11font_mdp"/>
+    <TextView
+        android:id="@+id/code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="COUP100"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:layout_marginEnd="@dimen/_10mdp"
+        app:layout_constraintTop_toBottomOf="@id/codeLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:drawablePadding="@dimen/_5mdp"
+        android:drawableEnd="@drawable/copy_16"
+        android:textSize="@dimen/_11font_mdp"/>
+    <TextView
+        android:id="@+id/typeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Type"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:layout_marginStart="@dimen/_10mdp"
+        app:layout_constraintTop_toBottomOf="@id/expireDate"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="@dimen/_11font_mdp"/>
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Flat Discount"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:layout_marginStart="@dimen/_10mdp"
+        android:layout_marginBottom="@dimen/_15mdp"
+        app:layout_constraintTop_toBottomOf="@id/typeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="@dimen/_11font_mdp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/delete"
+        android:layout_width="@dimen/_24mdp"
+        android:layout_height="@dimen/_24mdp"
+        android:src="@drawable/baseline_delete_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/oval_red"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="@dimen/_5mdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_background_reverse"
+        android:paddingStart="@dimen/_10mdp"
+        android:paddingTop="@dimen/_2mdp"
+        android:paddingEnd="@dimen/_5mdp"
+        android:paddingBottom="@dimen/_2mdp"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="@dimen/_9font_mdp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/code"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@
 
     <color name="gray">#f8f8f8</color>
     <color name="main_color">#393282</color>
+    <color name="dark_main">#393282</color>
     <color name="main_2nd">#3871c1</color>
 
     <color name="purple">#673AB7</color>
@@ -15,6 +16,12 @@
     <color name="icon_color">#757272</color>
     <color name="darkGray">#D5D7DC</color>
     <color name="selected_date">#FFCCCCCC</color>
+    <color name="light_main">#1f9e68</color>
+    <color name="light_lighter_main">#4EFFB4</color>
+
+    <color name="corner_black_shade">#46000000</color>
+    <color name="centre_black_shade">#14000000</color>
+    <color name="backgroundColour">#E3DADA</color>
 
     <color name="green">#4CAF50</color>
     <color name="greenDark">#3A933D</color>
@@ -23,6 +30,7 @@
     <color name="light_orange">#B9FDDDD3</color>
     <color name="light_yellow">#D0FBEFC7</color>
     <color name="Yellow">#FFEB3B</color>
+    <color name="discount_colour">#3F51B5</color>
 
     <color name="transparentColor" >#00FFFFFF</color>
     <color name="light_blue_purple">#96A6FF</color>

@@ -1,6 +1,7 @@
 package com.kuhokini.APIModels;
 
-import com.developerali.Models.CouponModel;
+
+import com.kuhokini.Models.CouponModel;
 
 import java.util.List;
 

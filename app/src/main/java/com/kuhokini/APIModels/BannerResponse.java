@@ -1,6 +1,7 @@
 package com.kuhokini.APIModels;
 
-import com.developerali.Models.BannerModel;
+
+import com.kuhokini.Models.BannerModel;
 
 import java.util.List;
 

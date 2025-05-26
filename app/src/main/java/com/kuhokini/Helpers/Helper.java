@@ -25,10 +25,10 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.developerali.kuhokiniadmin.R;
-import com.developerali.kuhokiniadmin.databinding.CustomDialogBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.firebase.database.DataSnapshot;
+import com.kuhokini.Activities.WebView;
+import com.kuhokini.R;
+import com.kuhokini.databinding.CustomDialogBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -310,61 +310,6 @@ public class Helper {
         return videoId;
     }
 
-    public interface RoomAvailabilityCallback {
-        void onRoomAvailability(int availability);
-    }
-    public static void roomAvailable(Activity activity, DataSnapshot snapshot, RoomAvailabilityCallback callback) {
-        String dateKey = Helper.dateKey(Helper.convertStToLocalD(Helper.StartDate));
-        if (snapshot.child("bookingNAvail").child(dateKey).exists()) {
-
-            if (snapshot.child("bookingNAvail").child(dateKey)
-                    .child("roomsAvail").exists()){
-                Helper.RoomAvailed = Integer.parseInt(snapshot.child("bookingNAvail").child(dateKey)
-                        .child("roomsAvail").getValue(String.class));
-            }
-            if (snapshot.child("bookingNAvail").child(dateKey)
-                    .child("enable").exists()){
-
-                Helper.Enable = snapshot.child("bookingNAvail").child(dateKey)
-                        .child("enable").getValue(Boolean.class);
-            }else {
-                Helper.Enable = true;
-            }
-
-            if (Helper.Enable){
-                if (Helper.RoomAvailed > 1){
-                    callback.onRoomAvailability(Helper.RoomAvailed);
-                }else if (Helper.RoomAvailed == 1){
-                    callback.onRoomAvailability(1);
-                }else if (Helper.RoomAvailed < 1){
-                    callback.onRoomAvailability(0);
-                }
-            }else {
-                callback.onRoomAvailability(0);
-            }
-
-        } else if (snapshot.child("availability").exists()) {
-
-            Long startDateOnServer = snapshot.child("availability").child("startDate").getValue(Long.class);
-            Long endDateOnServer = snapshot.child("availability").child("endDate").getValue(Long.class);
-
-            LocalDate start = Helper.convertLongToLocalDate(startDateOnServer);
-            LocalDate end = Helper.convertLongToLocalDate(endDateOnServer);
-
-            if (end.isAfter(Helper.convertStToLocalD(Helper.EndDate)) &&
-                    start.isBefore(Helper.convertStToLocalD(Helper.StartDate))) {
-                callback.onRoomAvailability(1);
-            } else if (start.isEqual(Helper.convertStToLocalD(Helper.StartDate)) &&
-                    end.isAfter(Helper.convertStToLocalD(Helper.EndDate))){
-                callback.onRoomAvailability(1);
-            }else if (start.isEqual(Helper.convertStToLocalD(Helper.StartDate)) &&
-                    end.isEqual(Helper.convertStToLocalD(Helper.EndDate))) {
-                callback.onRoomAvailability(1);
-            }else {
-                callback.onRoomAvailability(0);
-            }
-        }
-    }
     public static void plusBtn(Context context, EditText textView){
         String no = textView.getText().toString();
         int number = Integer.parseInt(no);
@@ -386,6 +331,16 @@ public class Helper {
             textView.setText(String.valueOf(newNum));
         }else {
             Toast.makeText(context, "value exceed", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static void openLink(Activity activity, String link){
+        if (Helper.isChromeCustomTabsSupported(activity)){
+            Helper.openChromeTab(link, activity);
+        }else {
+            Intent i = new Intent(activity.getApplicationContext(), WebView.class);
+            i.putExtra("share", link);
+            activity.startActivity(i);
         }
     }
 

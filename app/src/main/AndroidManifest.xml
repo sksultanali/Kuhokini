@@ -26,13 +26,44 @@
         android:theme="@style/Theme.Kuhokini"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.ProductDetails"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.SearchResult"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.CheckOutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.CartActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.WishListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.MenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Activities.WebView"
+            android:exported="false" />
     </application>
 
 </manifest>

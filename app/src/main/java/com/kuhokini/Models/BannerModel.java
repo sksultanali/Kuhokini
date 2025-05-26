@@ -4,6 +4,9 @@ public class BannerModel {
     private String id;
     private String serial;
     private String imageUrl;
+    private String message;
+    private String link;
+    private String btnTxt;
 
     public String getId() {
         return id;
@@ -27,5 +30,17 @@ public class BannerModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public String getBtnTxt() {
+        return btnTxt;
     }
 }
