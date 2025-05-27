@@ -5,9 +5,8 @@
     android:layout_width="@dimen/_150mdp"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_5mdp"
-    app:cardCornerRadius="@dimen/_10mdp"
+    app:cardCornerRadius="@dimen/_5mdp"
     android:background="@drawable/back_white_border_grey">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +15,7 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_105mdp"
-            app:iss_auto_cycle="true"
+            app:iss_auto_cycle="false"
             app:iss_corner_radius="6"
             app:iss_delay="0"
             app:iss_selected_dot="@color/transparentColor"
@@ -30,7 +29,6 @@
             android:id="@+id/offer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6mdp"
             android:background="@drawable/text_background"
             android:paddingStart="@dimen/_10mdp"
             android:paddingTop="@dimen/_2mdp"
@@ -137,8 +135,33 @@
                     android:textSize="@dimen/_9font_mdp" />
             </LinearLayout>
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <LinearLayout
+            android:id="@+id/wishList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10mdp"
+            android:background="@drawable/oval_click_effect"
+            android:padding="@dimen/_4mdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <com.like.LikeButton
+                android:id="@+id/shareBtn"
+                android:layout_width="@dimen/_16mdp"
+                android:layout_height="@dimen/_16mdp"
+                app:anim_scale_factor="10"
+                app:circle_end_color="@color/melon"
+                app:circle_start_color="@color/main_2nd"
+                app:dots_primary_color="@color/main_color"
+                app:dots_secondary_color="@color/dark_main"
+                app:icon_size="@dimen/_16mdp"
+                app:icon_type="Star"
+                app:is_enabled="true"
+                app:like_drawable="@drawable/favorite_24"
+                app:liked="false"
+                app:unlike_drawable="@drawable/favorite_white_24" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>

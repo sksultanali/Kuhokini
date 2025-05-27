@@ -53,10 +53,14 @@ public class MainActivity extends AppCompatActivity {
     MainActivity activity;
     private UpdateManager updateManager;
     private List<String> textList = Arrays.asList(
-            "Search 'Rings'...",
-            "or 'Saree'...",
-            "Golden Bangles..."
+            "Discover timeless rings...",
+            "Find your perfect saree...",
+            "Shop elegant golden bangles...",
+            "Explore trending bridal sets...",
+            "Unveil grace with pearl necklaces...",
+            "Adorn yourself with tradition..."
     );
+
     private Handler handler = new Handler(Looper.getMainLooper());
     int nextPageToken, currentPage = 0;
     private boolean isInitialLoad = true;
