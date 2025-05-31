@@ -32,7 +32,7 @@
             android:name=".Activities.SearchResult"
             android:exported="false" />
         <activity
-            android:name=".Activities.CheckOutActivity"
+            android:name=".Activities.CheckOut"
             android:exported="false" />
         <activity
             android:name=".Activities.CartActivity"
