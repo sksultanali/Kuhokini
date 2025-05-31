@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:background="@drawable/backgroud_top_selling">
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_5mdp"
+    android:background="@drawable/back_white_border_grey_corner">
 
     <LinearLayout
         android:id="@+id/profileSegment"
@@ -13,20 +15,17 @@
         android:foregroundGravity="center"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
+        android:padding="@dimen/_8mdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profileImage"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="@dimen/_30mdp"
+            android:layout_height="@dimen/_30mdp"
             android:src="@drawable/placeholder"
             app:civ_border_color="@color/dark_main"
-            app:civ_border_width="2dp"
+            app:civ_border_width="@dimen/_1mdp"
             app:layout_constraintStart_toStartOf="@+id/story"
             app:layout_constraintTop_toTopOf="@+id/story" />
 
@@ -53,6 +52,47 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="@dimen/_5mdp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tint="@color/red"
+            android:src="@drawable/star_half_24" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tint="@color/red"
+            android:src="@drawable/star_half_24" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tint="@color/red"
+            android:src="@drawable/star_half_24" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tint="@color/red"
+            android:src="@drawable/star_half_24" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tint="@color/red"
+            android:src="@drawable/star_half_24" />
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Rated 4)"
+            android:layout_marginStart="@dimen/_5mdp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11font_mdp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/constraintDiscover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +104,7 @@
             android:id="@+id/imageHolder"
             android:layout_width="78dp"
             android:layout_height="78dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="2dp"
@@ -77,6 +117,8 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/placeholder" />
         </androidx.cardview.widget.CardView>
+
+
 
         <TextView
             android:id="@+id/caption"
@@ -103,4 +145,4 @@
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
