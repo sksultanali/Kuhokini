@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/login_background"
+    android:padding="@dimen/_10mdp">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Address"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textAllCaps="true"
+        android:paddingTop="@dimen/_5mdp"
+        android:textSize="@dimen/_11font_mdp"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_5mdp"
+        android:layout_marginTop="@dimen/_2mdp"
+        android:text="Be Sure About Delivery Address"
+        android:textStyle="bold"
+        android:textSize="@dimen/_10font_mdp"
+        android:layout_gravity="center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1mdp"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:background="@color/darkGray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_10font_mdp"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:text="Name"/>
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10mdp"
+        android:background="@drawable/back_white_border_grey_corner"
+        android:layout_marginTop="@dimen/_5mdp"
+        android:textSize="@dimen/_11font_mdp"
+        android:textColor="@color/black"
+        android:inputType="text"
+        android:hint="Enter your name"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_10font_mdp"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:text="Address"/>
+    <EditText
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10mdp"
+        android:background="@drawable/back_white_border_grey_corner"
+        android:layout_marginTop="@dimen/_5mdp"
+        android:textSize="@dimen/_11font_mdp"
+        android:textColor="@color/black"
+        android:inputType="text"
+        android:hint="Enter complete address"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/_4mdp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10font_mdp"
+                android:text="Pin Code"/>
+            <EditText
+                android:id="@+id/pincode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10mdp"
+                android:background="@drawable/back_white_border_grey_corner"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:textSize="@dimen/_11font_mdp"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:hint="Enter your name"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_4mdp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10font_mdp"
+                android:text="State"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/back_white_border_grey_corner"
+                android:padding="@dimen/_2mdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:orientation="vertical">
+                <Spinner
+                    android:id="@+id/stateSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_10font_mdp"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:text="Name"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5mdp"
+        android:background="@drawable/back_white_border_grey_corner"
+        android:orientation="horizontal"
+        android:padding="@dimen/_5mdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5mdp"
+            android:text="+ 91"
+            android:textSize="@dimen/_11font_mdp" />
+
+        <View
+            android:layout_width="@dimen/_1mdp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_5mdp"
+            android:layout_marginEnd="@dimen/_5mdp"
+            android:background="@color/darkGray" />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:hint="Phone Number"
+            android:inputType="number"
+            android:maxLength="10"
+            android:padding="@dimen/_5mdp"
+            android:textSize="@dimen/_11font_mdp"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_10font_mdp"
+        android:layout_marginTop="@dimen/_10mdp"
+        android:text="Landmark (Optional)"/>
+    <EditText
+        android:id="@+id/landmark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10mdp"
+        android:background="@drawable/back_white_border_grey_corner"
+        android:layout_marginTop="@dimen/_5mdp"
+        android:textSize="@dimen/_11font_mdp"
+        android:textColor="@color/black"
+        android:inputType="text"
+        android:hint="Enter landmark"/>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15mdp"
+        android:text="Save Address"/>
+
+</LinearLayout>

@@ -12,6 +12,7 @@ import com.kuhokini.APIModels.RoomImagesResponse;
 import com.kuhokini.APIModels.TagsResponse;
 import com.kuhokini.APIModels.UserResponse;
 import com.kuhokini.APIModels.VariantResponse;
+import com.kuhokini.Models.AddressResponse;
 import com.kuhokini.Notification.NotificationRequest;
 import com.kuhokini.Notification.NotificationRequestToken;
 
@@ -78,6 +79,17 @@ public interface ApiService {
 
 
     // Insert APIs
+    @GET("apis/api.php?action=addAddress")
+    Call<ApiResponse> insertAddress(
+            @Query("name") String name,
+            @Query("user_id") String user_id,
+            @Query("phone") String phone,
+            @Query("state") String state,
+            @Query("pin") String pin,
+            @Query("address") String address,
+            @Query("landmark") @Nullable String landmark
+    );
+
     @GET("apis/api.php?action=insertCategory")
     Call<ApiResponse> insertCategory(
             @Query("name") String name,
@@ -95,6 +107,12 @@ public interface ApiService {
     Call<ApiResponse> addBanner(
             @Query("serial") String serial,
             @Query("imageUrl") String imageUrl
+    );
+
+    @GET("apis/api.php?action=updateAddressStatus")
+    Call<ApiResponse> updateAddressStatus(
+            @Query("user_id") String user_id,
+            @Query("address_id") String address_id
     );
 
     @GET("apis/api.php?action=addProduct")
@@ -175,6 +193,11 @@ public interface ApiService {
     @GET("apis/api.php?action=getProductDetails")
     Call<ProductResponse> getProductDetails(
             @Query("id") String id
+    );
+
+    @GET("apis/api.php?action=fetchAddresses")
+    Call<AddressResponse> getAddresses(
+            @Query("user_id") String user_id
     );
 
     @GET("apis/api.php?action=getTagsById")

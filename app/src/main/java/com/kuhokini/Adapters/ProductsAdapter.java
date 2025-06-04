@@ -17,14 +17,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.hishd.tinycart.model.Cart;
+import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.ProductData;
 import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Activities.ProductDetails;
 import com.kuhokini.Helpers.ApiService;
+import com.kuhokini.Helpers.DB_Helper_WishList;
 import com.kuhokini.Helpers.Helper;
 import com.kuhokini.Helpers.RetrofitClient;
+import com.kuhokini.Models.WishListModel;
 import com.kuhokini.R;
 import com.kuhokini.databinding.ChildProductBinding;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,16 +47,27 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     ApiService apiService;
     ProgressDialog progressDialog;
     String tableName;
+    DB_Helper_WishList wishList;
+    Cart cart;
+    OnCartChangedListener cartChangedListener;
 
-    public ProductsAdapter(Activity activity, List<ProductData> models) {
+    public interface OnCartChangedListener {
+        void onCartChanged();
+    }
+
+
+    public ProductsAdapter(Activity activity, List<ProductData> models, OnCartChangedListener cartChangedListener) {
         this.activity = activity;
         this.models = models;
+        this.cartChangedListener = cartChangedListener;
         images.add(new SlideModel(R.drawable.placeholder, ScaleTypes.CENTER_CROP));
+        wishList = new DB_Helper_WishList(activity);
         apiService = RetrofitClient.getClient().create(ApiService.class);
         progressDialog = new ProgressDialog(activity);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Connecting Server...");
         tableName = "products";
+        cart = TinyCartHelper.getCart();
     }
 
     @NonNull
@@ -63,7 +80,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ProductData details = models.get(position);
-        VariantResponse.Variant variantDetails = details.getVariants().get(position);
+        VariantResponse.Variant variantDetails = details.getVariants().get(0);
+
+        holder.binding.wishListBtn.setLiked(wishList.isHotelInWishlist(
+                String.valueOf(details.getProduct_id())
+        ));
 
         if (variantDetails.getImages() != null && !variantDetails.getImages().isEmpty()){
             holder.binding.imageView.setImageList(variantDetails.getImages(), ScaleTypes.CENTER_CROP);
@@ -95,8 +116,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         }
 
         holder.binding.name.setText(details.getProduct_name());
-        //holder.binding.variantsInfo.setText(details.getVariants().size() + " Variants");
-        holder.binding.rating.setText(details.getRating_info().getReview_count() + " Reviews");
+        holder.binding.rating.setText(details.getRating_info().getAverage_rating() + " (" + details.getRating_info().getReview_count() + ")");
         holder.binding.normalPrice.setPaintFlags(holder.binding.normalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         holder.binding.normalPrice.setText("₹"+variantDetails.getNormal_price());
         holder.binding.sellingPrice.setText("₹"+variantDetails.getSelling_price());
@@ -112,7 +132,32 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             activity.startActivity(new Intent(activity.getApplicationContext(), ProductDetails.class));
         });
 
+        holder.binding.wishListBtn.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                WishListModel wishListModel = new WishListModel();
+                wishListModel.setId(String.valueOf(details.getProduct_id()));
+                wishListModel.setName(details.getProduct_name());
+                wishList.addWishList(wishListModel);
+            }
 
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                wishList.deleteSearchQuery(details.getProduct_name());
+            }
+        });
+
+
+
+        holder.binding.addCart.setOnClickListener(v->{
+            cart.addItem(variantDetails,1);
+            if (cartChangedListener != null) {
+                cartChangedListener.onCartChanged();
+            }
+            holder.binding.addCart.setEnabled(false);
+            holder.binding.addCart.setText("Added");
+
+        });
 
 
     }

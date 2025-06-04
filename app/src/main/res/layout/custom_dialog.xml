@@ -51,7 +51,7 @@
                     android:id="@+id/closeBtn"
                     android:layout_width="@dimen/_16mdp"
                     android:layout_height="@dimen/_16mdp"
-                    app:tint="@color/white"
+                    app:tint="@color/icon_color"
                     android:src="@drawable/close_24"/>
             </LinearLayout>
             <LinearLayout

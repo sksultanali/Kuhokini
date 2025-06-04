@@ -30,6 +30,8 @@ import com.google.android.gms.tasks.Task;
 import com.hishd.tinycart.model.Cart;
 import com.hishd.tinycart.model.Item;
 import com.hishd.tinycart.util.TinyCartHelper;
+import com.kuhokini.Account.Login;
+import com.kuhokini.Helpers.Helper;
 import com.kuhokini.databinding.ActivityCheckOutBinding;
 import com.kuhokini.databinding.AddressDialogBoxBinding;
 
@@ -65,6 +67,7 @@ public class CheckOut extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCheckOutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.goBack.setOnClickListener(v->onBackPressed());
 
 //        database = FirebaseDatabase.getInstance();
 //        auth = FirebaseAuth.getInstance();
@@ -97,32 +100,53 @@ public class CheckOut extends AppCompatActivity {
 //        }
 
         String amount = String.valueOf(cart.getTotalPrice());
-        binding.subTotal.setText(amount);
-        binding.total.setText(amount);
-        binding.paymentAmount.setText(amount);
-        binding.payNowText.setText("Pay ₹" + amount + " Now");
+//        binding.subTotal.setText(amount);
+//        binding.total.setText(amount);
+//        binding.paymentAmount.setText(amount);
+//        binding.payNowText.setText("Pay ₹" + amount + " Now");
+//
+//        binding.editAddress.setOnClickListener(v->{
+//            addressInput();
+//        });
 
-        binding.editAddress.setOnClickListener(v->{
-            addressInput();
-        });
-
-        binding.uploadScreenShot.setOnClickListener(v->{
-            if (binding.address.getText().toString().equalsIgnoreCase("edit your address!")){
-                addressInput();
-            }else {
-                ImagePicker.with(this)
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(3072)			//Final image size will be less than 3 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                        .start(85);
-            }
-        });
+//        binding.uploadScreenShot.setOnClickListener(v->{
+//            if (binding.address.getText().toString().equalsIgnoreCase("edit your address!")){
+//                addressInput();
+//            }else {
+//                ImagePicker.with(this)
+//                        .crop()	    			//Crop image(Optional), Check Customization for more option
+//                        .compress(3072)			//Final image size will be less than 3 MB(Optional)
+//                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+//                        .start(85);
+//            }
+//        });
 
 
-        binding.payBtn.setOnClickListener(v->{
+//        binding.payBtn.setOnClickListener(v->{
+//
+//            int paidValue = Integer.parseInt(binding.paymentAmount.getText().toString());
+//
+//        });
 
-            int paidValue = Integer.parseInt(binding.paymentAmount.getText().toString());
+        binding.payNow.setOnClickListener(v->{
+            Helper.showActionDialog(CheckOut.this, "Login Required",
+                    "Please login to place order. Click below login button.",
+                    "Login", "Later", true, new Helper.DialogButtonClickListener() {
+                        @Override
+                        public void onYesButtonClicked() {
+                            startActivity(new Intent(CheckOut.this, Login.class));
+                        }
 
+                        @Override
+                        public void onNoButtonClicked() {
+
+                        }
+
+                        @Override
+                        public void onCloseButtonClicked() {
+
+                        }
+                    });
         });
 
     }
@@ -167,7 +191,7 @@ public class CheckOut extends AppCompatActivity {
                         addressBinding.addressBox.getText().toString() + "\n" +
                         "Pin-code: " + addressBinding.pinCode.getText().toString();
 
-                binding.address.setText(makeAddress);
+//                binding.address.setText(makeAddress);
 
                 addDialog.show();
 
@@ -189,7 +213,7 @@ public class CheckOut extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data != null && data.getData() != null && requestCode == 85){
-            binding.uploadScreenShot.setEnabled(false);
+//            binding.uploadScreenShot.setEnabled(false);
             imageUri = data.getData();
             dialog.show();
         }

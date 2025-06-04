@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,10 +27,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.hishd.tinycart.model.Cart;
+import com.hishd.tinycart.model.Item;
+import com.hishd.tinycart.util.TinyCartHelper;
+import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Activities.WebView;
 import com.kuhokini.R;
 import com.kuhokini.databinding.CustomDialogBinding;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -38,11 +46,17 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Helper {
 
@@ -63,6 +77,7 @@ public class Helper {
     public static String dateWiseChange;
     public static int selectedPosition = -1;
     public static ArrayList<String> list = new ArrayList<>();
+
 
     public static String capitalizeWords(String sentence) {
         if (sentence == null || sentence.trim().isEmpty()) {
@@ -342,6 +357,42 @@ public class Helper {
             i.putExtra("share", link);
             activity.startActivity(i);
         }
+    }
+
+    public static void executeCall(Call<ApiResponse> call, Activity activity, ProgressDialog dialog) {
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                ApiResponse apiResponse = response.body();
+                if (!apiResponse.getStatus().equalsIgnoreCase("success")){
+                    Helper.showActionDialog(activity, apiResponse.getStatus(), apiResponse.getMessage(), "Okay",
+                            null, false, new Helper.DialogButtonClickListener() {
+                                @Override
+                                public void onYesButtonClicked() {}
+                                @Override
+                                public void onNoButtonClicked() {}
+                                @Override
+                                public void onCloseButtonClicked() {}
+                            });
+                }else {
+                    Toast.makeText(activity, apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Helper.showActionDialog(activity, "Failed", t.getLocalizedMessage(), "Okay",
+                        null, false, new Helper.DialogButtonClickListener() {
+                            @Override
+                            public void onYesButtonClicked() {}
+                            @Override
+                            public void onNoButtonClicked() {}
+                            @Override
+                            public void onCloseButtonClicked() {}
+                        });
+            }
+        });
     }
 
     public interface DialogButtonClickListener {

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Account.Login">
+    <LinearLayout
+        android:id="@+id/firstLn"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:elevation="@dimen/_2mdp"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/goBack"
+            android:layout_width="@dimen/_20mdp"
+            android:layout_height="@dimen/_20mdp"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:layout_marginEnd="@dimen/_10mdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/arrow_back_24"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14font_mdp"
+            android:text="Login"/>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstLn">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/_20mdp"
+                android:padding="@dimen/_15mdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter Mobile Number"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_14font_mdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5mdp"
+                    android:layout_marginTop="@dimen/_2mdp"
+                    android:layout_marginEnd="@dimen/_5mdp"
+                    android:gravity="center"
+                    android:text="We will send you an OTP to verify your phone number"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12font_mdp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15mdp"
+                    android:background="@drawable/back_white_border_grey_corner"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5mdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5mdp"
+                        android:text="+ 91"
+                        android:textSize="@dimen/_14font_mdp" />
+
+                    <View
+                        android:layout_width="@dimen/_1mdp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_5mdp"
+                        android:layout_marginEnd="@dimen/_5mdp"
+                        android:background="@color/darkGray" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:hint="Phone Number"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:padding="@dimen/_5mdp"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:background="@drawable/click_effect_main"
+                    android:drawablePadding="@dimen/_5mdp"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/_8mdp"
+                    android:paddingBottom="@dimen/_8mdp"
+                    android:text="Request OTP"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:background="@drawable/click_effect_main"
+                    android:drawablePadding="@dimen/_5mdp"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/_8mdp"
+                    android:paddingBottom="@dimen/_8mdp"
+                    android:visibility="gone"
+                    android:text="Edit Number"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+
+                <in.aabhasjindal.otptextview.OtpTextView
+                    android:id="@+id/otp_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_25mdp"
+                    android:textColor="@color/black"
+                    app:bar_enabled="true"
+                    app:bar_height="2dp"
+                    app:height="40dp"
+                    app:otp_box_background="@drawable/back_white_border_grey_corner"
+                    app:length="4"
+                    app:otp_text_size="24dp"
+                    app:width="40dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="OTP request in 00:59 sec"
+                        android:textSize="@dimen/_11font_mdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Resend OTP"
+                        android:textColor="@color/blue_purple"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="@dimen/_60mdp"
+                android:layout_height="@dimen/_60mdp"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:visibility="gone"
+                app:lottie_rawRes="@raw/login" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

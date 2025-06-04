@@ -1,6 +1,9 @@
 package com.kuhokini.APIModels;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.hishd.tinycart.model.Item;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +37,7 @@ public class VariantResponse {
         this.variants = variants;
     }
 
-    public class Variant {
+    public class Variant implements Item, Serializable {
         private String id;
         private int product_id;
         private String varient_name;
@@ -42,6 +45,7 @@ public class VariantResponse {
         private String varient_des;
         private int selling_price;
         private int normal_price;
+        private int quantity;
         ArrayList<SlideModel> images; // You can use List<String> if images is a comma-separated string of URLs
 
         // Getters and setters
@@ -110,8 +114,21 @@ public class VariantResponse {
         }
 
         @Override
-        public String toString() {
-            return varient_name;
+        public BigDecimal getItemPrice() {
+            return new BigDecimal(selling_price);
+        }
+
+        @Override
+        public String getItemName() {
+            return id;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
         }
     }
 

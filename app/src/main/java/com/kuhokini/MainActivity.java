@@ -22,11 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.hishd.tinycart.model.Cart;
+import com.hishd.tinycart.model.Item;
+import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.BannerResponse;
 import com.kuhokini.APIModels.CategoryResponse;
 import com.kuhokini.APIModels.MainResponse;
+import com.kuhokini.Activities.CartActivity;
 import com.kuhokini.Activities.MenuActivity;
+import com.kuhokini.Activities.NotificationActivity;
 import com.kuhokini.Activities.SearchActivity;
+import com.kuhokini.Activities.WishListActivity;
 import com.kuhokini.Adapters.CategoryAdapter;
 import com.kuhokini.Adapters.FeaturedAdapter;
 import com.kuhokini.Adapters.ProductsAdapter;
@@ -41,6 +47,7 @@ import com.kuhokini.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,16 +106,44 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent, options.toBundle());
         });
 
+        binding.searchTags.setOnClickListener(v->binding.laySearch.performClick());
         binding.laySearch.setOnClickListener(v->{
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
+        });
+
+        binding.wishList.setOnClickListener(v->{
+            startActivity(new Intent(MainActivity.this, WishListActivity.class));
+        });
+
+        binding.cart.setOnClickListener(v->{
+            startActivity(new Intent(MainActivity.this, CartActivity.class));
+        });
+
+        binding.notification.setOnClickListener(v->{
+            startActivity(new Intent(MainActivity.this, NotificationActivity.class));
         });
 
 
 
 
 
-
     }
+
+    private void updateCartBadge() {
+        Cart cart = TinyCartHelper.getCart();
+        int totalItems = 0;
+        for (Map.Entry<Item, Integer> entry : cart.getAllItemsWithQty().entrySet()) {
+            totalItems += entry.getValue();
+        }
+
+        if (totalItems < 1){
+            binding.cartBadge.setVisibility(View.GONE);
+        }else {
+            binding.cartBadge.setVisibility(View.VISIBLE);
+            binding.cartBadge.setText(String.valueOf(totalItems));
+        }
+    }
+
 
     private void setupRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
@@ -152,7 +187,13 @@ public class MainActivity extends AppCompatActivity {
                     if (apiResponse.getStatus().equalsIgnoreCase("success")) {
                         if (apiResponse.getData() != null && !apiResponse.getData().isEmpty()) {
                             if (adapter == null) {
-                                adapter = new ProductsAdapter(MainActivity.this, apiResponse.getData());
+                                adapter = new ProductsAdapter(MainActivity.this, apiResponse.getData(),
+                                        new ProductsAdapter.OnCartChangedListener() {
+                                            @Override
+                                            public void onCartChanged() {
+                                                updateCartBadge();
+                                            }
+                                        });
                                 binding.recyclerview.setAdapter(adapter);
 
                                 LinearLayoutManager lnm = new LinearLayoutManager(MainActivity.this);
@@ -340,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateCartBadge();
         updateManager.onResume();
     }
 

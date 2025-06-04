@@ -26,6 +26,15 @@
         android:theme="@style/Theme.Kuhokini"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.AddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Account.SignUp"
+            android:exported="false" />
+        <activity
+            android:name=".Account.Login"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ProductDetails"
             android:exported="false" />
         <activity

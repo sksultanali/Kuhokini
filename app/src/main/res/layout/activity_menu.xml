@@ -190,6 +190,7 @@
                     android:textSize="@dimen/_11font_mdp"
                     android:textStyle="bold"/>
                 <LinearLayout
+                    android:id="@+id/orders"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -220,6 +221,7 @@
                     android:layout_marginTop="@dimen/_5mdp"
                     android:background="@color/darkGray"/>
                 <LinearLayout
+                    android:id="@+id/wishList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -250,6 +252,7 @@
                     android:layout_marginTop="@dimen/_5mdp"
                     android:background="@color/darkGray"/>
                 <LinearLayout
+                    android:id="@+id/coupons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -280,6 +283,7 @@
                     android:layout_marginTop="@dimen/_5mdp"
                     android:background="@color/darkGray"/>
                 <LinearLayout
+                    android:id="@+id/addresses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -310,6 +314,7 @@
                     android:layout_marginTop="@dimen/_5mdp"
                     android:background="@color/darkGray"/>
                 <LinearLayout
+                    android:id="@+id/rate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -350,6 +355,7 @@
                     android:textSize="@dimen/_11font_mdp"
                     android:textStyle="bold"/>
                 <LinearLayout
+                    android:id="@+id/tc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -381,6 +387,7 @@
                     android:layout_marginTop="@dimen/_5mdp"
                     android:background="@color/darkGray"/>
                 <LinearLayout
+                    android:id="@+id/pp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -412,6 +419,7 @@
                     android:layout_marginTop="@dimen/_5mdp"
                     android:background="@color/darkGray"/>
                 <LinearLayout
+                    android:id="@+id/rp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
@@ -447,18 +455,21 @@
                 android:padding="@dimen/_5mdp"
                 android:orientation="horizontal">
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/website"
                     android:layout_width="@dimen/_24mdp"
                     android:layout_height="@dimen/_24mdp"
                     android:layout_marginStart="@dimen/_5mdp"
                     android:layout_marginEnd="@dimen/_5mdp"
                     android:src="@drawable/internet"/>
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/instagram"
                     android:layout_width="@dimen/_24mdp"
                     android:layout_height="@dimen/_24mdp"
                     android:layout_marginStart="@dimen/_5mdp"
                     android:layout_marginEnd="@dimen/_5mdp"
                     android:src="@drawable/instagram"/>
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/facebook"
                     android:layout_width="@dimen/_24mdp"
                     android:layout_height="@dimen/_24mdp"
                     android:layout_marginStart="@dimen/_5mdp"

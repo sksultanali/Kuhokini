@@ -59,6 +59,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.firebase.messaging
+    implementation libs.swiperefreshlayout
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -93,4 +94,7 @@ dependencies {
     implementation 'com.github.jd-alexander:likebutton:0.2.3'
     implementation 'com.github.denzcoskun:ImageSlideshow:0.1.2'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
+    implementation 'com.github.aabhasr1:OtpView:v1.1.2'
+    implementation 'io.noties.markwon:core:4.6.2'
+    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
 }
