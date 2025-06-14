@@ -1,23 +1,38 @@
 package com.kuhokini.Account;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.kuhokini.Helpers.ApiService;
 import com.kuhokini.Helpers.Helper;
 import com.kuhokini.Helpers.RetrofitClient;
@@ -32,8 +47,10 @@ public class SignUp extends AppCompatActivity {
     ApiService apiService;
     ProgressDialog progressDialog;
     boolean passwordHide = true;
-    String type;
+    String type, generatedOtp;
     private CountDownTimer countDownTimer;
+    private static final int SMS_PERMISSION_REQUEST_CODE = 100;
+    private SmsReceiver smsReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +67,10 @@ public class SignUp extends AppCompatActivity {
         binding.goBack.setOnClickListener(v->onBackPressed());
 
         type = getIntent().getStringExtra("type");
-        if (type.equalsIgnoreCase("create")){
+        if (type.equalsIgnoreCase("create")) {
             binding.title.setText("Create New Account");
             binding.description.setText("We will send you an OTP to verify your Phone Number");
-        }else {
+        } else {
             binding.title.setText("Forget Password?");
             binding.description.setText("Fill registered Phone Number and New Password");
         }
@@ -61,12 +78,12 @@ public class SignUp extends AppCompatActivity {
         progressDialog = new ProgressDialog(SignUp.this);
         progressDialog.setCancelable(false);
 
-        binding.eyeBtn.setOnClickListener(v->{
-            if (passwordHide){
+        binding.eyeBtn.setOnClickListener(v -> {
+            if (passwordHide) {
                 binding.passwordBox.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 binding.eyeBtn.setImageDrawable(getDrawable(R.drawable.password_icon));
                 passwordHide = false;
-            }else {
+            } else {
                 binding.passwordBox.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 binding.eyeBtn.setImageDrawable(getDrawable(R.drawable.password_off));
                 passwordHide = true;
@@ -78,11 +95,13 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View view) {
                 String phone = binding.phoneEd.getText().toString();
                 String password = binding.passwordBox.getText().toString();
-                if (phone.isEmpty()){
+                if (phone.isEmpty()) {
                     binding.phoneEd.setError("*");
-                }else if (password.isEmpty()){
+                } else if (password.isEmpty()) {
                     binding.passwordBox.setError("*");
-                }else {
+                } else if (!isValidPassword(password)) {
+                    Toast.makeText(SignUp.this, "Password does not meet requirements", Toast.LENGTH_SHORT).show();
+                } else {
                     progressDialog.setMessage("Checking server...");
                     progressDialog.show();
                     sendOtp();
@@ -90,13 +109,14 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-        binding.loginBtn.setOnClickListener(v->{
+        binding.loginBtn.setOnClickListener(v -> {
             Intent i = new Intent(SignUp.this, Login.class);
             startActivity(i);
             finish();
         });
 
-        binding.psValid.setText(getPasswordRequirements());
+        // Initialize password validation text
+        updatePasswordValidationText("");
         binding.passwordBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -105,33 +125,132 @@ public class SignUp extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() == 0){
+                if (s.toString().length() == 0) {
                     binding.passwordValidationText.setVisibility(View.GONE);
                     binding.psValid.setVisibility(View.GONE);
-                }else {
+                } else {
                     binding.passwordValidationText.setVisibility(View.VISIBLE);
-                    binding.psValid.setVisibility(View.VISIBLE);
+                    binding.psValid.setVisibility(View.GONE); // Hide the separate requirements TextView
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                validatePassword(s.toString());
+                updatePasswordValidationText(s.toString());
             }
         });
 
-        binding.reSend.setOnClickListener(v->{
+        binding.reSend.setOnClickListener(v -> {
             sendOtp();
         });
+
+        // Start SMS Retriever
+        checkAndRequestSmsPermission();
 
 
 
     }
 
+    private void checkAndRequestSmsPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)
+                    != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                Manifest.permission.RECEIVE_SMS,
+                                Manifest.permission.READ_SMS
+                        },
+                        SMS_PERMISSION_REQUEST_CODE);
+            } else {
+                startSmsRetriever();
+            }
+        } else {
+            startSmsRetriever();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == SMS_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startSmsRetriever();
+            } else {
+                Toast.makeText(this, "SMS permission is required for automatic OTP verification",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void startSmsRetriever() {
+        try {
+            SmsRetrieverClient client = SmsRetriever.getClient(this);
+            Task<Void> task = client.startSmsRetriever();
+
+            task.addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // Successfully started retriever
+                    registerSmsReceiver();
+                }
+            });
+
+            task.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(SignUp.this,
+                            "Failed to start SMS Retriever: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(this, "Error initializing SMS Retriever: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void registerSmsReceiver() {
+        // Set the listener before registering
+        SmsReceiver.setListener(new SmsReceiver.SmsListener() {
+            @Override
+            public void onOtpReceived(String otp) {
+                runOnUiThread(() -> {
+                    Log.d("OTP_DEBUG", "Received OTP: " + otp);
+                    if (binding != null && binding.otpView != null) {
+                        binding.otpView.setOTP(otp);
+                        verifyOtp(otp);
+                    }
+                });
+            }
+
+            @Override
+            public void onOtpError(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(SignUp.this, error, Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+
+        // Register the receiver
+        try {
+            registerReceiver(new SmsReceiver(), SmsReceiver.getIntentFilter(),
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ?
+                            Context.RECEIVER_NOT_EXPORTED : 0);
+            Log.d("OTP_DEBUG", "SMS Receiver registered successfully");
+        } catch (Exception e) {
+            Log.e("OTP_DEBUG", "Failed to register receiver: " + e.getMessage());
+        }
+    }
+
+
     private void sendOtp() {
         String phone = binding.phoneEd.getText().toString();
-        String otpG = SmsSender.generateOTP();
-        SmsSender.sendSms(phone, getOtpMessage(otpG), "1707174979376480801", new SmsSender.SmsCallback() {
+        generatedOtp = SmsSender.generateOTP();
+        SmsSender.sendSms(phone, getOtpMessage(generatedOtp), "1707174979376480801", new SmsSender.SmsCallback() {
             @Override
             public void onSuccess(String response) {
                 binding.optSec.setVisibility(View.VISIBLE);
@@ -140,30 +259,18 @@ public class SignUp extends AppCompatActivity {
                 startCountdownTimer();
                 progressDialog.dismiss();
 
+                //binding.otpView.setOTP("1234");
                 binding.otpView.setOtpListener(new OTPListener() {
                     @Override
                     public void onInteractionListener() {
-                        // fired when user types something in the OtpBox
+                        // Fired when user types something in the OtpBox
                     }
+
                     @Override
                     public void onOTPComplete(String otp) {
-                        if (otp.equalsIgnoreCase(otpG)){
-                            Toast.makeText(SignUp.this, "perfect", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Helper.showActionDialog(SignUp.this, "OTP Mismatch",
-                                    "The verification code you entered is incorrect. Please try again...!",
-                                    null, "Try Again", true, new Helper.DialogButtonClickListener() {
-                                        @Override
-                                        public void onYesButtonClicked() {}
-                                        @Override
-                                        public void onNoButtonClicked() {}
-                                        @Override
-                                        public void onCloseButtonClicked() {}
-                                    });
-                        }
+                        verifyOtp(otp);
                     }
                 });
-
             }
 
             @Override
@@ -183,16 +290,34 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
-    public String getOtpMessage(String otp){
-        if (type.equalsIgnoreCase("create")){
-           return "Hello dear, "+ otp +" is your OTP from KUHOKINI for account creation. For security reasons, DO NOT share the OTP with anyone.\nThank You";
-        }else {
-            return "Hello dear, "+ otp +" is your OTP from KUHOKINI for account creation. For security reasons, DO NOT share the OTP with anyone.\nThank You";
+    private void verifyOtp(String otp) {
+        if (otp.equalsIgnoreCase(generatedOtp)) {
+            Toast.makeText(SignUp.this, "OTP Verified Successfully", Toast.LENGTH_SHORT).show();
+            // Proceed with account creation or password reset logic here
+        } else {
+            Helper.showActionDialog(SignUp.this, "OTP Mismatch",
+                    "The verification code you entered is incorrect. Please try again...!",
+                    null, "Try Again", true, new Helper.DialogButtonClickListener() {
+                        @Override
+                        public void onYesButtonClicked() {}
+                        @Override
+                        public void onNoButtonClicked() {}
+                        @Override
+                        public void onCloseButtonClicked() {}
+                    });
+        }
+    }
+
+    public String getOtpMessage(String otp) {
+        // Ensure the SMS starts with <#> for SMS Retriever API
+        if (type.equalsIgnoreCase("create")) {
+            return "Hello dear, " + otp + " is your OTP from KUHOKINI for account creation. For security reasons, DO NOT share the OTP with anyone.\nThank You";
+        } else {
+            return "Hello dear, " + otp + " is your OTP from KUHOKINI for password reset. For security reasons, DO NOT share the OTP with anyone.\nThank You";
         }
     }
 
     private void startCountdownTimer() {
-        // Cancel previous timer if exists
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
@@ -217,56 +342,67 @@ public class SignUp extends AppCompatActivity {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+        try {
+            if (smsReceiver != null) {
+                unregisterReceiver(smsReceiver);
+            }
+        } catch (Exception e) {
+            // Receiver was not registered
+        }
     }
 
-    private void validatePassword(String password) {
-        if (password.isEmpty()) {
-            binding.passwordValidationText.setText("");
-            binding.passwordValidationText.setTextColor(ContextCompat.getColor(this, android.R.color.darker_gray));
-            return;
+    private void updatePasswordValidationText(String password) {
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+
+        // Define criteria and their validation status
+        String[] criteria = {
+                "Minimum 8 characters",
+                "At least one uppercase letter",
+                "At least one lowercase letter",
+                "At least one number",
+                "At least one special character"
+        };
+        boolean[] isMet = {
+                password.length() >= 8,
+                password.matches(".*[A-Z].*"),
+                password.matches(".*[a-z].*"),
+                password.matches(".*\\d.*"),
+                password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")
+        };
+
+        // Build the spannable text
+        for (int i = 0; i < criteria.length; i++) {
+            String line = criteria[i] + "\n";
+            builder.append(line);
+            int start = builder.length() - line.length();
+            int end = builder.length();
+            int color = isMet[i] ? ContextCompat.getColor(this, android.R.color.holo_green_dark)
+                    : ContextCompat.getColor(this, android.R.color.holo_red_dark);
+            builder.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        boolean isValid = isValidPassword(password);
-
-        if (isValid) {
-            binding.passwordValidationText.setText("Password strength: Strong");
-            binding.passwordValidationText.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
-        } else {
-            binding.passwordValidationText.setText("Password doesn't meet requirements");
-            binding.passwordValidationText.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
-        }
+        binding.passwordValidationText.setText(builder);
     }
 
     public static boolean isValidPassword(String password) {
         if (password == null || password.isEmpty()) {
             return false;
         }
-
-        // Check for at least 8 characters
         if (password.length() < 8) {
             return false;
         }
-
-        // Check for at least one uppercase letter
         if (!password.matches(".*[A-Z].*")) {
             return false;
         }
-
-        // Check for at least one lowercase letter
         if (!password.matches(".*[a-z].*")) {
             return false;
         }
-
-        // Check for at least one digit
         if (!password.matches(".*\\d.*")) {
             return false;
         }
-
-        // Check for at least one special character
         if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")) {
             return false;
         }
-
         return true;
     }
 
