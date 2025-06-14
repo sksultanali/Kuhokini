@@ -3,16 +3,20 @@ package com.kuhokini;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,9 +26,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.hishd.tinycart.model.Cart;
-import com.hishd.tinycart.model.Item;
-import com.hishd.tinycart.util.TinyCartHelper;
+//import com.hishd.tinycart.model.Cart;
+//import com.hishd.tinycart.model.Item;
+//import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.BannerResponse;
 import com.kuhokini.APIModels.CategoryResponse;
 import com.kuhokini.APIModels.MainResponse;
@@ -42,6 +46,7 @@ import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.Helpers.TypeAnimation;
 import com.kuhokini.Helpers.UpdateManager;
 import com.kuhokini.Models.BannerModel;
+import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -78,7 +83,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot()); activity = MainActivity.this;
+        setContentView(binding.getRoot());
+        EdgeToEdge.enable(this);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        activity = MainActivity.this;
         apiService = RetrofitClient.getClient().create(ApiService.class);
 
         TypeAnimation typeAnimation = new TypeAnimation(handler, textList, binding.searchTags);
@@ -130,15 +144,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateCartBadge() {
-        Cart cart = TinyCartHelper.getCart();
-        int totalItems = 0;
-        for (Map.Entry<Item, Integer> entry : cart.getAllItemsWithQty().entrySet()) {
-            totalItems += entry.getValue();
-        }
+        TinyCart cart = TinyCart.getInstance();
+        int totalItems = cart.getTotalQuantity(); // Using the built-in total quantity from our TinyCart
 
-        if (totalItems < 1){
+        if (totalItems < 1) {
             binding.cartBadge.setVisibility(View.GONE);
-        }else {
+        } else {
             binding.cartBadge.setVisibility(View.VISIBLE);
             binding.cartBadge.setText(String.valueOf(totalItems));
         }

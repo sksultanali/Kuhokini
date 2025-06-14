@@ -1,7 +1,7 @@
 package com.kuhokini.APIModels;
 
 public class UserModel {
-    String id, name, email, user_id, token, image, phone, state, pin, address;
+    String id, name, email, user_id, token, image, phone, state, pin, address, password;
 
     public String getId() {
         return id;
@@ -9,6 +9,14 @@ public class UserModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {

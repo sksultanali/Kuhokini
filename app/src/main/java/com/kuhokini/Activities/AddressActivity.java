@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -65,6 +66,13 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
         super.onCreate(savedInstanceState);
         binding = ActivityAddressBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        EdgeToEdge.enable(this);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         binding.goBack.setOnClickListener(v->onBackPressed());
         progressDialog = new ProgressDialog(AddressActivity.this);
         progressDialog.setCancelable(false);
@@ -85,9 +93,6 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
                 binding.swipeRefreshLayout.setRefreshing(false); // Stop spinner
             }, 1500);
         });
-
-
-
 
 
     }

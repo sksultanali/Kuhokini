@@ -1,6 +1,6 @@
 package com.kuhokini.APIModels;
 import com.denzcoskun.imageslider.models.SlideModel;
-import com.hishd.tinycart.model.Item;
+//import com.hishd.tinycart.model.Item;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -37,7 +37,7 @@ public class VariantResponse {
         this.variants = variants;
     }
 
-    public class Variant implements Item, Serializable {
+    public class Variant implements Serializable {
         private String id;
         private int product_id;
         private String varient_name;
@@ -45,6 +45,7 @@ public class VariantResponse {
         private String varient_des;
         private int selling_price;
         private int normal_price;
+        private int weight;
         private int quantity;
         ArrayList<SlideModel> images; // You can use List<String> if images is a comma-separated string of URLs
 
@@ -67,6 +68,14 @@ public class VariantResponse {
 
         public String getVarient_name() {
             return varient_name;
+        }
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public void setWeight(int weight) {
+            this.weight = weight;
         }
 
         public void setVarient_name(String varient_name) {
@@ -113,15 +122,15 @@ public class VariantResponse {
             return images;
         }
 
-        @Override
-        public BigDecimal getItemPrice() {
-            return new BigDecimal(selling_price);
-        }
-
-        @Override
-        public String getItemName() {
-            return id;
-        }
+//        @Override
+//        public BigDecimal getItemPrice() {
+//            return new BigDecimal(selling_price);
+//        }
+//
+//        @Override
+//        public String getItemName() {
+//            return id;
+//        }
 
         public int getQuantity() {
             return quantity;

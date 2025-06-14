@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/item"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/_5mdp"
-    android:background="@color/white"
+    android:background="@drawable/click_effect_white_grey"
     android:orientation="vertical">
 
     <LinearLayout
@@ -18,6 +19,7 @@
             android:layout_height="@dimen/_18mdp"
             android:src="@drawable/history_24"/>
         <TextView
+            android:id="@+id/keyword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,14 +27,15 @@
             android:textSize="@dimen/_11font_mdp"
             android:text="History Here"/>
         <ImageView
+            android:id="@+id/delete"
             android:layout_width="@dimen/_18mdp"
             android:layout_height="@dimen/_18mdp"
             android:src="@drawable/close_24"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1mdp"
-        android:layout_marginTop="@dimen/_5mdp"
-        android:background="@color/darkGray"/>
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/_1mdp"-->
+<!--        android:layout_marginTop="@dimen/_5mdp"-->
+<!--        android:background="@color/gray"/>-->
 </LinearLayout>

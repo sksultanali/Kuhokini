@@ -2,6 +2,9 @@ package com.kuhokini.Adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,16 +55,19 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.ViewHolder
         ));
 
         holder.binding.code.setText(couponModel.getCode());
-        holder.binding.type.setText(couponModel.getType());
         if (couponModel.getType().equalsIgnoreCase("Flat Discount")) {
-            holder.binding.amount.setText("₹"+couponModel.getPercentageOrAmount()+" Off");
+            holder.binding.amount.setText("Flat\n₹"+couponModel.getPercentageOrAmount()+" Off");
         }else {
-            holder.binding.amount.setText(couponModel.getPercentageOrAmount()+"% Off");
+            holder.binding.amount.setText("Flat\n"+couponModel.getPercentageOrAmount()+"% Off");
         }
 
-        holder.binding.delete.setOnClickListener(v->{
-
+        holder.binding.code.setOnClickListener(v->{
+            ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Code Copied", couponModel.getCode());
+            Toast.makeText(activity, "Copied Clipboard", Toast.LENGTH_LONG).show();
+            clipboard.setPrimaryClip(clip);
         });
+
 
 
 

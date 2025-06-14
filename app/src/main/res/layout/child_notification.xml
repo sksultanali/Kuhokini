@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_8mdp"
+    android:gravity="center"
+    android:background="@color/white"
+    android:orientation="horizontal">
+    <TextView
+        android:id="@+id/notificationType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/_2mdp"
+        android:layout_marginEnd="@dimen/_5mdp"
+        android:textSize="@dimen/_11font_mdp"
+        android:textColor="@color/black"
+        android:layout_gravity="center_vertical"
+        android:text="@string/loading_please_wait"/>
+    <ImageView
+        android:id="@+id/notificationBadge"
+        android:layout_width="@dimen/_6mdp"
+        android:layout_height="@dimen/_6mdp"
+        android:layout_marginEnd="@dimen/_5mdp"
+        android:src="@drawable/oval_blue"/>
+
+</LinearLayout>

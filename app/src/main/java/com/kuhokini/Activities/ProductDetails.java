@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,8 +26,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
-import com.hishd.tinycart.model.Cart;
-import com.hishd.tinycart.util.TinyCartHelper;
+//import com.hishd.tinycart.model.Cart;
+//import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.BannerResponse;
 import com.kuhokini.APIModels.MainResponse;
 import com.kuhokini.APIModels.ProductData;
@@ -42,6 +43,7 @@ import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.MainActivity;
 import com.kuhokini.Models.BannerModel;
 import com.kuhokini.R;
+import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityProductDetailsBinding;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
@@ -64,7 +66,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
     int nextPageToken, currentPage = 0;
     private boolean isInitialLoad = true;
     private boolean isLoading = false;
-    Cart cart;
+    TinyCart cart;
     ProductsAdapter adapter;
 
     @Override
@@ -72,8 +74,16 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         super.onCreate(savedInstanceState);
         binding = ActivityProductDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        EdgeToEdge.enable(this);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        binding.goBack.setOnClickListener(v->onBackPressed());
         activity = ProductDetails.this;
-        cart = TinyCartHelper.getCart();
+        cart = TinyCart.getInstance();
         apiService = RetrofitClient.getClient().create(ApiService.class);
         productId = Helper.getData(ProductDetails.this, "product_id");
         images.add(new SlideModel(R.drawable.placeholder, ScaleTypes.CENTER_CROP));
@@ -186,7 +196,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
 
 
         binding.cartBtn.setOnClickListener(v->{
-            cart.addItem(variantDetails,1);
+            //cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), 200);
             binding.cartText.setText("Added");
         });
 

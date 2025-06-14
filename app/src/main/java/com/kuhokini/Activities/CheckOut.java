@@ -1,8 +1,14 @@
 package com.kuhokini.Activities;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -27,11 +33,13 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.hishd.tinycart.model.Cart;
-import com.hishd.tinycart.model.Item;
-import com.hishd.tinycart.util.TinyCartHelper;
+//import com.hishd.tinycart.model.Cart;
+//import com.hishd.tinycart.model.Item;
+//import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.Account.Login;
 import com.kuhokini.Helpers.Helper;
+import com.kuhokini.R;
+import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityCheckOutBinding;
 import com.kuhokini.databinding.AddressDialogBoxBinding;
 
@@ -49,7 +57,7 @@ import java.util.Map;
 public class CheckOut extends AppCompatActivity {
 
     ActivityCheckOutBinding binding;
-    Cart cart;
+    TinyCart cart;
 //    ArrayList<boughtModel> products;
 //    ProductModel productModel;
 //    FirebaseAuth auth;
@@ -67,6 +75,13 @@ public class CheckOut extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCheckOutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        EdgeToEdge.enable(this);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         binding.goBack.setOnClickListener(v->onBackPressed());
 
 //        database = FirebaseDatabase.getInstance();
@@ -85,7 +100,7 @@ public class CheckOut extends AppCompatActivity {
 //        addDialog.setCancelable(false);
 //        addDialog.setCanceledOnTouchOutside(false);
 
-        cart = TinyCartHelper.getCart();
+        cart = TinyCart.getInstance();
 //        products = new ArrayList<>();
 //        products.clear();
 //

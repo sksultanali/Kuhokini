@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
-import com.hishd.tinycart.model.Cart;
-import com.hishd.tinycart.util.TinyCartHelper;
+//import com.hishd.tinycart.model.Cart;
+//import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.ProductData;
 import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Activities.ProductDetails;
@@ -28,6 +28,7 @@ import com.kuhokini.Helpers.Helper;
 import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.Models.WishListModel;
 import com.kuhokini.R;
+import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ChildProductBinding;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -48,7 +49,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     ProgressDialog progressDialog;
     String tableName;
     DB_Helper_WishList wishList;
-    Cart cart;
+    TinyCart cart;
     OnCartChangedListener cartChangedListener;
 
     public interface OnCartChangedListener {
@@ -67,7 +68,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Connecting Server...");
         tableName = "products";
-        cart = TinyCartHelper.getCart();
+        cart = TinyCart.getInstance();
     }
 
     @NonNull
@@ -150,7 +151,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
 
         holder.binding.addCart.setOnClickListener(v->{
-            cart.addItem(variantDetails,1);
+            cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), 200);
             if (cartChangedListener != null) {
                 cartChangedListener.onCartChanged();
             }

@@ -29,9 +29,9 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.hishd.tinycart.model.Cart;
-import com.hishd.tinycart.model.Item;
-import com.hishd.tinycart.util.TinyCartHelper;
+//import com.hishd.tinycart.model.Cart;
+//import com.hishd.tinycart.model.Item;
+//import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Activities.WebView;
 import com.kuhokini.R;
@@ -77,6 +77,29 @@ public class Helper {
     public static String dateWiseChange;
     public static int selectedPosition = -1;
     public static ArrayList<String> list = new ArrayList<>();
+
+    public static void setWhiteStatusBarWithDarkIcons(Window window, int whiteColorResId) {
+        window.setStatusBarColor(ContextCompat.getColor(window.getContext(), whiteColorResId));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = window.getDecorView();
+            int flags = decor.getSystemUiVisibility();
+
+            // Add LIGHT_STATUS_BAR flag
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            decor.setSystemUiVisibility(flags);
+        }
+
+
+        window.setNavigationBarColor(ContextCompat.getColor(window.getContext(), whiteColorResId));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decor = window.getDecorView();
+            int flags = decor.getSystemUiVisibility();
+
+            // Add light nav bar flag (dark icons)
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            decor.setSystemUiVisibility(flags);
+        }
+    }
 
 
     public static String capitalizeWords(String sentence) {
@@ -183,10 +206,20 @@ public class Helper {
             Window window = activity.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(activity.getResources().getColor(color));
-
+            window.setStatusBarColor(activity.getColor(color));
             View decor = window.getDecorView();
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+    }
+
+    public static void changeStatusBarToDark(Activity activity, int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(activity.getColor(color));
+            View decor = window.getDecorView();
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
     }
 

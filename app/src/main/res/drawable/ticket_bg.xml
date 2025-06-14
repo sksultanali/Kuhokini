@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background with base color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFA726" /> <!-- Orange color -->
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <!-- Simulated curved perforation using a mask image is recommended in real apps -->
+
+</layer-list>

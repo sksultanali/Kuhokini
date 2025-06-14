@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.OrdersActivity">
+    <LinearLayout
+        android:id="@+id/firstLn"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:elevation="@dimen/_2mdp"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/goBack"
+            android:layout_width="@dimen/_20mdp"
+            android:layout_height="@dimen/_20mdp"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:layout_marginEnd="@dimen/_10mdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/arrow_back_24"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14font_mdp"
+            android:text="My Orders"/>
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/firstLn"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/dateRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/_10mdp"
+                android:gravity="center"
+                android:padding="@dimen/_5mdp"
+                android:background="@drawable/back_white_border_grey_corner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" >
+                <ImageView
+                    android:id="@+id/time"
+                    android:layout_width="@dimen/_14mdp"
+                    android:layout_height="@dimen/_14mdp"
+                    android:layout_marginEnd="@dimen/_5mdp"
+                    app:tint="@color/icon_color"
+                    android:layout_marginStart="@dimen/_5mdp"
+                    android:src="@drawable/calendar_month_24"/>
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="01 Jan - 25 Jan 2025"
+                    android:inputType="text"
+                    android:textSize="@dimen/_12font_mdp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/_10mdp"
+                android:gravity="center"
+                android:padding="@dimen/_5mdp"
+                android:background="@drawable/back_white_border_grey_corner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" >
+                <ImageView
+                    android:layout_width="@dimen/_14mdp"
+                    android:layout_height="@dimen/_14mdp"
+                    android:layout_marginEnd="@dimen/_5mdp"
+                    app:tint="@color/icon_color"
+                    android:layout_marginStart="@dimen/_5mdp"
+                    android:src="@drawable/filter_list_24"/>
+                <TextView
+                    android:id="@+id/filterText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="Filter"
+                    android:inputType="text"
+                    android:textSize="@dimen/_12font_mdp" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/filterOkay"
+                    android:layout_width="@dimen/_6mdp"
+                    android:layout_height="@dimen/_6mdp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/_5mdp"
+                    android:layout_marginStart="@dimen/_5mdp"
+                    android:src="@color/blue_purple"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/laySearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="@dimen/_10mdp"
+                android:padding="@dimen/_5mdp"
+                android:gravity="center"
+                android:background="@drawable/back_white_border_grey_corner"
+                app:layout_constraintTop_toBottomOf="@id/dateRange" >
+                <EditText
+                    android:id="@+id/searchTags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:hint="Enter tags or search keywords"
+                    android:inputType="text"
+                    android:padding="@dimen/_5mdp"
+                    android:textSize="@dimen/_12font_mdp" />
+                <ImageView
+                    android:id="@+id/closeBtn"
+                    android:layout_width="@dimen/_18mdp"
+                    android:layout_height="@dimen/_18mdp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/_5mdp"
+                    android:src="@drawable/close_24"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="true"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:layout_marginStart="@dimen/_5mdp"
+                android:layout_marginEnd="@dimen/_5mdp"
+                tools:listitem="@layout/child_orders"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/laySearch" />
+
+            <ProgressBar
+                android:id="@+id/loadMore"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/laySearch" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/no_data"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/no_data" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

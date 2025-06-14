@@ -4,22 +4,29 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.hishd.tinycart.model.Cart;
-import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.ProductData;
 import com.kuhokini.APIModels.VariantResponse;
+import com.kuhokini.Activities.CheckOut;
+import com.kuhokini.Activities.ProductDetails;
+import com.kuhokini.Helpers.ApiService;
+import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.R;
+import com.kuhokini.TinyCart.CartItem;
+import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ItemCartBinding;
 
 import java.util.ArrayList;
@@ -30,7 +37,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     Activity activity;
     ArrayList<VariantResponse.Variant> products;
     CartListener cartListener;
-    Cart cart;
+    TinyCart cart;
+    ApiService apiService;
+    ArrayAdapter<String> obj;
+    ArrayList<String> qtyList = new ArrayList<>();
 
     public interface CartListener {
         public void onQuantityChanged();
@@ -41,7 +51,21 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         this.activity = activity;
         this.products = products;
         this.cartListener = cartListener;
-        cart = TinyCartHelper.getCart();
+        cart = TinyCart.getInstance();
+        qtyList.clear();
+        qtyList.add("Qty 1 ");
+        qtyList.add("Qty 2 ");
+        qtyList.add("Qty 3 ");
+        qtyList.add("Qty 4 ");
+        qtyList.add("Qty 5 ");
+        qtyList.add("Qty 6 ");
+        qtyList.add("Qty 7 ");
+        qtyList.add("Qty 8 ");
+        qtyList.add("Qty 9 ");
+        qtyList.add("Qty 10 ");
+        obj = new ArrayAdapter<String>(activity,
+                R.layout.layout_spinner_items, qtyList);
+        apiService = RetrofitClient.getClient().create(ApiService.class);
     }
 
     @NonNull
@@ -55,80 +79,56 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         VariantResponse.Variant product = products.get(position);
 
-        if (product.getImages().get(0) != null && !activity.isDestroyed()){
+        if (product.getImages().get(0).getImageUrl() != null && !activity.isDestroyed()){
             Glide.with(context)
-                    .load(product.getImages().get(0))
+                    .load(product.getImages().get(0).getImageUrl())
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .placeholder(context.getDrawable(R.drawable.no_image))
                     .into(holder.binding.image);
         }
 
-//        holder.binding.name.setText(product.getName());
-//        holder.binding.rating.setText(product.getRating() + " • Ratings • Best");
-//        holder.binding.otherNote.setText(product.getOtherNotes());
-//        holder.binding.price.setText("₹" + product.getDiscountedPrice());
-//        holder.binding.normalPrice.setPaintFlags((int) (product.getDiscountedPrice() | Paint.STRIKE_THRU_TEXT_FLAG));
-//        holder.binding.normalPrice.setText("₹" + product.getPrice());
-//        holder.binding.quantity.setText(product.getQuantity() + " item(s)");
-//
-//
-//        holder.itemView.setOnClickListener(v->{
-//            DialogQuantityBinding quantityDialogBinding = DialogQuantityBinding.inflate(LayoutInflater.from(context));
-//
-//            AlertDialog dialog = new AlertDialog.Builder(context)
-//                    .setView(quantityDialogBinding.getRoot())
-//                    .create();
-//
-//            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
-//
-//            quantityDialogBinding.productName.setText(product.getName());
-////            quantityDialogBinding.productStock.setText("Stock: " + product.getStock());
-////            quantityDialogBinding.quantity.setText(String.valueOf(product.getQuantity()));
-////            int stock = product.getStock();
-//
-//
-//            quantityDialogBinding.plusBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    int quantity = product.getQuantity();
-//                    quantity++;
-//
-//                    product.setQuantity(quantity);
-//                    quantityDialogBinding.quantity.setText(String.valueOf(quantity));
-//
-//                    notifyDataSetChanged();
-//                    cart.updateItem(product, product.getQuantity());
-//                    cartListener.onQuantityChanged();
-//                }
-//            });
-//
-//            quantityDialogBinding.minusBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    int quantity = product.getQuantity();
-//                    if(quantity > 1)
-//                        quantity--;
-//                    product.setQuantity(quantity);
-//                    quantityDialogBinding.quantity.setText(String.valueOf(quantity));
-//
-//                    notifyDataSetChanged();
-//                    cart.updateItem(product, product.getQuantity());
-//                    cartListener.onQuantityChanged();
-//                }
-//            });
-//
-//            quantityDialogBinding.saveBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    dialog.dismiss();
-////                        notifyDataSetChanged();
-////                        cart.updateItem(product, product.getQuantity());
-////                        cartListener.onQuantityChanged();
-//                }
-//            });
-//
-//            dialog.show();
-//        });
+        // Get the CartItem to access weight information
+        CartItem cartItem = cart.getItems().get(product);
+        try {
+            holder.binding.name.setText(cartItem.getName());
+            holder.binding.description.setText(String.format("%.2f gm", cartItem.getWeight()));
+        }catch (Exception e){
+
+        }
+
+        holder.binding.normalPrice.setPaintFlags(holder.binding.normalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.binding.normalPrice.setText(String.valueOf(product.getNormal_price()));
+
+        holder.binding.price.setText(String.valueOf(product.getSelling_price()));
+
+
+
+        holder.binding.qtySpinner.setAdapter(obj);
+        holder.binding.qtySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cart.updateItem(product, (position +1), product.getSelling_price(), product.getWeight());
+                //cartListener.onQuantityChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        holder.binding.removeItem.setOnClickListener(v->{
+            cart.removeItem(product);
+            cartListener.onQuantityChanged();
+        });
+
+        holder.binding.buyNow.setOnClickListener(v->{
+            Intent i = new Intent(activity, CheckOut.class);
+            activity.startActivity(i);
+        });
+
+
 
     }
 
