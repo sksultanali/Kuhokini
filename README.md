@@ -32,11 +32,6 @@ A specialized e-commerce platform offering curated fashion, beauty, and lifestyl
 
 </div>
 
-## 🛒 Download Now
-
-[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200">](https://play.google.com/store/apps/details?id=com.developerali.kuhokini)
-[<img src="https://img.shields.io/badge/Download-APK-blue?style=for-the-badge&logo=android" width="200">](https://github.com/sksultanali/Kuhokini/releases/latest)
-
 ## 💻 Technology Highlights
 
 - **Frontend**: Java, Android Studio
@@ -54,10 +49,6 @@ A specialized e-commerce platform offering curated fashion, beauty, and lifestyl
 3. **Size Guide** - Accurate sizing recommendations
 4. **Eco-Friendly Options** - Sustainable fashion choices
 5. **24/7 Support** - Dedicated customer care
-
-## 📜 License
-
-MIT License - See [LICENSE](LICENSE) for details.
 
 ## 📞 Contact
 
