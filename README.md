@@ -39,12 +39,11 @@ A specialized e-commerce platform offering curated fashion, beauty, and lifestyl
 
 ## 💻 Technology Highlights
 
-- **Frontend**: Kotlin, Jetpack Compose
-- **Backend**: Firebase (Auth, Firestore, Storage)
-- **Payment Integration**: Razorpay, PayPal
-- **Analytics**: Google Analytics, Firebase Analytics
+- **Frontend**: Java, Android Studio
+- **Backend**: PHP, MySqli, Firebase (Auth, Firestore, Storage)
+- **Payment Integration**: Razorpay, Cashfree
+- **Analytics**: Google Analytics, Firebase Analytics, Crashlatics
 - **Special Features**:
-  - AR Virtual Try-On (Sceneform)
   - Push Notifications
   - Dark Mode Support
 
