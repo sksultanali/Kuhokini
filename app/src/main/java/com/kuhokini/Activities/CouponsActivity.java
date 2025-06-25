@@ -85,7 +85,9 @@ public class CouponsActivity extends AppCompatActivity {
     }
 
     void checkCoupons(String keyword){
-        binding.loadMore.setVisibility(View.VISIBLE);
+        //binding.loadMore.setVisibility(View.VISIBLE);
+        binding.recyclerview.showShimmerAdapter();
+
         Call<CouponResponse> call = apiService.getCoupons(null, keyword);
         call.enqueue(new Callback<CouponResponse>() {
             @Override
@@ -101,14 +103,16 @@ public class CouponsActivity extends AppCompatActivity {
                         binding.recyclerview.setVisibility(View.GONE);
                         binding.noData.setVisibility(View.VISIBLE);
                     }
-                    binding.loadMore.setVisibility(View.GONE);
+                    //binding.loadMore.setVisibility(View.GONE);
+                    binding.recyclerview.hideShimmerAdapter();
                 }
             }
 
             @Override
             public void onFailure(Call<CouponResponse> call, Throwable t) {
                 binding.noData.setVisibility(View.VISIBLE);
-                binding.loadMore.setVisibility(View.GONE);
+                //binding.loadMore.setVisibility(View.GONE);
+                binding.recyclerview.hideShimmerAdapter();
                 Toast.makeText(CouponsActivity.this, "Coupon: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

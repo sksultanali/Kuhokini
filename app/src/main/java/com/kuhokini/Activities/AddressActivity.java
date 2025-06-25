@@ -119,7 +119,7 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
         loadStates(addressBinding);
 
         addressBinding.save.setOnClickListener(v->{
-            String userId = "1";
+            String userId = Helper.getData(AddressActivity.this, "user_id");
             String name = addressBinding.name.getText().toString();
             String phone = addressBinding.phone.getText().toString();
             String address = addressBinding.address.getText().toString();
@@ -208,6 +208,10 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
             }
         });
 
+        addressBinding.closeBtn.setOnClickListener(v->{
+            dialog.dismiss();
+        });
+
         // Show the dialog
         dialog.show();
     }
@@ -231,10 +235,10 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
                             // Create adapter after data is loaded
                             ArrayAdapter<StateModel> adapter = new ArrayAdapter<>(
                                     AddressActivity.this,
-                                    android.R.layout.simple_spinner_item,
+                                    R.layout.layout_spinner_items,
                                     stateModels
                             );
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            adapter.setDropDownViewResource(R.layout.layout_spinner_items);
                             addressBinding.stateSpinner.setAdapter(adapter);
 
                             addressBinding.stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -278,9 +282,12 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
     }
 
     private void loadAddresses() {
-        binding.progressBar.setVisibility(View.VISIBLE);
+        //binding.progressBar.setVisibility(View.VISIBLE);
+        binding.addressRec.showShimmerAdapter();
         binding.addressRec.setVisibility(View.GONE);
-        Call<AddressResponse> call = apiService.getAddresses("1");
+
+        String phone = Helper.getData(AddressActivity.this, "user_id");
+        Call<AddressResponse> call = apiService.getAddresses(phone);
         call.enqueue(new Callback<AddressResponse>() {
             @Override
             public void onResponse(Call<AddressResponse> call, Response<AddressResponse> response) {
@@ -302,20 +309,26 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
                         binding.noData.setVisibility(View.VISIBLE);
                     }
                 }
-                binding.progressBar.setVisibility(View.GONE);
+                binding.addressRec.hideShimmerAdapter();
             }
 
             @Override
             public void onFailure(Call<AddressResponse> call, Throwable t) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.addressRec.hideShimmerAdapter();
                 binding.addressRec.setVisibility(View.GONE);
                 binding.noData.setVisibility(View.VISIBLE);
             }
         });
     }
 
+
     @Override
-    public void changed() {
+    public void onChangePrimary() {
         loadAddresses();
+    }
+
+    @Override
+    public void onSelect(AddressResponse.AddressModel addressModel) {
+
     }
 }

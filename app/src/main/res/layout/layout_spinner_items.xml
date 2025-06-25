@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
+    android:textSize="@dimen/_11font_mdp"
+    android:paddingTop="@dimen/_5mdp"
+    android:paddingBottom="@dimen/_5mdp"
     android:textAlignment="inherit"/>

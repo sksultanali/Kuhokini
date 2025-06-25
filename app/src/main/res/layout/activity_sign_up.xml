@@ -106,7 +106,6 @@
                         android:background="@color/white"
                         android:hint="Phone Number"
                         android:inputType="number"
-                        android:text="8967254087"
                         android:maxLength="10"
                         android:textSize="@dimen/_12font_mdp"
                         android:padding="@dimen/_5mdp"
@@ -131,7 +130,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:text="Good@4127"
                         android:hint="Enter New Password"
                         android:inputType="textPassword"
                         android:textSize="@dimen/_12font_mdp" />

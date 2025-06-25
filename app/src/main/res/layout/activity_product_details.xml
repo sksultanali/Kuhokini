@@ -369,10 +369,137 @@
                     android:paddingBottom="@dimen/_10mdp"
                     android:paddingTop="@dimen/_5mdp"
                     android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5mdp"
+                        android:background="@color/gray"
+                        android:padding="@dimen/_5mdp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/_11font_mdp"
+                            android:textColor="@color/black"
+                            android:text="Delivery charge is calculating as per this precautions "/>
+                        <ImageView
+                            android:layout_width="@dimen/_20mdp"
+                            android:layout_height="@dimen/_20mdp"
+                            android:src="@drawable/arrow_down_24"/>
+                    </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/payToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="@dimen/_10mdp"
+                        android:background="@drawable/pink_out_line"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/payOnline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_1mdp"
+                            android:background="@drawable/toggle_widget_background"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingEnd="@dimen/_10mdp"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:drawableEnd="@drawable/phonepe"
+                            android:drawablePadding="@dimen/_5mdp"
+                            android:drawableTint="@drawable/text_color_selector"
+                            android:text="Pay Online"
+                            android:checked="true"
+                            android:textSize="@dimen/_10font_mdp"
+                            android:textColor="@drawable/text_color_selector" />
+
+                        <RadioButton
+                            android:id="@+id/cod"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_1mdp"
+                            android:background="@drawable/toggle_widget_background"
+                            android:button="@null"
+                            android:drawableEnd="@drawable/rupee_note"
+                            android:drawablePadding="@dimen/_5mdp"
+                            android:drawableTint="@drawable/text_color_selector"
+                            android:paddingEnd="@dimen/_10mdp"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:textSize="@dimen/_10font_mdp"
+                            android:gravity="center"
+                            android:text="Cash on Delivery"
+                            android:textColor="@drawable/text_color_selector" />
+                    </RadioGroup>
+                    <TextView
+                        android:id="@+id/cashExtra"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="₹10 will be charged extra for Cash on Delivery!"
+                        android:textColor="@color/red"
+                        android:layout_marginStart="@dimen/_10mdp"
+                        android:layout_marginTop="@dimen/_10mdp"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:layout_gravity="center_vertical"/>
+                    <RadioGroup
+                        android:id="@+id/mat_toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="@dimen/_10mdp"
+                        android:background="@drawable/pink_out_line"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/emailSecR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_1mdp"
+                            android:background="@drawable/toggle_widget_background"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:paddingEnd="@dimen/_10mdp"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:drawableEnd="@drawable/express"
+                            android:drawablePadding="@dimen/_5mdp"
+                            android:drawableTint="@drawable/text_color_selector"
+                            android:text="Express"
+                            android:checked="true"
+                            android:textSize="@dimen/_10font_mdp"
+                            android:textColor="@drawable/text_color_selector" />
+
+                        <RadioButton
+                            android:id="@+id/googleSecR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_1mdp"
+
+                            android:background="@drawable/toggle_widget_background"
+                            android:button="@null"
+                            android:paddingEnd="@dimen/_10mdp"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:textSize="@dimen/_10font_mdp"
+                            android:gravity="center"
+                            android:text="Regular"
+                            android:textColor="@drawable/text_color_selector" />
+                    </RadioGroup>
+                    <TextView
+                        android:id="@+id/deliveryExpR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Delivery within 4-7 days"
+                        android:textColor="@color/greenDark"
+                        android:layout_marginStart="@dimen/_10mdp"
+                        android:layout_marginTop="@dimen/_10mdp"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:layout_gravity="center_vertical"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10mdp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -593,6 +720,63 @@
                 android:layout_height="@dimen/_1mdp"
                 android:background="@color/gray"/>
 
+            <LinearLayout
+                android:id="@+id/paymentIcons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:layout_marginBottom="@dimen/_5mdp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:text="We accept all payment modes including"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/_16mdp"
+                        android:layout_height="@dimen/_16mdp"
+                        app:tint="@color/purple"
+                        android:layout_gravity="center"
+                        android:src="@drawable/phonepe"/>
+                    <ImageView
+                        android:layout_width="@dimen/_20mdp"
+                        android:layout_height="@dimen/_20mdp"
+                        android:layout_marginStart="@dimen/_5mdp"
+                        android:src="@drawable/google_pay"/>
+                    <ImageView
+                        android:layout_width="@dimen/_20mdp"
+                        android:layout_height="@dimen/_20mdp"
+                        android:layout_marginStart="@dimen/_5mdp"
+                        android:src="@drawable/amazon"/>
+                    <ImageView
+                        android:layout_width="@dimen/_20mdp"
+                        android:layout_height="@dimen/_20mdp"
+                        android:layout_marginStart="@dimen/_5mdp"
+                        android:src="@drawable/paytm"/>
+                    <ImageView
+                        android:layout_width="@dimen/_20mdp"
+                        android:layout_height="@dimen/_20mdp"
+                        android:layout_marginStart="@dimen/_5mdp"
+                        android:src="@drawable/visa"/>
+                    <ImageView
+                        android:layout_width="@dimen/_20mdp"
+                        android:layout_height="@dimen/_20mdp"
+                        android:layout_marginStart="@dimen/_5mdp"
+                        android:src="@drawable/mastercard"/>
+
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearDes"
@@ -1190,14 +1374,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bannerLayout" />
 
-                <androidx.recyclerview.widget.RecyclerView
+                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
                     android:id="@+id/similarRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5mdp"
                     android:layout_marginStart="@dimen/_5mdp"
                     android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:shimmer_demo_child_count="10"
+                    app:shimmer_demo_layout="@layout/demo_featured"
+                    app:shimmer_demo_layout_manager_type="linear_horizontal"
+                    app:shimmer_demo_angle="20"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView1"
                     tools:listitem="@layout/child_featured_product" />
@@ -1216,14 +1403,18 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_10font_mdp"
                 android:textStyle="bold" />
-            <androidx.recyclerview.widget.RecyclerView
+            <com.cooltechworks.views.shimmer.ShimmerRecyclerView
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5mdp"
                 android:orientation="horizontal"
                 app:spanCount="2"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:shimmer_demo_child_count="10"
+                app:shimmer_demo_layout="@layout/demo_product"
+                app:shimmer_demo_layout_manager_type="grid"
+                app:shimmer_demo_grid_child_count="2"
+                app:shimmer_demo_angle="20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView1"
                 tools:listitem="@layout/child_product" />

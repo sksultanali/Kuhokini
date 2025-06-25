@@ -74,6 +74,13 @@ public interface ApiService {
             @Query("imageUrl") String imageUrl
     );
 
+    @GET("apis/api.php?action=updateUserField")
+    Call<ApiResponse> updateUserField(
+            @Query("user_id") String user_id,
+            @Query("field") String field,
+            @Query("value") String value
+    );
+
 
 
 
@@ -96,6 +103,14 @@ public interface ApiService {
     Call<ApiResponse> insertCategory(
             @Query("name") String name,
             @Query("image") String image
+    );
+
+    @POST("apis/post_api.php?action=insertUser")
+    Call<ApiResponse> insertUser(
+            @Query("password") String password,
+            @Query("phone") String phone,
+            @Query("email") String email,
+            @Query("token") String token
     );
 
     @GET("apis/api.php?action=insertSubCategory")
@@ -192,6 +207,11 @@ public interface ApiService {
             @Query("keyword")@Nullable String keyword
     );
 
+    @GET("testApis/api.php?action=checkCouponCode")
+    Call<CouponResponse> checkCouponCode(
+            @Query("code") String code
+    );
+
     @GET("apis/api.php?action=getProductDetails")
     Call<ProductResponse> getProductDetails(
             @Query("id") String id
@@ -199,7 +219,7 @@ public interface ApiService {
 
     @GET("apis/api.php?action=fetchAddresses")
     Call<AddressResponse> getAddresses(
-            @Query("user_id") String user_id
+            @Query("userId") String userId
     );
 
     @GET("apis/api.php?action=getUserDetails")

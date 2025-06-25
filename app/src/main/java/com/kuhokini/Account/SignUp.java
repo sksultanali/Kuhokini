@@ -33,13 +33,20 @@ import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.kuhokini.APIModels.SingleUserResponse;
+import com.kuhokini.Helpers.ApiResponse;
 import com.kuhokini.Helpers.ApiService;
 import com.kuhokini.Helpers.Helper;
 import com.kuhokini.Helpers.RetrofitClient;
+import com.kuhokini.MainActivity;
 import com.kuhokini.R;
 import com.kuhokini.databinding.ActivitySignUpBinding;
 
 import in.aabhasjindal.otptextview.OTPListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUp extends AppCompatActivity {
 
@@ -51,6 +58,7 @@ public class SignUp extends AppCompatActivity {
     private CountDownTimer countDownTimer;
     private static final int SMS_PERMISSION_REQUEST_CODE = 100;
     private SmsReceiver smsReceiver;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +79,7 @@ public class SignUp extends AppCompatActivity {
             binding.title.setText("Create New Account");
             binding.description.setText("We will send you an OTP to verify your Phone Number");
         } else {
-            binding.title.setText("Forget Password?");
+            binding.title.setText("Forget Password");
             binding.description.setText("Fill registered Phone Number and New Password");
         }
 
@@ -100,11 +108,63 @@ public class SignUp extends AppCompatActivity {
                 } else if (password.isEmpty()) {
                     binding.passwordBox.setError("*");
                 } else if (!isValidPassword(password)) {
-                    Toast.makeText(SignUp.this, "Password does not meet requirements", Toast.LENGTH_SHORT).show();
+                    Helper.showOnlyMessage(SignUp.this,"InEligible Password!", "Password does not meet requirements\n" +
+                            "\"-Minimum 8 characters\",\n" +
+                            "\"-At least one uppercase letter\",\n" +
+                            "\"-At least one lowercase letter\",\n" +
+                            "\"-At least one number\",\n" +
+                            "\"-At least one special character\"");
                 } else {
+                    Helper.hideKeyboard(SignUp.this);
                     progressDialog.setMessage("Checking server...");
                     progressDialog.show();
-                    sendOtp();
+                    binding.reqOtp.setVisibility(View.GONE);
+                    binding.loginBtn.setVisibility(View.GONE);
+                    Call<SingleUserResponse> call = apiService.getUserDetails(phone);
+                    call.enqueue(new Callback<SingleUserResponse>() {
+                        @Override
+                        public void onResponse(Call<SingleUserResponse> call, Response<SingleUserResponse> response) {
+                            if (response.isSuccessful() && response.body() != null){
+                                SingleUserResponse userResponse = response.body();
+                                if (userResponse.getStatus().equalsIgnoreCase("success")){
+                                    Helper.showActionDialog(SignUp.this, "Already Registered",
+                                            "<b>+91 " + phone + "</b> is already registered with us! Please login or try any other mobile no to register !",
+                                            "Login", "Use Another Number", true, new Helper.DialogButtonClickListener() {
+                                                @Override
+                                                public void onYesButtonClicked() {
+                                                    startActivity(new Intent(SignUp.this, Login.class));
+                                                    finish();
+                                                }
+
+                                                @Override
+                                                public void onNoButtonClicked() {
+                                                    resetFields();
+                                                }
+
+                                                @Override
+                                                public void onCloseButtonClicked() {
+                                                    binding.reqOtp.setVisibility(View.VISIBLE);
+                                                    binding.loginBtn.setVisibility(View.VISIBLE);
+                                                }
+                                            });
+                                    progressDialog.dismiss();
+                                }else {
+                                    sendOtp();
+                                }
+                            }else {
+                                sendOtp();
+                            }
+
+                            //Log.d("API_URL", call.request().url().toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<SingleUserResponse> call, Throwable t) {
+                            progressDialog.dismiss();
+                            Helper.showOnlyMessage(SignUp.this, "Error!", "Something went wrong. "+
+                                    t.getLocalizedMessage());
+                        }
+                    });
                 }
             }
         });
@@ -146,9 +206,62 @@ public class SignUp extends AppCompatActivity {
 
         // Start SMS Retriever
         checkAndRequestSmsPermission();
+        registerForToken();
 
+    }
 
+    void resetFields(){
+        binding.passwordBox.setText("");
+        binding.phoneEd.setText("");
+        binding.reqOtp.setVisibility(View.VISIBLE);
+        binding.loginBtn.setVisibility(View.VISIBLE);
+    }
 
+    void registerForToken(){
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        token = task.getResult();
+                    }
+                });
+    }
+
+    void registerData(){
+        String phone = binding.phoneEd.getText().toString();
+        String password = binding.passwordBox.getText().toString();
+        progressDialog.setMessage("Creating new account...");
+        progressDialog.show();
+        Call<ApiResponse> call = apiService.insertUser(password, phone, null, token);
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    ApiResponse apiResponse = response.body();
+                    if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                        Helper.saveData(SignUp.this, "user_id", apiResponse.getUser_id());
+                        Helper.saveData(SignUp.this, "phone", phone);
+                        //Helper.saveData(SignUp.this, "email", apiResponse.getData().getEmail());
+                        //startActivity(new Intent(SignUp.this, MainActivity.class));
+                        finish();
+                    }else {
+                        Helper.showOnlyMessage(SignUp.this, apiResponse.getStatus(),
+                                apiResponse.getMessage());
+                    }
+                    progressDialog.dismiss();
+                }else{
+                    Helper.showOnlyMessage(SignUp.this, "Error Caught", "Something went wrong! "
+                            + ", Please try again.");
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Helper.showOnlyMessage(SignUp.this, "Error Caught", "Something went wrong! "+
+                        t.getLocalizedMessage() + ", Please try again.");
+            }
+        });
     }
 
     private void checkAndRequestSmsPermission() {
@@ -208,8 +321,8 @@ public class SignUp extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
-            Toast.makeText(this, "Error initializing SMS Retriever: " + e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Error initializing SMS Retriever: " + e.getMessage(),
+//                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -292,8 +405,7 @@ public class SignUp extends AppCompatActivity {
 
     private void verifyOtp(String otp) {
         if (otp.equalsIgnoreCase(generatedOtp)) {
-            Toast.makeText(SignUp.this, "OTP Verified Successfully", Toast.LENGTH_SHORT).show();
-            // Proceed with account creation or password reset logic here
+            registerData();
         } else {
             Helper.showActionDialog(SignUp.this, "OTP Mismatch",
                     "The verification code you entered is incorrect. Please try again...!",
@@ -370,15 +482,36 @@ public class SignUp extends AppCompatActivity {
                 password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")
         };
 
-        // Build the spannable text
-        for (int i = 0; i < criteria.length; i++) {
-            String line = criteria[i] + "\n";
-            builder.append(line);
-            int start = builder.length() - line.length();
-            int end = builder.length();
-            int color = isMet[i] ? ContextCompat.getColor(this, android.R.color.holo_green_dark)
-                    : ContextCompat.getColor(this, android.R.color.holo_red_dark);
-            builder.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // Check if all criteria are met
+        boolean allCriteriaMet = true;
+        for (boolean met : isMet) {
+            if (!met) {
+                allCriteriaMet = false;
+                break;
+            }
+        }
+
+        if (allCriteriaMet) {
+            // Display success message
+            String successMessage = "Woh! Good to go 👍🏻";
+            builder.append(successMessage);
+            builder.setSpan(
+                    new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_green_dark)),
+                    0,
+                    builder.length(),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
+        } else {
+            // Build the spannable text for criteria
+            for (int i = 0; i < criteria.length; i++) {
+                String line = criteria[i] + "\n";
+                builder.append(line);
+                int start = builder.length() - line.length();
+                int end = builder.length();
+                int color = isMet[i] ? ContextCompat.getColor(this, android.R.color.holo_green_dark)
+                        : ContextCompat.getColor(this, android.R.color.holo_red_dark);
+                builder.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         }
 
         binding.passwordValidationText.setText(builder);
@@ -404,15 +537,6 @@ public class SignUp extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    public static String getPasswordRequirements() {
-        return "Password must contain:\n" +
-                "- Minimum 8 characters\n" +
-                "- At least one uppercase letter\n" +
-                "- At least one lowercase letter\n" +
-                "- At least one number\n" +
-                "- At least one special character";
     }
 
 }

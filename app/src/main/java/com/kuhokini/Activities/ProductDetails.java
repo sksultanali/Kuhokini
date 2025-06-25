@@ -272,10 +272,13 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
     }
 
     void getPostData() {
-        binding.loadMore.setVisibility(View.VISIBLE);
+//        binding.loadMore.setVisibility(View.VISIBLE);
+//        binding.noData.setVisibility(View.GONE); // Hide noData initially
 
         if (nextPageToken == 0 && adapter != null) {
             adapter.clearItems(); // clear old data on new search
+            binding.similarRecyclerView.showShimmerAdapter();
+            binding.recyclerview.showShimmerAdapter();
         }
 
         Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null);
@@ -295,6 +298,8 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                                             }
                                         });
                                 binding.recyclerview.setAdapter(adapter);
+                                binding.similarRecyclerView.hideShimmerAdapter();
+                                binding.recyclerview.hideShimmerAdapter();
 
                                 LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
                                 lnm.setOrientation(RecyclerView.HORIZONTAL);
@@ -328,6 +333,8 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
             public void onFailure(Call<MainResponse> call, Throwable t) {
 //                binding.noData.setVisibility(View.VISIBLE);
 //                binding.loadMore.setVisibility(View.GONE);
+                binding.similarRecyclerView.hideShimmerAdapter();
+                binding.recyclerview.hideShimmerAdapter();
                 isLoading = false;
             }
         });

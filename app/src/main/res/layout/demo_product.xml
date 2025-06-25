@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/back_white_border_grey">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/consLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_105mdp"
+            android:src="@drawable/placeholder"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/_10mdp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+            <View
+                android:layout_width="@dimen/_50mdp"
+                android:layout_height="@dimen/_10mdp"
+                android:layout_weight="1"
+                android:background="@color/gray"
+                android:textSize="@dimen/_11font_mdp"
+                android:textColor="@color/black"
+                android:text="Sk Sultan Ali, 721137"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/star1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:tint="@color/darkGray"
+                    android:src="@drawable/star_half_24" />
+
+                <ImageView
+                    android:id="@+id/star2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:tint="@color/darkGray"
+                    android:src="@drawable/star_half_24" />
+
+                <ImageView
+                    android:id="@+id/star3"
+                    android:layout_width="wrap_content"
+                    android:visibility="visible"
+                    app:tint="@color/darkGray"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_half_24" />
+
+                <ImageView
+                    android:id="@+id/star4"
+                    android:visibility="visible"
+                    app:tint="@color/darkGray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_half_24" />
+
+                <ImageView
+                    android:id="@+id/star5"
+                    android:visibility="visible"
+                    app:tint="@color/darkGray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star_half_24" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_10mdp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_15mdp"
+                        android:background="@color/darkGray"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:textColor="@color/black"
+                        android:text="Sk Sultan Ali, 721137"/>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_10mdp"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:layout_marginEnd="@dimen/_105mdp"
+                android:background="@color/gray"
+                android:textSize="@dimen/_11font_mdp"
+                android:textColor="@color/darkGray"
+                android:text="Sk Sultan Ali, 721137"/>
+
+            <TextView
+                android:id="@+id/addCart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15mdp"
+                android:background="@drawable/bg_dark_grey_cornrs"
+                android:gravity="center"
+                android:paddingTop="@dimen/_3mdp"
+                android:paddingBottom="@dimen/_3mdp"
+                android:text="Add to Cart"
+                android:textColor="@color/darkGray"
+                android:textSize="@dimen/_10font_mdp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/wishList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10mdp"
+            android:background="@drawable/oval_click_effect"
+            android:padding="@dimen/_4mdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <com.like.LikeButton
+                android:id="@+id/wishListBtn"
+                android:layout_width="@dimen/_16mdp"
+                android:layout_height="@dimen/_16mdp"
+                app:anim_scale_factor="10"
+                app:circle_end_color="@color/melon"
+                app:circle_start_color="@color/main_2nd"
+                app:dots_primary_color="@color/main_color"
+                app:dots_secondary_color="@color/dark_main"
+                app:icon_size="@dimen/_16mdp"
+                app:icon_type="Star"
+                app:is_enabled="true"
+                app:like_drawable="@drawable/favorite_24"
+                app:liked="false"
+                app:unlike_drawable="@drawable/favorite_white_24" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/noImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/no_image"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/consLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

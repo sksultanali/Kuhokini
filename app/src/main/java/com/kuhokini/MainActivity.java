@@ -184,9 +184,10 @@ public class MainActivity extends AppCompatActivity {
     void getPostData() {
 //        binding.loadMore.setVisibility(View.VISIBLE);
 //        binding.noData.setVisibility(View.GONE); // Hide noData initially
-
         if (nextPageToken == 0 && adapter != null) {
             adapter.clearItems(); // clear old data on new search
+            binding.featuredRec.showShimmerAdapter();
+            binding.recyclerview.showShimmerAdapter();
         }
 
         Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null);
@@ -206,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
                                 binding.recyclerview.setAdapter(adapter);
+                                binding.featuredRec.hideShimmerAdapter();
+                                binding.recyclerview.hideShimmerAdapter();
 
                                 LinearLayoutManager lnm = new LinearLayoutManager(MainActivity.this);
                                 lnm.setOrientation(RecyclerView.HORIZONTAL);
@@ -239,6 +242,8 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<MainResponse> call, Throwable t) {
 //                binding.noData.setVisibility(View.VISIBLE);
 //                binding.loadMore.setVisibility(View.GONE);
+                binding.featuredRec.hideShimmerAdapter();
+                binding.recyclerview.hideShimmerAdapter();
                 isLoading = false;
             }
         });
@@ -250,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager lnm = new LinearLayoutManager(this);
         lnm.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.categoryRec.setLayoutManager(lnm);
+        binding.categoryRec.showShimmerAdapter();
 
         call.enqueue(new Callback<CategoryResponse>() {
             @Override
@@ -260,12 +266,14 @@ public class MainActivity extends AppCompatActivity {
                         CategoryAdapter adapter = new CategoryAdapter(MainActivity.this,
                                 categoryResponse.getData(), "category_tbl");
                         binding.categoryRec.setAdapter(adapter);
+                        binding.categoryRec.hideShimmerAdapter();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<CategoryResponse> call, Throwable t) {
+                binding.categoryRec.hideShimmerAdapter();
             }
         });
     }

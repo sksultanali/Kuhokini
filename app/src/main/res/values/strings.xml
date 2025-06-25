@@ -2,6 +2,6 @@
     <string name="app_name">Kuhokini</string>
     <string name="loading_please_wait">loading_please_wait</string>
     <string name="product_description">Howdy, Shopping Lovers! You\'ve stumbled upon Kuhokini, the shopping destination designed with you in mind. We house a vast array of products, whether you\'re looking for a sleek new gadget, a stylish wardrobe upgrade, or a cozy home accessory. Our commitment is towards delivering high-quality products at pocket-friendly prices, right to your doorstep. Happy shopping with Kuhokini, where every shopping story is a happy story!</string>
-    <string name="less_shipping_packing">Less, Shipping and Packing (-)</string>
+    <string name="less_shipping_packing">Add, Shipping and Packing (+)</string>
 
 </resources>

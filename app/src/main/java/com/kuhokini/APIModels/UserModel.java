@@ -1,7 +1,8 @@
 package com.kuhokini.APIModels;
 
 public class UserModel {
-    String id, name, email, user_id, token, image, phone, state, pin, address, password;
+    String id, name, email, user_id, token, image, phone, state, dob, gender, password;
+    int order_count, address_count;
 
     public String getId() {
         return id;
@@ -75,19 +76,27 @@ public class UserModel {
         this.state = state;
     }
 
-    public String getPin() {
-        return pin;
+    public String getDob() {
+        return dob;
     }
 
-    public void setPin(String pin) {
-        this.pin = pin;
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
-    public String getAddress() {
-        return address;
+    public String getGender() {
+        return gender;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public int getOrder_count() {
+        return order_count;
+    }
+
+    public int getAddress_count() {
+        return address_count;
     }
 }

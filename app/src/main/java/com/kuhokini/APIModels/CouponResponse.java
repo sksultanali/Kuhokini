@@ -9,6 +9,11 @@ public class CouponResponse {
     private String status;
     private String message;
     private List<CouponModel> data;
+    private CouponModel singleData;
+
+    public CouponModel getSingleData() {
+        return singleData;
+    }
 
     public String getStatus() {
         return status;

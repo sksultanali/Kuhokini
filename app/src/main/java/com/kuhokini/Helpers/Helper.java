@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ import com.google.gson.Gson;
 //import com.hishd.tinycart.model.Item;
 //import com.hishd.tinycart.util.TinyCartHelper;
 import com.kuhokini.APIModels.VariantResponse;
+import com.kuhokini.Account.Login;
+import com.kuhokini.Activities.CheckOut;
 import com.kuhokini.Activities.WebView;
 import com.kuhokini.R;
 import com.kuhokini.databinding.CustomDialogBinding;
@@ -426,6 +429,49 @@ public class Helper {
                         });
             }
         });
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+
+    public static void showOnlyMessage(Activity activity, String title, String content){
+        Helper.showActionDialog(activity, capitalizeFirstLetter(title), content, "Okay", null, true,
+                new DialogButtonClickListener() {
+                    @Override
+                    public void onYesButtonClicked() {}
+                    @Override
+                    public void onNoButtonClicked() {}
+                    @Override
+                    public void onCloseButtonClicked() {}
+                });
+    }
+
+    public static String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
+
+    public static void showLoginDialog(Activity activity){
+        Helper.showActionDialog(activity, "Login Required",
+                "Please login to place order. Click below login button.",
+                "Login", "Later", true, new Helper.DialogButtonClickListener() {
+                    @Override
+                    public void onYesButtonClicked() {
+                        activity.startActivity(new Intent(activity.getApplicationContext(), Login.class));
+                    }
+                    @Override
+                    public void onNoButtonClicked() {}
+                    @Override
+                    public void onCloseButtonClicked() {}
+                });
     }
 
     public interface DialogButtonClickListener {

@@ -32,7 +32,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     OnChangeListener onChangeListener;
 
     public interface OnChangeListener{
-        void changed();
+        void onChangePrimary();
+        void onSelect(AddressResponse.AddressModel addressModel);
     }
 
     public AddressAdapter(Activity activity, List<AddressResponse.AddressModel> models,
@@ -83,7 +84,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
                                 Call<ApiResponse> call = apiService.updateAddressStatus(addressModel.getUser_id(), addressModel.getId());
                                 dialog.show();
                                 Helper.executeCall(call, activity, dialog);
-                                onChangeListener.changed();
+                                onChangeListener.onChangePrimary();
                             }
 
                             @Override
@@ -91,7 +92,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
                                 Call<ApiResponse> call = apiService.deleteTable("addresses", addressModel.getId());
                                 dialog.show();
                                 Helper.executeCall(call, activity, dialog);
-                                onChangeListener.changed();
+                                onChangeListener.onChangePrimary();
                             }
                             @Override
                             public void onCloseButtonClicked() {}
@@ -100,6 +101,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
                 return true;
             }
+        });
+
+        holder.itemView.setOnClickListener(v->{
+            onChangeListener.onSelect(addressModel);
         });
 
 

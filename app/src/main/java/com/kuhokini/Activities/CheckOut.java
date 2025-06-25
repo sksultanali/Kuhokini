@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -36,17 +38,27 @@ import com.google.android.gms.tasks.Task;
 //import com.hishd.tinycart.model.Cart;
 //import com.hishd.tinycart.model.Item;
 //import com.hishd.tinycart.util.TinyCartHelper;
+import com.kuhokini.APIModels.CategoryResponse;
+import com.kuhokini.APIModels.CouponResponse;
 import com.kuhokini.Account.Login;
+import com.kuhokini.Adapters.AddressAdapter;
+import com.kuhokini.Adapters.CategoryAdapter;
+import com.kuhokini.Helpers.ApiService;
 import com.kuhokini.Helpers.Helper;
+import com.kuhokini.Helpers.RetrofitClient;
+import com.kuhokini.Models.AddressResponse;
+import com.kuhokini.Models.CouponModel;
 import com.kuhokini.R;
 import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityCheckOutBinding;
 import com.kuhokini.databinding.AddressDialogBoxBinding;
+import com.kuhokini.databinding.DialogListShowBinding;
 
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -54,26 +66,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CheckOut extends AppCompatActivity {
 
     ActivityCheckOutBinding binding;
+    ApiService apiService;
     TinyCart cart;
-//    ArrayList<boughtModel> products;
-//    ProductModel productModel;
-//    FirebaseAuth auth;
-//    FirebaseDatabase database;
-//    FirebaseStorage storage;
-    Uri imageUri;
-    int money;
-    Activity activity;
-    ProgressDialog dialog, addDialog;
-
-
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCheckOutBinding.inflate(getLayoutInflater());
+        apiService = RetrofitClient.getClient().create(ApiService.class);
         setContentView(binding.getRoot());
         EdgeToEdge.enable(this);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -83,186 +91,228 @@ public class CheckOut extends AppCompatActivity {
             return insets;
         });
         binding.goBack.setOnClickListener(v->onBackPressed());
-
-//        database = FirebaseDatabase.getInstance();
-//        auth = FirebaseAuth.getInstance();
-//        storage = FirebaseStorage.getInstance();
-//        activity = CheckOut.this;
-//
-//        dialog = new ProgressDialog(CheckOut.this);
-//        dialog.setCancelable(false);
-//        dialog.setCanceledOnTouchOutside(false);
-//        dialog.setTitle("Order Processing");
-//        dialog.setMessage("don't exit or close app");
-//
-//        addDialog = new ProgressDialog(CheckOut.this);
-//        addDialog.setMessage("saving data");
-//        addDialog.setCancelable(false);
-//        addDialog.setCanceledOnTouchOutside(false);
+        progressDialog = new ProgressDialog(CheckOut.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Connecting server...");
 
         cart = TinyCart.getInstance();
-//        products = new ArrayList<>();
-//        products.clear();
-//
-//        for(Map.Entry<Item, Integer> item : cart.getAllItemsWithQty().entrySet()) {
-//            productModel = (ProductModel) item.getKey();
-//            int quantity = item.getValue();
-//            productModel.setQuantity(quantity);
-//
-//            products.add(new boughtModel(productModel.getId(), productModel.getQuantity(),
-//                    productModel.getDiscountedPrice().intValue(), "Order is processing"));
-//
-//        }
-
-        String amount = String.valueOf(cart.getTotalPrice());
-//        binding.subTotal.setText(amount);
-//        binding.total.setText(amount);
-//        binding.paymentAmount.setText(amount);
-//        binding.payNowText.setText("Pay ₹" + amount + " Now");
-//
-//        binding.editAddress.setOnClickListener(v->{
-//            addressInput();
-//        });
-
-//        binding.uploadScreenShot.setOnClickListener(v->{
-//            if (binding.address.getText().toString().equalsIgnoreCase("edit your address!")){
-//                addressInput();
-//            }else {
-//                ImagePicker.with(this)
-//                        .crop()	    			//Crop image(Optional), Check Customization for more option
-//                        .compress(3072)			//Final image size will be less than 3 MB(Optional)
-//                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-//                        .start(85);
-//            }
-//        });
-
-
-//        binding.payBtn.setOnClickListener(v->{
-//
-//            int paidValue = Integer.parseInt(binding.paymentAmount.getText().toString());
-//
-//        });
-
         binding.payNow.setOnClickListener(v->{
-            Helper.showActionDialog(CheckOut.this, "Login Required",
-                    "Please login to place order. Click below login button.",
-                    "Login", "Later", true, new Helper.DialogButtonClickListener() {
-                        @Override
-                        public void onYesButtonClicked() {
-                            startActivity(new Intent(CheckOut.this, Login.class));
+            String phoneNo = Helper.getData(CheckOut.this, "phone");
+            String name = binding.name.getText().toString();
+            String address = binding.address.getText().toString();
+            String phone = binding.phone.getText().toString();
+            
+            if (phoneNo == null || phoneNo.isEmpty()){
+                Helper.showLoginDialog(CheckOut.this);
+            }else if (name.isEmpty() || address.isEmpty() || phone.isEmpty()){
+                Helper.showOnlyMessage(CheckOut.this, "Address Required",
+                        "Please click on <b>'Add New Address'</b> and fill complete address where you want your delivery!");
+            }else {
+                Toast.makeText(this, "good to go", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        loadAddresses();
+        binding.addAddress.setOnClickListener(v -> {
+            String phoneNo = Helper.getData(CheckOut.this, "phone");
+            if (phoneNo == null || phoneNo.isEmpty()){
+                Helper.showLoginDialog(CheckOut.this);
+            }else {
+                startActivity(new Intent(CheckOut.this, AddressActivity.class));
+            }
+        });
+
+        binding.payToggle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (binding.payOnline.isChecked()){
+                    binding.paymentIcons.setVisibility(View.VISIBLE);
+                    binding.cashExtra.setVisibility(View.GONE);
+                }else {
+                    binding.paymentIcons.setVisibility(View.GONE);
+                    binding.cashExtra.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+        binding.applyCode.setOnClickListener(v -> {
+            String couponCode = binding.ccEdText.getText().toString().trim();
+            if (couponCode.isEmpty()) {
+                binding.ccEdText.setError("Required!");
+                return;
+            }
+
+            Call<CouponResponse> call = apiService.checkCouponCode(couponCode);
+            call.enqueue(new Callback<CouponResponse>() {
+                @Override
+                public void onResponse(Call<CouponResponse> call, Response<CouponResponse> response) {
+                    if (response.isSuccessful() && response.body() != null){
+                        CouponResponse couponResponse = response.body();
+                        if (couponResponse.getStatus().equalsIgnoreCase("success")){
+                            applyCoupon(couponResponse.getSingleData());
+                        }else {
+                            Helper.showOnlyMessage(CheckOut.this, "Failed ",
+                                    couponResponse.getMessage());
                         }
+                    }
+                }
 
-                        @Override
-                        public void onNoButtonClicked() {
+                @Override
+                public void onFailure(Call<CouponResponse> call, Throwable t) {
+                    Helper.showOnlyMessage(CheckOut.this, "Error ",
+                            "Something went wrong. Please try again later. "+ t.getLocalizedMessage());
+                }
+            });
+        });
 
-                        }
-
-                        @Override
-                        public void onCloseButtonClicked() {
-
-                        }
-                    });
+        binding.removeCuppon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.appliedCoupon.setVisibility(View.GONE);
+                binding.PerDis.setText("");
+//                binding.coupons.setTextColor(getColor(R.color.icon_color));
+//                binding.coupons.setText(" | Coupon can be applied");
+//                Helper.COUPON_CODE = 0;
+//                Helper.FLAT_DISCOUNT = 0;
+//                binding.ccEdText.setText("");
+//                setPrice();
+            }
         });
 
     }
 
-    public void addressInput(){
-        AddressDialogBoxBinding addressBinding = AddressDialogBoxBinding.inflate(getLayoutInflater());
+    private void applyCoupon(CouponModel coupon) {
+//        if ("Percentage".equalsIgnoreCase(coupon.getType())) {
+//            Helper.FLAT_DISCOUNT = 0;
+//            Helper.COUPON_CODE = coupon.getPercentageOrAmount();
+//            binding.coupons.setText(" | " + Helper.COUPON_CODE + "% Coupon code applied");
+//            binding.PerDis.setText(Helper.COUPON_CODE + "% OFF applied");
+//        } else {
+//            Helper.COUPON_CODE = -1;
+//            Helper.FLAT_DISCOUNT = coupon.getPercentageOrAmount();
+//            binding.coupons.setText(" | ₹" + Helper.FLAT_DISCOUNT + "/- Flat Off");
+//            binding.PerDis.setText("₹" + Helper.FLAT_DISCOUNT + "/- Flat Off");
+//        }
+//
+//        binding.appliedCoupon.setVisibility(View.VISIBLE);
+//        binding.coupons.setTextColor(getColor(R.color.blue_purple));
+//        setPrice();
+    }
 
-        // Create a new dialog and set the custom layout
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(addressBinding.getRoot());
+    private void loadAddresses() {
+        String phoneNo = Helper.getData(CheckOut.this, "user_id");
+        if (phoneNo == null || phoneNo.isEmpty()){
+            noAddress();
+            return;
+        }
+        Call<AddressResponse> call = apiService.getAddresses(phoneNo);
+        call.enqueue(new Callback<AddressResponse>() {
+            @Override
+            public void onResponse(Call<AddressResponse> call, Response<AddressResponse> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    AddressResponse addressResponse = response.body();
+                    if (addressResponse.getCod_enable() == 0){
+                        binding.cod.setChecked(false);
+                        binding.payOnline.setChecked(true);
+                        binding.cod.setVisibility(View.GONE);
+                    }
+
+                    if (addressResponse.getStatus().equalsIgnoreCase("success")){
+                        if (addressResponse.getAddresses().isEmpty()){
+                            noAddress();
+                        }else {
+                            AddressResponse.AddressModel addressModel = addressResponse.getAddresses().get(0);
+                            binding.name.setText(addressModel.getName());
+                            binding.phone.setText("+91 "+addressModel.getPhone());
+                            if (addressModel.getLandmark() != null && !addressModel.getLandmark().isEmpty()) {
+                                binding.address.setText(addressModel.getAddress() + ", "+ addressModel.getLandmark()+", "
+                                        + addressModel.getState());
+                            }else {
+                                binding.address.setText(addressModel.getAddress() + ", "
+                                        + addressModel.getState());
+                            }
+                            binding.noAddress.setVisibility(View.GONE);
+                            binding.addressLayout.setVisibility(View.VISIBLE);
+                            binding.changeAddress.setVisibility(View.VISIBLE);
+                            binding.addAddress.setVisibility(View.GONE);
+
+                            binding.changeAddress.setOnClickListener(v->{
+                                showAddresses(addressResponse.getAddresses());
+                            });
+                        }
+                    }else {
+                        noAddress();
+                    }
+                }else {
+                    noAddress();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddressResponse> call, Throwable t) {
+                noAddress();
+            }
+        });
+    }
+
+    private void noAddress() {
+        binding.noAddress.setVisibility(View.VISIBLE);
+        binding.addressLayout.setVisibility(View.GONE);
+        binding.changeAddress.setVisibility(View.GONE);
+        binding.addAddress.setVisibility(View.VISIBLE);
+    }
+
+    private void showAddresses(List<AddressResponse.AddressModel> addressModelList) {
+        DialogListShowBinding listsBinding = DialogListShowBinding.inflate(getLayoutInflater());
+        Dialog dialog = new Dialog(CheckOut.this);
+        dialog.setContentView(listsBinding.getRoot());
+
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
-        addressBinding.nameInput.postDelayed(new Runnable() {
+        listsBinding.title.setText("Select Any Address");
+
+        listsBinding.recyclerview.setLayoutManager(new LinearLayoutManager(CheckOut.this));
+        AddressAdapter addressAdapter = new AddressAdapter(CheckOut.this,
+                addressModelList,
+                apiService, progressDialog, new AddressAdapter.OnChangeListener() {
             @Override
-            public void run() {
-                addressBinding.nameInput.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(addressBinding.nameInput, InputMethodManager.SHOW_IMPLICIT);
+            public void onChangePrimary() {
+                
             }
-        }, 200);
 
-        addressBinding.postBtn.setOnClickListener(v->{
-            String name = addressBinding.nameInput.getText().toString();
-            String phone = addressBinding.nameInput.getText().toString();
-            String address = addressBinding.nameInput.getText().toString();
-            String pinCode = addressBinding.nameInput.getText().toString();
-
-            if (name.isEmpty()){
-                addressBinding.nameInput.setError("*");
-            }else if (phone.isEmpty()){
-                addressBinding.phone.setError("*");
-            }else if (address.isEmpty()){
-                addressBinding.addressBox.setError("*");
-            }else if (pinCode.isEmpty()){
-                addressBinding.pinCode.setError("*");
-            }else {
-
-                String makeAddress = "Name: " + addressBinding.nameInput.getText().toString() + "\n" +
-                        "Phone: " + addressBinding.phone.getText().toString() + "\n\n" +
-                        addressBinding.addressBox.getText().toString() + "\n" +
-                        "Pin-code: " + addressBinding.pinCode.getText().toString();
-
-//                binding.address.setText(makeAddress);
-
-                addDialog.show();
-
+            @Override
+            public void onSelect(AddressResponse.AddressModel addressModel) {
+                binding.name.setText(addressModel.getName());
+                binding.phone.setText("+91 "+addressModel.getPhone());
+                if (addressModel.getLandmark() != null && !addressModel.getLandmark().isEmpty()) {
+                    binding.address.setText(addressModel.getAddress() + ", "+ addressModel.getLandmark()+", "
+                            + addressModel.getState());
+                }else {
+                    binding.address.setText(addressModel.getAddress() + ", "
+                            + addressModel.getState());
+                }
+                dialog.dismiss();
             }
         });
 
+        listsBinding.recyclerview.setAdapter(addressAdapter);
+        listsBinding.noData.setVisibility(View.GONE);
+        listsBinding.addNewAddress.setVisibility(View.VISIBLE);
 
+        listsBinding.addNewAddressBtn.setOnClickListener(v->{
+            startActivity(new Intent(CheckOut.this, AddressActivity.class));
+            dialog.dismiss();
+        });
 
-
-
-
-        // Show the dialog
+        listsBinding.closeBtn.setOnClickListener(v->{
+            dialog.dismiss();
+        });
+        
         dialog.show();
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (data != null && data.getData() != null && requestCode == 85){
-//            binding.uploadScreenShot.setEnabled(false);
-            imageUri = data.getData();
-            dialog.show();
-        }
-
-        if (requestCode == 17) {
-            if (resultCode == RESULT_OK) {
-                // Payment was successful, you can handle it here.
-                // You can also check the payment response data for more details.
-                
-                if (data != null){
-                    String response = data.getStringExtra("response");
-
-                    if (response == null){
-                        Toast.makeText(this, "response is empty", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(this, response, Toast.LENGTH_SHORT).show();
-                    }
-
-                }else {
-                    Toast.makeText(this, "data is null", Toast.LENGTH_SHORT).show();
-                }
-                
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // Payment was canceled by the user.
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
-
-            } else {
-                // Payment failed or an unknown error occurred.
-                Toast.makeText(this, "Payment Failed", Toast.LENGTH_SHORT).show();
-
-            }
-        }
-
-    }
 
 }

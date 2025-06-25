@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,6 +72,7 @@ public class Login extends AppCompatActivity {
                 binding.passwordBox.setError("*");
             }else {
                 Call<SingleUserResponse> call = apiService.getUserDetails(phone);
+                Helper.hideKeyboard(Login.this);
                 progressDialog.setMessage("Finding profile details...");
                 progressDialog.show();
                 call.enqueue(new Callback<SingleUserResponse>() {
@@ -81,7 +83,10 @@ public class Login extends AppCompatActivity {
                             if (userResponse.getStatus().equalsIgnoreCase("success")){
                                 if (userResponse.getData().getPassword().equalsIgnoreCase(password)){
                                     Helper.saveData(Login.this, "user_id", userResponse.getData().getId());
-                                    startActivity(new Intent(Login.this, MainActivity.class));
+                                    Helper.saveData(Login.this, "phone", userResponse.getData().getPhone());
+                                    Helper.saveData(Login.this, "email", userResponse.getData().getEmail());
+                                    //startActivity(new Intent(Login.this, MainActivity.class));
+                                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_LONG).show();
                                     finish();
                                 }else {
                                     Helper.showActionDialog(Login.this, "Password Mismatch",
@@ -123,6 +128,10 @@ public class Login extends AppCompatActivity {
                                         });
                             }
                             progressDialog.dismiss();
+                        }else{
+                            progressDialog.dismiss();
+                            Helper.showOnlyMessage(Login.this, "Error!", "Something went wrong. " +
+                                    "Please check entered phone number and try again!");
                         }
                     }
 

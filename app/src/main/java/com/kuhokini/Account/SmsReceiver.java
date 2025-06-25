@@ -66,12 +66,12 @@ public class SmsReceiver extends BroadcastReceiver {
                             break;
                         case CommonStatusCodes.TIMEOUT:
                             if (smsListener != null) {
-                                smsListener.onOtpError("OTP retrieval timed out");
+                                //smsListener.onOtpError("OTP retrieval timed out");
                             }
                             break;
                         default:
                             if (smsListener != null) {
-                                smsListener.onOtpError("Error retrieving OTP");
+                                //smsListener.onOtpError("Error retrieving OTP");
                             }
                             break;
                     }

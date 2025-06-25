@@ -39,6 +39,7 @@ public class WishListActivity extends AppCompatActivity {
             return insets;
         });
         binding.goBack.setOnClickListener(v->onBackPressed());
+        binding.wishListRec.showShimmerAdapter();
 
         db_wishList_helper = new DB_Helper_WishList(WishListActivity.this);
         wishListModelArrayList = new ArrayList<>();
@@ -62,6 +63,7 @@ public class WishListActivity extends AppCompatActivity {
             wisAdapter = new WishLIstAdapter(WishListActivity.this, wishListModelArrayList, binding.noData);
             binding.wishListRec.setAdapter(wisAdapter);
             binding.noData.setVisibility(View.GONE);
+            binding.wishListRec.hideShimmerAdapter();
         }
         if (wishListModelArrayList.isEmpty()){
             binding.wishListRec.setVisibility(View.GONE);
@@ -70,6 +72,7 @@ public class WishListActivity extends AppCompatActivity {
             binding.wishListRec.setVisibility(View.VISIBLE);
             binding.noData.setVisibility(View.GONE);
         }
+        binding.wishListRec.hideShimmerAdapter();
 
         binding.goBack.setOnClickListener(v->{
             onBackPressed();

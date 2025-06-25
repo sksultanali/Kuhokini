@@ -1,8 +1,11 @@
 package com.kuhokini.Activities;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.kuhokini.Account.Login;
 import com.kuhokini.Helpers.Helper;
 import com.kuhokini.R;
 import com.kuhokini.databinding.ActivityMenuBinding;
@@ -20,6 +24,7 @@ import org.commonmark.node.OrderedList;
 public class MenuActivity extends AppCompatActivity {
 
     ActivityMenuBinding binding;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +39,42 @@ public class MenuActivity extends AppCompatActivity {
             return insets;
         });
         binding.goBack.setOnClickListener(v->onBackPressed());
+        userId = Helper.getData(MenuActivity.this, "user_id");
+
+        if (userId == null){
+            binding.myProfile.setVisibility(View.GONE);
+            binding.notLoginSec.setVisibility(View.VISIBLE);
+        }else {
+            binding.myProfile.setVisibility(View.VISIBLE);
+            binding.notLoginSec.setVisibility(View.GONE);
+        }
 
         binding.myProfile.setOnClickListener(v->{
             startActivity(new Intent(MenuActivity.this, ProfileActivity.class));
         });
 
+        binding.logBtn.setOnClickListener(v->{
+            startActivity(new Intent(MenuActivity.this, Login.class));
+            finish();
+        });
+
         binding.addresses.setOnClickListener(v->{
-            startActivity(new Intent(MenuActivity.this, AddressActivity.class));
+            if (userId == null){
+                Helper.showLoginDialog(MenuActivity.this);
+            }else {
+                startActivity(new Intent(MenuActivity.this, AddressActivity.class));
+            }
         });
 
         binding.wishList.setOnClickListener(v->{
             startActivity(new Intent(MenuActivity.this, WishListActivity.class));
         });
         binding.orders.setOnClickListener(v->{
-            startActivity(new Intent(MenuActivity.this, OrdersActivity.class));
+            if (userId == null){
+                Helper.showLoginDialog(MenuActivity.this);
+            }else {
+                startActivity(new Intent(MenuActivity.this, OrdersActivity.class));
+            }
         });
         binding.coupons.setOnClickListener(v->{
             startActivity(new Intent(MenuActivity.this, CouponsActivity.class));
@@ -77,10 +104,20 @@ public class MenuActivity extends AppCompatActivity {
         binding.instagram.setOnClickListener(v->{
             Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
         });
+        binding.youTube.setOnClickListener(v->{
+            Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
+        });
         binding.website.setOnClickListener(v->{
             Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
         });
 
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            Long versionCode = (long) packageInfo.versionCode;
+            binding.appVersionText.setText("App Version " + versionCode + "\nMade with ❤\uFE0F Kuhokini");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
 

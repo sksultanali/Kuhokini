@@ -9,6 +9,9 @@ public class ApiResponse {
     @SerializedName("message")
     private String message;
 
+    @SerializedName("user_id")
+    private String user_id;
+
     @SerializedName("data")
     private Data data;
 
@@ -22,6 +25,14 @@ public class ApiResponse {
 
     public Data getData() {
         return data;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public static class Data {

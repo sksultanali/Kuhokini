@@ -5,9 +5,13 @@ import java.util.List;
 public class AddressResponse {
     private String status;
     private List<AddressModel> addresses;
-
+    private int cod_enable;
     public String getStatus() {
         return status;
+    }
+
+    public int getCod_enable() {
+        return cod_enable;
     }
 
     public List<AddressModel> getAddresses() {
@@ -24,6 +28,7 @@ public class AddressResponse {
         private String address;
         private String landmark;
         private int status;
+
 
         public String getId() {
             return id;
@@ -60,6 +65,8 @@ public class AddressResponse {
         public int getStatus() {
             return status;
         }
+
+
     }
 
 

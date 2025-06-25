@@ -5,166 +5,172 @@
     android:layout_width="match_parent"
     android:id="@+id/main"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Activities.CartActivity">
 
-    <LinearLayout
-        android:id="@+id/cartActionBar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:minHeight="?attr/actionBarSize"
-        android:gravity="center"
-        android:elevation="@dimen/_5mdp"
-        android:padding="@dimen/_10mdp"
-        android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:id="@+id/goBack"
-            android:layout_width="@dimen/_20mdp"
-            android:layout_height="@dimen/_20mdp"
-            app:tint="@color/black"
-            android:src="@drawable/arrow_back_24"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/_10mdp"
-            android:textSize="@dimen/_14font_mdp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:text="my Cart"/>
+        android:layout_height="match_parent"
+        android:background="@color/gray">
         <LinearLayout
-            android:id="@+id/clearAllBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/_8mdp"
-            android:paddingEnd="@dimen/_8mdp"
-            android:paddingTop="@dimen/_4mdp"
-            android:paddingBottom="@dimen/_4mdp"
-            android:background="@drawable/click_effect_white"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Clear All"
-                android:textSize="@dimen/_11font_mdp"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/cartEmpty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/bottomPrice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/cartList"
-        app:layout_constraintTop_toBottomOf="@id/cartActionBar">
-        <ImageView
-            android:layout_width="@dimen/_80mdp"
-            android:layout_height="@dimen/_80mdp"
-            android:src="@drawable/no_image" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cart is Empty!"
-            android:layout_marginTop="@dimen/_2mdp"
-            android:textSize="@dimen/_10font_mdp"
-            android:layout_gravity="center"
-            android:textColor="@color/black"/>
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cartList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        tools:listitem="@layout/item_cart"
-        app:layout_constraintBottom_toTopOf="@+id/bottomPrice"
-        app:layout_constraintTop_toBottomOf="@+id/cartActionBar"
-        tools:layout_editor_absoluteX="5dp" />
-
-    <LinearLayout
-        android:id="@+id/bottomPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/darkGray"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/_2mdp"
-        android:paddingBottom="@dimen/_2mdp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10mdp"
-            android:textSize="@dimen/_10font_mdp"
-            android:text="Order by clicking continue below..."/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
+            android:id="@+id/cartActionBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:background="@drawable/click_effect_white_grey"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/_10mdp">
-
+            android:minHeight="?attr/actionBarSize"
+            android:gravity="center"
+            android:elevation="@dimen/_5mdp"
+            android:padding="@dimen/_10mdp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/goBack"
+                android:layout_width="@dimen/_20mdp"
+                android:layout_height="@dimen/_20mdp"
+                app:tint="@color/black"
+                android:src="@drawable/arrow_back_24"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Subtotal"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12font_mdp"
-                android:textStyle="bold" />
-            <TextView
-                android:id="@+id/subtotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:layout_marginStart="10dp"
-                android:text="₹0"
-                android:textColor="@color/blue_purple"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_10mdp"
                 android:textSize="@dimen/_14font_mdp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="my Cart"/>
+            <LinearLayout
+                android:id="@+id/clearAllBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/_8mdp"
+                android:paddingEnd="@dimen/_8mdp"
+                android:paddingTop="@dimen/_4mdp"
+                android:paddingBottom="@dimen/_4mdp"
+                android:background="@drawable/click_effect_white"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Clear All"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/continueBtn"
+            android:id="@+id/cartEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bottomPrice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/cartList"
+            app:layout_constraintTop_toBottomOf="@id/cartActionBar">
+            <ImageView
+                android:layout_width="@dimen/_80mdp"
+                android:layout_height="@dimen/_80mdp"
+                android:src="@drawable/no_image" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cart is Empty!"
+                android:layout_marginTop="@dimen/_2mdp"
+                android:textSize="@dimen/_10font_mdp"
+                android:layout_gravity="center"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:listitem="@layout/item_cart"
+            app:layout_constraintBottom_toTopOf="@+id/bottomPrice"
+            app:layout_constraintTop_toBottomOf="@+id/cartActionBar"
+            tools:layout_editor_absoluteX="5dp" />
+
+        <LinearLayout
+            android:id="@+id/bottomPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/click_effect_dark"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/_10mdp"
-            android:paddingBottom="@dimen/_10mdp">
-
+            android:background="@color/darkGray"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/_2mdp"
+            android:paddingBottom="@dimen/_2mdp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10mdp"
+                android:textSize="@dimen/_10font_mdp"
+                android:text="Order by clicking continue below..."/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:background="@drawable/click_effect_white_grey"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_10mdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subtotal"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12font_mdp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/subtotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_marginStart="10dp"
+                    android:text="₹0"
+                    android:textColor="@color/blue_purple"
+                    android:textSize="@dimen/_14font_mdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/continueBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Continue"
-                android:textSize="@dimen/_12font_mdp"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:layout_weight="1"
+                android:background="@drawable/click_effect_dark"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/_10mdp"
+                android:paddingBottom="@dimen/_10mdp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Continue"
+                    android:textSize="@dimen/_12font_mdp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

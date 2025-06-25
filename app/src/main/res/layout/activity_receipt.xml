@@ -6,466 +6,500 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Activities.ReceiptActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout7"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:elevation="@dimen/_5mdp"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/goBack"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:tint="@color/black"
-            android:src="@drawable/arrow_back_24" />
-
+        android:layout_height="match_parent"
+        android:background="@color/gray">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Receipt Activity"
-                android:textColor="@color/black"
-                android:ellipsize="end"
-                android:textSize="@dimen/_14font_mdp"
-                android:singleLine="true"/>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/getMail"
-            android:layout_width="@dimen/_22mdp"
-            android:layout_height="@dimen/_22mdp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/baseline_email_24" />
-
-        <ImageView
-            android:id="@+id/sharePrint"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="5dp"
-            android:paddingEnd="10dp"
-            android:src="@drawable/share_icon_color_24" />
-    </LinearLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
-
-        <LinearLayout
+            android:id="@+id/linearLayout7"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:elevation="@dimen/_5mdp"
+            android:orientation="horizontal"
+            android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/goBack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:tint="@color/black"
+                android:src="@drawable/arrow_back_24" />
+
             <LinearLayout
-                android:id="@+id/printShareLayout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/gray"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Receipt Activity"
+                    android:textColor="@color/black"
+                    android:ellipsize="end"
+                    android:textSize="@dimen/_14font_mdp"
+                    android:singleLine="true"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/getMail"
+                android:layout_width="@dimen/_22mdp"
+                android:layout_height="@dimen/_22mdp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/baseline_email_24" />
+
+            <ImageView
+                android:id="@+id/sharePrint"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="5dp"
+                android:paddingEnd="10dp"
+                android:src="@drawable/share_icon_color_24" />
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <LinearLayout
+                    android:id="@+id/printShareLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10mdp"
-                    android:background="@drawable/back_white_border_grey_corner"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_10mdp">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="@dimen/_42mdp"
-                        android:layout_height="@dimen/_42mdp"
-                        android:src="@drawable/logo" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/app_name"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_13font_mdp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Shines Forever"
-                            android:textSize="@dimen/_11font_mdp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Howrah | West Bengal - 7000 123"
-                            android:textSize="@dimen/_10font_mdp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10mdp"
-                    android:layout_marginTop="@dimen/_5mdp"
-                    android:layout_marginEnd="@dimen/_10mdp"
-                    android:layout_marginBottom="@dimen/_5mdp"
-                    android:background="@drawable/back_white_border_grey_corner"
+                    android:background="@color/gray"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/bg_blue_purple_corners"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_10mdp"
-                        android:paddingEnd="@dimen/_10mdp"
-                        android:text="Receipt Copy"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_10font_mdp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10mdp"
-                        android:layout_marginEnd="@dimen/_10mdp"
-                        android:orientation="horizontal">
+                        android:layout_margin="@dimen/_10mdp"
+                        android:background="@drawable/back_white_border_grey_corner"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_10mdp">
 
-                        <TextView
-                            android:id="@+id/bookingId"
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="@dimen/_42mdp"
+                            android:layout_height="@dimen/_42mdp"
+                            android:src="@drawable/logo" />
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="Invoice No\n#324564"
-                            android:textSize="@dimen/_11font_mdp" />
-
-                        <TextView
-                            android:id="@+id/bookingDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="end"
-                            android:text="Date- 19 Nov 2023"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_11font_mdp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10mdp"
-                        android:layout_marginEnd="@dimen/_20mdp"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/hotel_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textStyle="bold"
-                                android:text="Product Name"
+                                android:text="@string/app_name"
                                 android:textColor="@color/black"
+                                android:textSize="@dimen/_13font_mdp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Shines Forever"
                                 android:textSize="@dimen/_11font_mdp" />
 
                             <TextView
-                                android:id="@+id/room_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Variant Name"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11font_mdp" />
-
-                            <TextView
-                                android:id="@+id/roomName_address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Delivery Partner Name"
-                                android:textSize="@dimen/_11font_mdp" />
+                                android:text="Howrah | West Bengal - 7000 123"
+                                android:textSize="@dimen/_10font_mdp" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/roomImg"
-                            android:layout_width="@dimen/_40mdp"
-                            android:layout_height="@dimen/_40mdp"
-                            android:src="@drawable/placeholder" />
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/back_white_border_grey_corner"
-                        android:layout_margin="@dimen/_10mdp"
-                        android:padding="@dimen/_5mdp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/bookingName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Customer Name"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_11font_mdp" />
-
-                        <TextView
-                            android:id="@+id/bookingEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Customer Email Address"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_11font_mdp" />
-
-                        <TextView
-                            android:id="@+id/bookingPhone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="+91 9865 XXXX 20"
-                            android:textSize="@dimen/_11font_mdp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/back_white_border_grey_corner"
                         android:layout_marginStart="@dimen/_10mdp"
-                        android:layout_marginEnd="@dimen/_10mdp"
-                        android:layout_marginBottom="@dimen/_10mdp"
-                        android:padding="@dimen/_5mdp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/bookingAddress"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Customer Complete Address"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_11font_mdp" />
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/bookingEmail"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:gravity="center"-->
-<!--                            android:text="Customer Email Address"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:textSize="@dimen/_11font_mdp" />-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/bookingPhone"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:gravity="center"-->
-<!--                            android:text="+91 9865 XXXX 20"-->
-<!--                            android:textSize="@dimen/_11font_mdp" />-->
-                    </LinearLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1mdp"
                         android:layout_marginTop="@dimen/_5mdp"
-                        android:background="@color/darkGray" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10mdp"
-                        android:layout_marginTop="@dimen/_10mdp"
                         android:layout_marginEnd="@dimen/_10mdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="@dimen/_5mdp"
+                        android:background="@drawable/back_white_border_grey_corner"
+                        android:orientation="vertical">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:background="@drawable/bg_blue_purple_corners"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:paddingEnd="@dimen/_10mdp"
+                            android:text="Receipt Copy"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_10font_mdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10mdp"
+                            android:layout_marginEnd="@dimen/_10mdp"
+                            android:orientation="horizontal">
 
                             <TextView
+                                android:id="@+id/bookingId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Ordered"
+                                android:gravity="center"
+                                android:text="Invoice No\n#324564"
                                 android:textSize="@dimen/_11font_mdp" />
 
                             <TextView
-                                android:id="@+id/trips_start"
+                                android:id="@+id/bookingDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="15-Mar-2023"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11font_mdp" />
-
-                            <TextView
-                                android:id="@+id/checkIn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="12:30 am"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="end"
+                                android:text="Date- 19 Nov 2023"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_11font_mdp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:layout_marginStart="@dimen/_10mdp"
+                            android:layout_marginEnd="@dimen/_20mdp"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_weight="1"
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/gap"
+                                    android:id="@+id/hotel_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:text="2"
+                                    android:textStyle="bold"
+                                    android:text="Product Name"
+                                    android:textColor="@color/black"
                                     android:textSize="@dimen/_11font_mdp" />
 
-                                <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
-                                    android:layout_gravity="center"
-                                    android:gravity="center"
-                                    android:src="@drawable/sun_24"
-                                    app:tint="@color/icon_color" />
+                                <TextView
+                                    android:id="@+id/room_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Variant Name"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/_11font_mdp" />
+
+                                <TextView
+                                    android:id="@+id/roomName_address"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Delivery Partner Name"
+                                    android:textSize="@dimen/_11font_mdp" />
                             </LinearLayout>
 
+                            <ImageView
+                                android:id="@+id/roomImg"
+                                android:layout_width="@dimen/_40mdp"
+                                android:layout_height="@dimen/_40mdp"
+                                android:src="@drawable/placeholder" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/back_white_border_grey_corner"
+                            android:layout_margin="@dimen/_10mdp"
+                            android:padding="@dimen/_5mdp"
+                            android:orientation="vertical">
+
                             <TextView
-                                android:id="@+id/gapTxt"
+                                android:id="@+id/bookingName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Customer Name"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_11font_mdp" />
+
+                            <TextView
+                                android:id="@+id/bookingEmail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Customer Email Address"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_11font_mdp" />
+
+                            <TextView
+                                android:id="@+id/bookingPhone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="+91 9865 XXXX 20"
+                                android:textSize="@dimen/_11font_mdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/back_white_border_grey_corner"
+                            android:layout_marginStart="@dimen/_10mdp"
+                            android:layout_marginEnd="@dimen/_10mdp"
+                            android:layout_marginBottom="@dimen/_10mdp"
+                            android:padding="@dimen/_5mdp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/bookingAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Customer Complete Address"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_11font_mdp" />
+
+                            <!--                        <TextView-->
+                            <!--                            android:id="@+id/bookingEmail"-->
+                            <!--                            android:layout_width="match_parent"-->
+                            <!--                            android:layout_height="wrap_content"-->
+                            <!--                            android:layout_weight="1"-->
+                            <!--                            android:gravity="center"-->
+                            <!--                            android:text="Customer Email Address"-->
+                            <!--                            android:textColor="@color/black"-->
+                            <!--                            android:textSize="@dimen/_11font_mdp" />-->
+
+                            <!--                        <TextView-->
+                            <!--                            android:id="@+id/bookingPhone"-->
+                            <!--                            android:layout_width="match_parent"-->
+                            <!--                            android:layout_height="wrap_content"-->
+                            <!--                            android:layout_weight="1"-->
+                            <!--                            android:gravity="center"-->
+                            <!--                            android:text="+91 9865 XXXX 20"-->
+                            <!--                            android:textSize="@dimen/_11font_mdp" />-->
+                        </LinearLayout>
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1mdp"
+                            android:layout_marginTop="@dimen/_5mdp"
+                            android:background="@color/darkGray" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10mdp"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:layout_marginEnd="@dimen/_10mdp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="days"
-                                android:textSize="@dimen/_11font_mdp" />
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ordered"
+                                    android:textSize="@dimen/_11font_mdp" />
+
+                                <TextView
+                                    android:id="@+id/trips_start"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15-Mar-2023"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/_11font_mdp" />
+
+                                <TextView
+                                    android:id="@+id/checkIn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="12:30 am"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/_11font_mdp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/gap"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="2"
+                                        android:textSize="@dimen/_11font_mdp" />
+
+                                    <ImageView
+                                        android:layout_width="14dp"
+                                        android:layout_height="14dp"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:src="@drawable/sun_24"
+                                        app:tint="@color/icon_color" />
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/gapTxt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="days"
+                                    android:textSize="@dimen/_11font_mdp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:gravity="end"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Delivery"
+                                    android:textSize="@dimen/_11font_mdp" />
+
+                                <TextView
+                                    android:id="@+id/trips_end"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15-Mar-2023"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/_11font_mdp" />
+
+                                <TextView
+                                    android:id="@+id/checkOut"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="12:30 am"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/_11font_mdp" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:gravity="end"
-                            android:orientation="vertical">
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:background="@drawable/bg_gray_round_corner"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:paddingEnd="@dimen/_10mdp"
+                            android:visibility="visible">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Delivery"
+                                android:text="1 psc (quantity)"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_10mdp"
+                            android:background="@color/light_orange"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:paddingEnd="@dimen/_10mdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Amount Paid "
+                                android:textColor="@color/blue_purple"
                                 android:textSize="@dimen/_11font_mdp" />
 
                             <TextView
-                                android:id="@+id/trips_end"
+                                android:id="@+id/amountPaid"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="15-Mar-2023"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_11font_mdp" />
-
-                            <TextView
-                                android:id="@+id/checkOut"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="12:30 am"
-                                android:textColor="@color/black"
+                                android:drawableStart="@drawable/rupee_24"
+                                android:drawableTint="@color/blue_purple"
+                                android:gravity="center"
+                                android:text="5000"
+                                android:textColor="@color/blue_purple"
                                 android:textSize="@dimen/_11font_mdp" />
                         </LinearLayout>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:background="@drawable/bg_gray_round_corner"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/_10mdp"
-                        android:paddingEnd="@dimen/_10mdp"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1 psc (quantity)"/>
-
-                    </LinearLayout>
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_10mdp"
-                        android:background="@color/light_orange"
-                        android:orientation="horizontal"
-                        android:paddingStart="@dimen/_10mdp"
-                        android:paddingEnd="@dimen/_10mdp">
+                        android:layout_marginStart="@dimen/_10mdp"
+                        android:layout_marginTop="@dimen/_5mdp"
+                        android:layout_marginEnd="@dimen/_10mdp"
+                        android:layout_marginBottom="@dimen/_5mdp"
+                        android:background="@drawable/back_white_border_grey_corner"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_5mdp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Amount Paid "
-                            android:textColor="@color/blue_purple"
-                            android:textSize="@dimen/_11font_mdp" />
+                            android:layout_marginTop="@dimen/_5mdp"
+                            android:text="Price Breakdown"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11font_mdp"
+                            android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/amountPaid"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/rupee_24"
-                            android:drawableTint="@color/blue_purple"
-                            android:gravity="center"
-                            android:text="5000"
-                            android:textColor="@color/blue_purple"
-                            android:textSize="@dimen/_11font_mdp" />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
+
                 </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/cancelLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10mdp"
@@ -477,220 +511,192 @@
                     android:padding="@dimen/_5mdp">
 
                     <TextView
+                        android:id="@+id/tv_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5mdp"
-                        android:text="Price Breakdown"
+                        android:text="Cancellation Policy"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_11font_mdp"
                         android:textStyle="bold" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cancelLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10mdp"
-                android:layout_marginTop="@dimen/_5mdp"
-                android:layout_marginEnd="@dimen/_10mdp"
-                android:layout_marginBottom="@dimen/_5mdp"
-                android:background="@drawable/back_white_border_grey_corner"
-                android:orientation="vertical"
-                android:padding="@dimen/_5mdp">
-
-                <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5mdp"
-                    android:text="Cancellation Policy"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_11font_mdp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/gray"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/_5mdp"
-                        android:text="This special discounted rate is Refundable. If you choose to cancel this order, refund of 100% of the payment will be initiated automatically...!"
-                        android:textSize="@dimen/_11font_mdp" />
-
-                    <TextView
-                        android:id="@+id/cancelBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:layout_marginEnd="@dimen/_10mdp"
-                        android:layout_marginBottom="@dimen/_10mdp"
-                        android:layout_weight="1"
-                        android:background="@drawable/back_click_effect_red_gray"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_10mdp"
-                        android:paddingTop="@dimen/_5mdp"
-                        android:paddingEnd="@dimen/_10mdp"
-                        android:paddingBottom="@dimen/_5mdp"
-                        android:text="Cancel Now"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_10font_mdp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rescheduleLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10mdp"
-                android:layout_marginTop="@dimen/_5mdp"
-                android:visibility="gone"
-                android:layout_marginEnd="@dimen/_10mdp"
-                android:layout_marginBottom="@dimen/_5mdp"
-                android:background="@drawable/back_white_border_grey_corner"
-                android:orientation="vertical"
-                android:padding="@dimen/_5mdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5mdp"
-                    android:text="Reschedule Policy"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_11font_mdp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/gray"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/_5mdp"
-                        android:text="This special discounted rate is Refundable. If you choose to cancel this booking, you will be refunded 60% of the payment"
-                        android:textSize="@dimen/_11font_mdp" />
-
-                    <TextView
-                        android:id="@+id/reschedule"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:layout_marginEnd="@dimen/_10mdp"
-                        android:layout_marginBottom="@dimen/_10mdp"
-                        android:background="@drawable/back_click_effect_red_gray"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_10mdp"
-                        android:paddingTop="@dimen/_5mdp"
-                        android:paddingEnd="@dimen/_10mdp"
-                        android:paddingBottom="@dimen/_5mdp"
-                        android:text="Reschedule"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_10font_mdp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/helpLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10mdp"
-                android:layout_marginTop="@dimen/_5mdp"
-                android:layout_marginEnd="@dimen/_10mdp"
-                android:layout_marginBottom="@dimen/_15mdp"
-                android:background="@drawable/back_white_border_grey_corner"
-                android:orientation="vertical"
-                android:padding="@dimen/_5mdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5mdp"
-                    android:drawableEnd="@drawable/help_16"
-                    android:drawablePadding="@dimen/_4mdp"
-                    android:text="Reach Customer Care"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_10font_mdp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/gray"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/_5mdp"
-                        android:text="Here is your customer's contact details. Contact in single click...!"
-                        android:textSize="@dimen/_11font_mdp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:layout_marginEnd="@dimen/_10mdp"
-                        android:layout_marginBottom="@dimen/_10mdp"
-                        android:gravity="end"
-                        android:orientation="horizontal">
+                        android:background="@color/gray"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/call"
+                            android:id="@+id/tv_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_5mdp"
+                            android:text="This special discounted rate is Refundable. If you choose to cancel this order, refund of 100% of the payment will be initiated automatically...!"
+                            android:textSize="@dimen/_11font_mdp" />
+
+                        <TextView
+                            android:id="@+id/cancelBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="@dimen/_5mdp"
-                            android:background="@drawable/bg_blue_purple_corners"
-                            android:drawableStart="@drawable/call_16"
-                            android:drawablePadding="@dimen/_3mdp"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:layout_marginEnd="@dimen/_10mdp"
+                            android:layout_marginBottom="@dimen/_10mdp"
+                            android:layout_weight="1"
+                            android:background="@drawable/back_click_effect_red_gray"
                             android:gravity="center"
                             android:paddingStart="@dimen/_10mdp"
                             android:paddingTop="@dimen/_5mdp"
                             android:paddingEnd="@dimen/_10mdp"
                             android:paddingBottom="@dimen/_5mdp"
-                            android:text="  Call"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_10font_mdp" />
-
-                        <TextView
-                            android:id="@+id/chat"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginStart="@dimen/_5mdp"
-                            android:background="@drawable/bg_green_corner"
-                            android:drawableEnd="@drawable/send_16"
-                            android:drawablePadding="@dimen/_3mdp"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_10mdp"
-                            android:paddingTop="@dimen/_5mdp"
-                            android:paddingEnd="@dimen/_10mdp"
-                            android:paddingBottom="@dimen/_5mdp"
-                            android:text="Chat"
+                            android:text="Cancel Now"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10font_mdp" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rescheduleLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
+                    android:layout_marginTop="@dimen/_5mdp"
+                    android:visibility="gone"
+                    android:layout_marginEnd="@dimen/_10mdp"
+                    android:layout_marginBottom="@dimen/_5mdp"
+                    android:background="@drawable/back_white_border_grey_corner"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5mdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5mdp"
+                        android:text="Reschedule Policy"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_5mdp"
+                            android:text="This special discounted rate is Refundable. If you choose to cancel this booking, you will be refunded 60% of the payment"
+                            android:textSize="@dimen/_11font_mdp" />
+
+                        <TextView
+                            android:id="@+id/reschedule"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:layout_marginEnd="@dimen/_10mdp"
+                            android:layout_marginBottom="@dimen/_10mdp"
+                            android:background="@drawable/back_click_effect_red_gray"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_10mdp"
+                            android:paddingTop="@dimen/_5mdp"
+                            android:paddingEnd="@dimen/_10mdp"
+                            android:paddingBottom="@dimen/_5mdp"
+                            android:text="Reschedule"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_10font_mdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/helpLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
+                    android:layout_marginTop="@dimen/_5mdp"
+                    android:layout_marginEnd="@dimen/_10mdp"
+                    android:layout_marginBottom="@dimen/_15mdp"
+                    android:background="@drawable/back_white_border_grey_corner"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5mdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5mdp"
+                        android:drawableEnd="@drawable/help_16"
+                        android:drawablePadding="@dimen/_4mdp"
+                        android:text="Reach Customer Care"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_10font_mdp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gray"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_5mdp"
+                            android:text="Here is your customer's contact details. Contact in single click...!"
+                            android:textSize="@dimen/_11font_mdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:layout_marginEnd="@dimen/_10mdp"
+                            android:layout_marginBottom="@dimen/_10mdp"
+                            android:gravity="end"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/call"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:layout_marginEnd="@dimen/_5mdp"
+                                android:background="@drawable/bg_blue_purple_corners"
+                                android:drawableStart="@drawable/call_16"
+                                android:drawablePadding="@dimen/_3mdp"
+                                android:gravity="center"
+                                android:paddingStart="@dimen/_10mdp"
+                                android:paddingTop="@dimen/_5mdp"
+                                android:paddingEnd="@dimen/_10mdp"
+                                android:paddingBottom="@dimen/_5mdp"
+                                android:text="  Call"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10font_mdp" />
+
+                            <TextView
+                                android:id="@+id/chat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:layout_marginStart="@dimen/_5mdp"
+                                android:background="@drawable/bg_green_corner"
+                                android:drawableEnd="@drawable/send_16"
+                                android:drawablePadding="@dimen/_3mdp"
+                                android:gravity="center"
+                                android:paddingStart="@dimen/_10mdp"
+                                android:paddingTop="@dimen/_5mdp"
+                                android:paddingEnd="@dimen/_10mdp"
+                                android:paddingBottom="@dimen/_5mdp"
+                                android:text="Chat"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10font_mdp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
             </LinearLayout>
-
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
