@@ -122,6 +122,22 @@ public class VariantResponse {
             return images;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Variant variant = (Variant) o;
+
+            return getId() != null ? getId().equals(variant.getId()) : variant.getId() == null;
+        }
+
+        @Override
+        public int hashCode() {
+            return getId() != null ? getId().hashCode() : 0;
+        }
+
+
 //        @Override
 //        public BigDecimal getItemPrice() {
 //            return new BigDecimal(selling_price);

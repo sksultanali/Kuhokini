@@ -313,7 +313,6 @@
                                 android:layout_marginStart="10dp"
                                 android:text="699"
                                 android:textStyle="bold"
-                                android:drawableStart="@drawable/rupee_16"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_16font_mdp" />
                             <TextView
@@ -371,6 +370,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/deliveryCriteria"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/gray"
@@ -385,117 +385,127 @@
                             android:textColor="@color/black"
                             android:text="Delivery charge is calculating as per this precautions "/>
                         <ImageView
+                            android:id="@+id/delArrow"
                             android:layout_width="@dimen/_20mdp"
                             android:layout_height="@dimen/_20mdp"
+                            android:rotation="0"
                             android:src="@drawable/arrow_down_24"/>
                     </LinearLayout>
 
-                    <RadioGroup
-                        android:id="@+id/payToggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:background="@drawable/pink_out_line"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/payOnline"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/_1mdp"
-                            android:background="@drawable/toggle_widget_background"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:paddingEnd="@dimen/_10mdp"
-                            android:paddingStart="@dimen/_10mdp"
-                            android:drawableEnd="@drawable/phonepe"
-                            android:drawablePadding="@dimen/_5mdp"
-                            android:drawableTint="@drawable/text_color_selector"
-                            android:text="Pay Online"
-                            android:checked="true"
-                            android:textSize="@dimen/_10font_mdp"
-                            android:textColor="@drawable/text_color_selector" />
-
-                        <RadioButton
-                            android:id="@+id/cod"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/_1mdp"
-                            android:background="@drawable/toggle_widget_background"
-                            android:button="@null"
-                            android:drawableEnd="@drawable/rupee_note"
-                            android:drawablePadding="@dimen/_5mdp"
-                            android:drawableTint="@drawable/text_color_selector"
-                            android:paddingEnd="@dimen/_10mdp"
-                            android:paddingStart="@dimen/_10mdp"
-                            android:textSize="@dimen/_10font_mdp"
-                            android:gravity="center"
-                            android:text="Cash on Delivery"
-                            android:textColor="@drawable/text_color_selector" />
-                    </RadioGroup>
-                    <TextView
-                        android:id="@+id/cashExtra"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/delCriteriaLayout"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="₹10 will be charged extra for Cash on Delivery!"
-                        android:textColor="@color/red"
-                        android:layout_marginStart="@dimen/_10mdp"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:textSize="@dimen/_11font_mdp"
-                        android:layout_gravity="center_vertical"/>
-                    <RadioGroup
-                        android:id="@+id/mat_toggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:background="@drawable/pink_out_line"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/emailSecR"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+                        <RadioGroup
+                            android:id="@+id/payToggle"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/_1mdp"
-                            android:background="@drawable/toggle_widget_background"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:paddingEnd="@dimen/_10mdp"
-                            android:paddingStart="@dimen/_10mdp"
-                            android:drawableEnd="@drawable/express"
-                            android:drawablePadding="@dimen/_5mdp"
-                            android:drawableTint="@drawable/text_color_selector"
-                            android:text="Express"
-                            android:checked="true"
-                            android:textSize="@dimen/_10font_mdp"
-                            android:textColor="@drawable/text_color_selector" />
+                            android:layout_height="30dp"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:background="@drawable/pink_out_line"
+                            android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/googleSecR"
+                            <RadioButton
+                                android:id="@+id/payOnline"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/_1mdp"
+                                android:background="@drawable/toggle_widget_background"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:paddingEnd="@dimen/_10mdp"
+                                android:paddingStart="@dimen/_10mdp"
+                                android:drawableEnd="@drawable/phonepe"
+                                android:drawablePadding="@dimen/_5mdp"
+                                android:drawableTint="@drawable/text_color_selector"
+                                android:text="Pay Online"
+                                android:checked="true"
+                                android:textSize="@dimen/_10font_mdp"
+                                android:textColor="@drawable/text_color_selector" />
+
+                            <RadioButton
+                                android:id="@+id/cod"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/_1mdp"
+                                android:background="@drawable/toggle_widget_background"
+                                android:button="@null"
+                                android:drawableEnd="@drawable/rupee_note"
+                                android:drawablePadding="@dimen/_5mdp"
+                                android:drawableTint="@drawable/text_color_selector"
+                                android:paddingEnd="@dimen/_10mdp"
+                                android:paddingStart="@dimen/_10mdp"
+                                android:textSize="@dimen/_10font_mdp"
+                                android:gravity="center"
+                                android:text="Cash on Delivery"
+                                android:textColor="@drawable/text_color_selector" />
+                        </RadioGroup>
+                        <TextView
+                            android:id="@+id/cashExtra"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/_1mdp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="No extra charges for prepaid orders!"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="@dimen/_10mdp"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:textSize="@dimen/_11font_mdp"
+                            android:layout_gravity="center_vertical"/>
+                        <RadioGroup
+                            android:id="@+id/mat_toggle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:background="@drawable/pink_out_line"
+                            android:orientation="horizontal">
 
-                            android:background="@drawable/toggle_widget_background"
-                            android:button="@null"
-                            android:paddingEnd="@dimen/_10mdp"
-                            android:paddingStart="@dimen/_10mdp"
-                            android:textSize="@dimen/_10font_mdp"
-                            android:gravity="center"
-                            android:text="Regular"
-                            android:textColor="@drawable/text_color_selector" />
-                    </RadioGroup>
-                    <TextView
-                        android:id="@+id/deliveryExpR"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Delivery within 4-7 days"
-                        android:textColor="@color/greenDark"
-                        android:layout_marginStart="@dimen/_10mdp"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:textSize="@dimen/_11font_mdp"
-                        android:layout_gravity="center_vertical"/>
+                            <RadioButton
+                                android:id="@+id/expressD"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/_1mdp"
+                                android:background="@drawable/toggle_widget_background"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:paddingEnd="@dimen/_10mdp"
+                                android:paddingStart="@dimen/_10mdp"
+                                android:drawableEnd="@drawable/express"
+                                android:drawablePadding="@dimen/_5mdp"
+                                android:drawableTint="@drawable/text_color_selector"
+                                android:text="Express"
+                                android:textSize="@dimen/_10font_mdp"
+                                android:textColor="@drawable/text_color_selector" />
+
+                            <RadioButton
+                                android:id="@+id/surfaceD"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/_1mdp"
+                                android:background="@drawable/toggle_widget_background"
+                                android:button="@null"
+                                android:checked="true"
+                                android:paddingEnd="@dimen/_10mdp"
+                                android:paddingStart="@dimen/_10mdp"
+                                android:textSize="@dimen/_10font_mdp"
+                                android:gravity="center"
+                                android:text="Regular"
+                                android:textColor="@drawable/text_color_selector" />
+                        </RadioGroup>
+                        <TextView
+                            android:id="@+id/deliveryExpR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Delivery within 7-10 days"
+                            android:textColor="@color/greenDark"
+                            android:layout_marginStart="@dimen/_10mdp"
+                            android:layout_marginTop="@dimen/_10mdp"
+                            android:textSize="@dimen/_11font_mdp"
+                            android:layout_gravity="center_vertical"/>
+                    </LinearLayout>
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -504,15 +514,19 @@
                         android:orientation="horizontal">
 
                         <EditText
+                            android:id="@+id/pinEdText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:maxLength="6"
+                            android:inputType="number"
                             android:background="@drawable/back_white_border_grey_corner"
                             android:hint="Enter Your Pin Number"
                             android:textSize="@dimen/_11font_mdp"
                             android:padding="@dimen/_8mdp" />
 
                         <TextView
+                            android:id="@+id/pinCodeCheck"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
@@ -534,37 +548,13 @@
                         android:layout_marginTop="@dimen/_5mdp"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/availablePinText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/blue_purple"
                             android:textStyle="bold"
                             android:textSize="@dimen/_11font_mdp"
                             android:text="Good to Go! Available in your pin-code...! 😃 "/>
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/gray"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Delivery To: "
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_11font_mdp"
-                            android:layout_marginTop="@dimen/_5mdp"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearDes" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_2mdp"
-                            android:drawableEnd="@drawable/edit_24"
-                            android:drawablePadding="@dimen/_5mdp"
-                            android:drawableTint="@color/icon_color"
-                            android:text="Mecheda, Purba Medinipur, Near Kolaghat Thermal Power Plant"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_11font_mdp" />
                         <Button
                             android:id="@+id/returnBtn"
                             android:layout_width="wrap_content"
@@ -591,6 +581,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/basicDetails">
                 <LinearLayout
+                    android:id="@+id/delSec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -613,6 +604,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/freeDelivery"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Free Delivery"
@@ -643,6 +635,7 @@
                                     android:text="Exp. delivery by,"
                                     android:textSize="@dimen/_11font_mdp" />
                                 <TextView
+                                    android:id="@+id/delBy"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="31 December, Thursday"
@@ -660,6 +653,7 @@
                         app:tint="@color/icon_color"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/returnSec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -687,6 +681,7 @@
                         app:tint="@color/icon_color"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/cashSec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -916,412 +911,362 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bannerLayout" />
-
-
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingStart="@dimen/_5mdp"
-                    android:paddingBottom="@dimen/_10mdp"
-                    android:paddingEnd="@dimen/_10mdp">
+                    android:layout_margin="@dimen/_10mdp"
+                    android:padding="@dimen/_5mdp"
+                    android:background="@drawable/back_white_border_grey_corner"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="@dimen/_125mdp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/_5mdp">
+
+                        <TextView
+                            android:id="@+id/totalReview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Very Good"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/_10font_mdp" />
+
+                        <TextView
+                            android:id="@+id/avgRating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/_5mdp"
+                            android:text="0/5  "
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_10font_mdp"
+                            android:textStyle="bold|italic" />
+
+                        <TextView
+                            android:id="@+id/totalRating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="00 Ratings"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_10font_mdp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/_1mdp"
+                        android:layout_height="match_parent"
+                        android:background="@color/darkGray"/>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10mdp"
                         android:layout_marginStart="@dimen/_5mdp"
                         android:padding="@dimen/_5mdp"
-                        android:background="@drawable/back_white_border_grey_corner"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="@dimen/_125mdp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:layout_gravity="center"
-                            android:padding="@dimen/_5mdp">
-
-                            <TextView
-                                android:id="@+id/totalReview"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="Very Good"
-                                android:textStyle="bold"
-                                android:textSize="@dimen/_10font_mdp" />
-
-                            <TextView
-                                android:id="@+id/avgRating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="@dimen/_5mdp"
-                                android:text="0/5  "
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_10font_mdp"
-                                android:textStyle="bold|italic" />
-
-                            <TextView
-                                android:id="@+id/totalRating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="00 Ratings"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/_10font_mdp" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="@dimen/_1mdp"
-                            android:layout_height="match_parent"
-                            android:background="@color/darkGray"/>
+                        android:layout_weight="5"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5mdp"
-                            android:padding="@dimen/_5mdp"
-                            android:layout_weight="5"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="5"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="5"
-                                    android:textColor="@color/black"
-                                    android:textSize="12sp" />
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:paddingLeft="5dp"
+                                app:tint="@color/red"
+                                android:src="@drawable/star_half_24" />
 
-                                <ImageView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:paddingLeft="5dp"
-                                    app:tint="@color/red"
-                                    android:src="@drawable/star_half_24" />
-
-                                <SeekBar
-                                    android:id="@+id/seekBar5"
-                                    android:layout_width="50dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="7"
-                                    android:clickable="false"
-                                    android:progress="50"
-                                    android:progressTint="#8BC34A"
-                                    android:thumb="@color/transparentColor" />
-
-                                <TextView
-                                    android:id="@+id/Star5"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="0"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <SeekBar
+                                android:id="@+id/seekBar5"
+                                android:layout_width="50dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center"
+                                android:layout_weight="7"
+                                android:clickable="false"
+                                android:progress="50"
+                                android:progressTint="#8BC34A"
+                                android:thumb="@color/transparentColor" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="4"
-                                    android:textColor="@color/black"
-                                    android:textSize="12sp" />
-
-                                <ImageView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:paddingLeft="5dp"
-                                    app:tint="@color/red"
-                                    android:src="@drawable/star_half_24" />
-
-                                <SeekBar
-                                    android:id="@+id/seekBar4"
-                                    android:layout_width="50dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="7"
-                                    android:clickable="false"
-                                    android:progress="50"
-                                    android:progressTint="#4CAF50"
-                                    android:thumb="@color/transparentColor" />
-
-                                <TextView
-                                    android:id="@+id/Star4"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="0"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/Star5"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="12sp" />
+                        </LinearLayout>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="3"
-                                    android:textColor="@color/black"
-                                    android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                                <ImageView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:paddingLeft="5dp"
-                                    app:tint="@color/red"
-                                    android:src="@drawable/star_half_24" />
-
-                                <SeekBar
-                                    android:id="@+id/seekBar3"
-                                    android:layout_width="50dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="7"
-                                    android:clickable="false"
-                                    android:progress="50"
-                                    android:progressTint="@color/greenDark"
-                                    android:thumb="@color/transparentColor" />
-
-                                <TextView
-                                    android:id="@+id/Star3"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="0"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="4"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="2"
-                                    android:textColor="@color/black"
-                                    android:textSize="12sp" />
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:paddingLeft="5dp"
+                                app:tint="@color/red"
+                                android:src="@drawable/star_half_24" />
 
-                                <ImageView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:paddingLeft="5dp"
-                                    app:tint="@color/red"
-                                    android:src="@drawable/star_half_24" />
-
-                                <SeekBar
-                                    android:id="@+id/seekBar2"
-                                    android:layout_width="50dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="7"
-                                    android:clickable="false"
-                                    android:progress="50"
-                                    android:progressTint="#FF5722"
-                                    android:thumb="@color/transparentColor" />
-
-                                <TextView
-                                    android:id="@+id/Star2"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="0"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
+                            <SeekBar
+                                android:id="@+id/seekBar4"
+                                android:layout_width="50dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center"
+                                android:layout_weight="7"
+                                android:clickable="false"
+                                android:progress="50"
+                                android:progressTint="#4CAF50"
+                                android:thumb="@color/transparentColor" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="1"
-                                    android:textColor="@color/black"
-                                    android:textSize="12sp" />
+                            <TextView
+                                android:id="@+id/Star4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="12sp" />
+                        </LinearLayout>
 
-                                <ImageView
-                                    android:layout_width="12dp"
-                                    android:layout_height="12dp"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:paddingLeft="5dp"
-                                    app:tint="@color/red"
-                                    android:src="@drawable/star_half_24" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                                <SeekBar
-                                    android:id="@+id/seekBar1"
-                                    android:layout_width="50dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="7"
-                                    android:clickable="false"
-                                    android:progress="50"
-                                    android:progressTint="#F44336"
-                                    android:thumb="@color/transparentColor" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="3"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
 
-                                <TextView
-                                    android:id="@+id/Star1"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="0.5"
-                                    android:gravity="center"
-                                    android:text="0"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:paddingLeft="5dp"
+                                app:tint="@color/red"
+                                android:src="@drawable/star_half_24" />
+
+                            <SeekBar
+                                android:id="@+id/seekBar3"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="7"
+                                android:clickable="false"
+                                android:progress="50"
+                                android:progressTint="@color/greenDark"
+                                android:thumb="@color/transparentColor" />
+
+                            <TextView
+                                android:id="@+id/Star3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="2"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:paddingLeft="5dp"
+                                app:tint="@color/red"
+                                android:src="@drawable/star_half_24" />
+
+                            <SeekBar
+                                android:id="@+id/seekBar2"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="7"
+                                android:clickable="false"
+                                android:progress="50"
+                                android:progressTint="#FF5722"
+                                android:thumb="@color/transparentColor" />
+
+                            <TextView
+                                android:id="@+id/Star2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="1"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:paddingLeft="5dp"
+                                app:tint="@color/red"
+                                android:src="@drawable/star_half_24" />
+
+                            <SeekBar
+                                android:id="@+id/seekBar1"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="7"
+                                android:clickable="false"
+                                android:progress="50"
+                                android:progressTint="#F44336"
+                                android:thumb="@color/transparentColor" />
+
+                            <TextView
+                                android:id="@+id/Star1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:text="Photos"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11font_mdp" />
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/reviewImages"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10mdp"
-                        android:text="Reviews"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_11font_mdp" />
-                    <TextView
-                        android:id="@+id/noReviews"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="@dimen/_11font_mdp"
-                        android:visibility="gone"
-                        android:layout_marginTop="10dp"
-                        android:text="no reviews..!"/>
-
-                    <LinearLayout
-                        android:id="@+id/reviewSegment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="100+ Reviews"/>
-                        <TextView
-                            android:id="@+id/addReview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="@dimen/_5mdp"
-                            android:paddingStart="@dimen/_10mdp"
-                            android:paddingEnd="@dimen/_10mdp"
-                            android:paddingBottom="@dimen/_5mdp"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="@color/blue_purple"
-                            android:background="@drawable/bg_blue_blue"
-                            android:text="Add Review"/>
-                    </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/reviewsRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5mdp"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView1"
-                        tools:listitem="@layout/item_review" />
                 </LinearLayout>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/gray"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="@dimen/_10mdp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/basicDetails">
+
                 <LinearLayout
+                    android:id="@+id/reviewSegment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/_10mdp"
+                    android:layout_marginEnd="@dimen/_10mdp"
+                    android:visibility="gone">
                     <TextView
+                        android:id="@+id/reviewCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/_10mdp"
-                        android:text="See All 20 Reviews"
-                        android:textSize="@dimen/_11font_mdp" />
-                    <ImageView
-                        android:layout_width="@dimen/_12mdp"
-                        android:layout_height="@dimen/_12mdp"
-                        android:src="@drawable/arrow_right"
-                        app:tint="@color/icon_color"/>
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="Reviews (100+)"/>
                 </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/reviewsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView1"
+                    tools:listitem="@layout/item_review" />
+                <LinearLayout
+                    android:id="@+id/seeAllReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/basicDetails">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/gray"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="@dimen/_10mdp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/sellAllReviewTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/_10mdp"
+                            android:text="See All 20 Reviews"
+                            android:textSize="@dimen/_11font_mdp" />
+                        <ImageView
+                            android:layout_width="@dimen/_12mdp"
+                            android:layout_height="@dimen/_12mdp"
+                            android:src="@drawable/arrow_right"
+                            app:tint="@color/icon_color"/>
+                    </LinearLayout>
 
 
+                </LinearLayout>
             </LinearLayout>
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_1mdp"
@@ -1332,8 +1277,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/_2mdp"
-                android:layout_margin="15dp"
-                app:cardCornerRadius="8dp"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:layout_marginBottom="@dimen/_10mdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profileSegment">
@@ -1438,8 +1383,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:background="@drawable/click_effect_white_grey"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:paddingStart="@dimen/_10mdp">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Subtotal"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="@dimen/_12font_mdp"-->
+<!--                android:textStyle="bold" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/subtotal"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="right"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:text="0"-->
+<!--                android:drawableTint="@color/blue_purple"-->
+<!--                android:drawableStart="@drawable/rupee_14"-->
+<!--                android:textColor="@color/blue_purple"-->
+<!--                android:textSize="@dimen/_14font_mdp"-->
+<!--                android:textStyle="bold" />-->
+<!--        </LinearLayout>-->
         <LinearLayout
-            android:id="@+id/cartBtn"
+            android:id="@+id/addToCart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -1448,15 +1423,14 @@
             android:paddingTop="12dp"
             android:paddingBottom="12dp">
             <TextView
-                android:id="@+id/cartText"
+                android:id="@+id/addToCartTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Add To Cart"
+                android:text="Add to Cart"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/buyBtn"
             android:layout_width="match_parent"

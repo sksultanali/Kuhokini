@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.kuhokini.Helpers.DB_Helper_WishList;
 import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.Models.WishListModel;
 import com.kuhokini.R;
+import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ChildProductBinding;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -44,6 +46,7 @@ public class WishLIstAdapter extends RecyclerView.Adapter<WishLIstAdapter.ViewHo
     ApiService apiService;
     Animation animation;
     Gson gson;
+    TinyCart cart;
     DB_Helper_WishList db_wishList_helper;
     ArrayList<SlideModel> images = new ArrayList<>();
 
@@ -54,6 +57,7 @@ public class WishLIstAdapter extends RecyclerView.Adapter<WishLIstAdapter.ViewHo
         this.linearLayout = linearLayout;
         images.add(new SlideModel(R.drawable.placeholder, ScaleTypes.CENTER_CROP));
         gson = new Gson();
+        cart = TinyCart.getInstance();
         db_wishList_helper = new DB_Helper_WishList(activity);
         apiService = RetrofitClient.getClient().create(ApiService.class);
     }
@@ -119,6 +123,24 @@ public class WishLIstAdapter extends RecyclerView.Adapter<WishLIstAdapter.ViewHo
                         holder.binding.normalPrice.setText("₹"+variantDetails.getNormal_price());
                         holder.binding.sellingPrice.setText("₹"+variantDetails.getSelling_price());
 
+                        holder.binding.addCart.setOnClickListener(v -> {
+                            cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), details.getWeight());
+                            holder.binding.addCart.setEnabled(false);
+                            new CountDownTimer(3000, 1000) {
+                                int count = 3;
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    holder.binding.addCart.setText("Added (" + count + ")");
+                                    count--;
+                                }
+                                @Override
+                                public void onFinish() {
+                                    holder.binding.addCart.setEnabled(true);
+                                    holder.binding.addCart.setText("Add Again");
+                                }
+                            }.start();
+                        });
+
                         int discount = (int)(
                                 ((variantDetails.getNormal_price() - variantDetails.getSelling_price())*100)
                                         /variantDetails.getNormal_price()
@@ -164,6 +186,8 @@ public class WishLIstAdapter extends RecyclerView.Adapter<WishLIstAdapter.ViewHo
             intent.putExtra("id", wishListModel.getId());
             activity.startActivity(intent);
         });
+
+
 
     }
 

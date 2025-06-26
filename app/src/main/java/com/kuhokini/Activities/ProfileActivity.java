@@ -87,12 +87,26 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         binding.logOut.setOnClickListener(v->{
-            Helper.saveData(ProfileActivity.this, "user_id", null);
-            Helper.saveData(ProfileActivity.this, "phone", null);
-            Helper.saveData(ProfileActivity.this, "email", null);
-            Toast.makeText(this, "Logout Successful!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(ProfileActivity.this, MainActivity.class));
-            finish();
+            Helper.showActionDialog(ProfileActivity.this, "Log Out?",
+                    "Are you sure want to log out this account? ", "Yes", "No", true, new Helper.DialogButtonClickListener() {
+                        @Override
+                        public void onYesButtonClicked() {
+                            Helper.saveData(ProfileActivity.this, "user_id", null);
+                            Helper.saveData(ProfileActivity.this, "phone", null);
+                            Helper.saveData(ProfileActivity.this, "email", null);
+                            Toast.makeText(ProfileActivity.this, "Logout Successful!", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                            finish();
+                        }
+                        @Override
+                        public void onNoButtonClicked() {
+
+                        }
+                        @Override
+                        public void onCloseButtonClicked() {
+
+                        }
+                    });
         });
 
 

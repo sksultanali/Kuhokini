@@ -89,23 +89,23 @@ public class MenuActivity extends AppCompatActivity {
         });
 
         binding.tc.setOnClickListener(v->{
-            Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
+            Helper.openLink(MenuActivity.this, "https://kuhokini.com/terms-and-conditions.php");
         });
         binding.pp.setOnClickListener(v->{
-            Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
+            Helper.openLink(MenuActivity.this, "https://kuhokini.com/privacy_policy.php");
         });
         binding.rp.setOnClickListener(v->{
-            Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
+            Helper.openLink(MenuActivity.this, "https://kuhokini.com/refund-policy.php");
         });
 
         binding.facebook.setOnClickListener(v->{
-            Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
+            Helper.openLink(MenuActivity.this, "https://www.facebook.com/kuhokinijewellery/");
         });
         binding.instagram.setOnClickListener(v->{
-            Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
+            Helper.openLink(MenuActivity.this, "https://www.instagram.com/kuhokiniofficial/");
         });
         binding.youTube.setOnClickListener(v->{
-            Helper.openLink(MenuActivity.this, "https://kuhokini.com/");
+            Helper.openLink(MenuActivity.this, "https://www.youtube.com/@Kuhokini_official");
         });
         binding.website.setOnClickListener(v->{
             Helper.openLink(MenuActivity.this, "https://kuhokini.com/");

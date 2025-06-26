@@ -91,31 +91,41 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         CartItem cartItem = cart.getItems().get(product);
         try {
             holder.binding.name.setText(cartItem.getName());
-            holder.binding.description.setText(String.format("%.2f gm", cartItem.getWeight()));
+            //holder.binding.description.setText(String.format("%.2f gm", cartItem.getWeight()));
+            holder.binding.description.setText(product.getVarient_name());
         }catch (Exception e){
 
         }
 
         holder.binding.normalPrice.setPaintFlags(holder.binding.normalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         holder.binding.normalPrice.setText(String.valueOf(product.getNormal_price()));
-
         holder.binding.price.setText(String.valueOf(product.getSelling_price()));
 
-
-
         holder.binding.qtySpinner.setAdapter(obj);
+        int selectedQty = cartItem.getQuantity();
+        if (selectedQty >= 1 && selectedQty <= 10) {
+            holder.binding.qtySpinner.setTag("init");
+            holder.binding.qtySpinner.setSelection(selectedQty - 1); // index = quantity - 1
+        }
+
+        holder.binding.qtySpinner.setTag("init");
         holder.binding.qtySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cart.updateItem(product, (position +1), product.getSelling_price(), product.getWeight());
-                //cartListener.onQuantityChanged();
+                if ("init".equals(holder.binding.qtySpinner.getTag())) {
+                    holder.binding.qtySpinner.setTag(null); // Reset after first skip
+                    return;
+                }
+
+                cart.updateItem(product, (position + 1), product.getSelling_price(), product.getWeight());
+                cartListener.onQuantityChanged();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
+
 
 
         holder.binding.removeItem.setOnClickListener(v->{

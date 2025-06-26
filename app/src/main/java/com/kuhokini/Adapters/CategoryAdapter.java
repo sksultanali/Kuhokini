@@ -22,8 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kuhokini.APIModels.CategoryResponse;
+import com.kuhokini.Activities.SubCategoryActivity;
 import com.kuhokini.Helpers.ApiService;
 import com.kuhokini.Helpers.RetrofitClient;
+import com.kuhokini.Models.AddressResponse;
 import com.kuhokini.Models.CategoryModel;
 import com.kuhokini.R;
 import com.kuhokini.databinding.ChildCategoryBinding;
@@ -43,11 +45,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     ProgressDialog progressDialog;
     String tableName;
     Animation animation;
+    OnChangeListener onChangeListener;
 
-    public CategoryAdapter(Activity activity, List<CategoryModel> models, String tableName) {
+    public interface OnChangeListener{
+        void onSelect(CategoryModel categoryModel);
+    }
+
+    public CategoryAdapter(Activity activity, List<CategoryModel> models,
+                           String tableName, OnChangeListener onChangeListener) {
         this.activity = activity;
         this.models = models;
         this.tableName = tableName;
+        this.onChangeListener = onChangeListener;
         apiService = RetrofitClient.getClient().create(ApiService.class);
         progressDialog = new ProgressDialog(activity);
         progressDialog.setCancelable(false);
@@ -82,11 +91,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         holder.itemView.setOnClickListener(v->{
             if (tableName.equalsIgnoreCase("category_tbl")){
-                showSubCategories(categoryModel.getId(), categoryModel.getName());
+                //showSubCategories(categoryModel.getId(), categoryModel.getName());
+                Intent i = new Intent(activity.getApplicationContext(), SubCategoryActivity.class);
+                i.putExtra("catId", categoryModel.getId());
+                i.putExtra("catName", categoryModel.getName());
+                activity.startActivity(i);
             }else {
-
+                onChangeListener.onSelect(categoryModel);
             }
         });
+
+
 
 
 
@@ -115,7 +130,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     if (categoryResponse.getStatus().equalsIgnoreCase("success")){
                         listsBinding.title.setText("Choose A Sub Category (" + categoryResponse.getCount() + ")");
                         if (categoryResponse.getData() == null || !categoryResponse.getData().isEmpty()){
-                            CategoryAdapter adapter = new CategoryAdapter(activity, categoryResponse.getData(), "sub_category_tbl");
+                            CategoryAdapter adapter = new CategoryAdapter(activity, categoryResponse.getData(), "sub_category_tbl",
+                                    new OnChangeListener() {
+                                        @Override
+                                        public void onSelect(CategoryModel categoryModel) {
+
+                                        }
+                                    });
                             listsBinding.recyclerview.setAdapter(adapter);
                             listsBinding.noData.setVisibility(View.GONE);
                         }else {

@@ -2,13 +2,18 @@ package com.kuhokini.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -36,11 +41,17 @@ import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Adapters.FeaturedAdapter;
 import com.kuhokini.Adapters.PhotosAdapter;
 import com.kuhokini.Adapters.ProductsAdapter;
+import com.kuhokini.Adapters.ReviewAdapter;
 import com.kuhokini.Adapters.VariantAdapter;
+import com.kuhokini.DeliveryModels.DelRetrofitClient;
+import com.kuhokini.DeliveryModels.InvoiceResponse;
 import com.kuhokini.Helpers.ApiService;
+import com.kuhokini.Helpers.DelhiveryApiService;
 import com.kuhokini.Helpers.Helper;
+import com.kuhokini.Helpers.Precautions;
 import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.MainActivity;
+import com.kuhokini.Models.AddressResponse;
 import com.kuhokini.Models.BannerModel;
 import com.kuhokini.R;
 import com.kuhokini.TinyCart.TinyCart;
@@ -49,6 +60,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.noties.markwon.Markwon;
 import retrofit2.Call;
@@ -59,15 +71,19 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
 
     ActivityProductDetailsBinding binding;
     ApiService apiService;
+    DelhiveryApiService delhiveryApiService;
     String productId;
     Activity activity;
     VariantResponse.Variant variantDetails;
     ArrayList<SlideModel> images = new ArrayList<>();
-    int nextPageToken, currentPage = 0;
+    int nextPageToken, currentPage = 0, productPrice;
     private boolean isInitialLoad = true;
     private boolean isLoading = false;
+    private boolean delCriteriaVisible = false;
     TinyCart cart;
+    ProductData details;
     ProductsAdapter adapter;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +101,13 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         activity = ProductDetails.this;
         cart = TinyCart.getInstance();
         apiService = RetrofitClient.getClient().create(ApiService.class);
+        delhiveryApiService = DelRetrofitClient.getApiService();
         productId = Helper.getData(ProductDetails.this, "product_id");
         images.add(new SlideModel(R.drawable.placeholder, ScaleTypes.CENTER_CROP));
+        progressDialog = new ProgressDialog(ProductDetails.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Checking availability...");
 
         LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
         lnm.setOrientation(RecyclerView.HORIZONTAL);
@@ -100,13 +121,14 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                     ProductResponse productResponse = response.body();
                     if (productResponse.getStatus().equalsIgnoreCase("success")){
 
-                        ProductData details = productResponse.getData();
+                        details = productResponse.getData();
                         binding.availVariant.setText("Available Variant : " + details.getVariants().size());
                         VariantAdapter adapter = new VariantAdapter(ProductDetails.this, details.getVariants(),
                                 ProductDetails.this);
                         binding.variantRec.setAdapter(adapter);
 
                         variantDetails = details.getVariants().get(0);
+                        Precautions.WEIGHT = details.getWeight();
                         setVariantInfo(variantDetails);
 
                         if (details.getRating_info().getAverage_rating() == 1){
@@ -132,11 +154,37 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                             binding.star5.setVisibility(View.VISIBLE);
                         }
 
+
                         binding.name.setText(details.getProduct_name());
                         binding.rating.setText(details.getRating_info().getAverage_rating() + " ("
                                 + details.getRating_info().getReview_count() +" Reviews)");
                         binding.avgRating.setText(details.getRating_info().getAverage_rating() + "/5");
                         binding.totalRating.setText(details.getRating_info().getReview_count() + " Reviews");
+                        binding.reviewCount.setText("Review ("+details.getRating_info().getReview_count()+"+)");
+
+                        if (details.getRating_info().getReview_count() == 0){
+                            binding.reviewSegment.setVisibility(View.GONE);
+                            binding.reviewsRecyclerView.setVisibility(View.GONE);
+                        }else {
+                            binding.reviewSegment.setVisibility(View.VISIBLE);
+                            binding.reviewsRecyclerView.setVisibility(View.VISIBLE);
+
+                            LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
+                            binding.reviewsRecyclerView.setLayoutManager(lnm);
+                            ReviewAdapter adapter1 = new ReviewAdapter(ProductDetails.this, details.getLatest_reviews());
+                            binding.reviewsRecyclerView.setAdapter(adapter1);
+                        }
+
+                        if (details.getRating_info().getReview_count() < 3){
+                            binding.seeAllReview.setVisibility(View.GONE);
+                        }else {
+                            binding.seeAllReview.setVisibility(View.VISIBLE);
+                            binding.sellAllReviewTxt.setText("See All "+ details.getRating_info().getReview_count() +" Reviews");
+
+                            binding.seeAllReview.setOnClickListener(v->{
+                                startActivity(new Intent(ProductDetails.this, ReviewsActivity.class));
+                            });
+                        }
 
                         binding.Star1.setText(String.valueOf(details.getRating_info().getRating_distribution().getOne_star()));
                         binding.Star2.setText(String.valueOf(details.getRating_info().getRating_distribution().getTwo_star()));
@@ -144,13 +192,24 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                         binding.Star4.setText(String.valueOf(details.getRating_info().getRating_distribution().getFour_star()));
                         binding.Star5.setText(String.valueOf(details.getRating_info().getRating_distribution().getFive_star()));
 
-
                         binding.seekBar1.setProgress(details.getRating_info().getRating_distribution().getOne_star());
                         binding.seekBar2.setProgress(details.getRating_info().getRating_distribution().getTwo_star());
                         binding.seekBar3.setProgress(details.getRating_info().getRating_distribution().getThree_star());
                         binding.seekBar4.setProgress(details.getRating_info().getRating_distribution().getFour_star());
                         binding.seekBar5.setProgress(details.getRating_info().getRating_distribution().getFive_star());
-                        
+
+                        binding.seekBar1.setMax(details.getRating_info().getTotal_ratings());
+                        binding.seekBar2.setMax(details.getRating_info().getTotal_ratings());
+                        binding.seekBar3.setMax(details.getRating_info().getTotal_ratings());
+                        binding.seekBar4.setMax(details.getRating_info().getTotal_ratings());
+                        binding.seekBar5.setMax(details.getRating_info().getTotal_ratings());
+
+                        binding.seekBar1.setOnTouchListener((v, event) -> true);
+                        binding.seekBar2.setOnTouchListener((v, event) -> true);
+                        binding.seekBar3.setOnTouchListener((v, event) -> true);
+                        binding.seekBar4.setOnTouchListener((v, event) -> true);
+                        binding.seekBar5.setOnTouchListener((v, event) -> true);
+
 
 //                        Markwon markwon = Markwon.create(ProductDetails.this);
 //                        markwon.setMarkdown(binding.description, details.getDescription());
@@ -178,6 +237,90 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
             }
         });
 
+        binding.deliveryCriteria.setOnClickListener(v->{
+            if (delCriteriaVisible){
+                binding.delCriteriaLayout.setVisibility(View.GONE);
+                delCriteriaVisible = false;
+                binding.delArrow.setRotation(0);
+            }else {
+                binding.delCriteriaLayout.setVisibility(View.VISIBLE);
+                delCriteriaVisible = true;
+                binding.delArrow.setRotation(180);
+            }
+        });
+
+        binding.payToggle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (binding.cod.isChecked()){
+                    binding.cashExtra.setText("₹" + Precautions.CASH_PAYMENT_CHARGES + " will be charged extra for Cash on Delivery!");
+                    Precautions.CASH_PAYMENT = true;
+                }else {
+                    binding.cashExtra.setText("No extra charges for prepaid orders!");
+                    Precautions.CASH_PAYMENT = false;
+                }
+                setPrice();
+            }
+        });
+
+        binding.delBy.setText(Helper.getFutureDate(10));
+        binding.matToggle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (binding.expressD.isChecked()){
+                    binding.deliveryExpR.setText(Precautions.EXPRESS_DELIVERY_DAYS);
+                    binding.delBy.setText(Helper.getFutureDate(7));
+                    Precautions.REGULAR_DELIVERY = false;
+                }else {
+                    binding.deliveryExpR.setText(Precautions.REGULAR_DELIVERY_DAYS);
+                    binding.delBy.setText(Helper.getFutureDate(10));
+                    Precautions.REGULAR_DELIVERY = true;
+                }
+                setPrice();
+            }
+        });
+
+        binding.pinCodeCheck.setOnClickListener(v->{
+            String pin = binding.pinEdText.getText().toString();
+            if (pin.isEmpty()){
+                binding.pinEdText.setError("*");
+            }else {
+                Helper.hideKeyboard(ProductDetails.this);
+                checkPinCode(pin);
+            }
+        });
+
+        binding.delSec.setOnClickListener(v->{
+            Helper.showOnlyBottomMessage(ProductDetails.this, "Delivery Type",
+                    "If you choose <b>Express</b> option. "+
+                            Precautions.EXPRESS_DELIVERY_DAYS +
+                            "(Exp. delivery by <b>"+ Helper.getFutureDate(7) +
+                            "</b>)<br>And if you choose <b>Regular</b> option. "+
+                    Precautions.REGULAR_DELIVERY_DAYS + "(Exp. delivery by <b>"+ Helper.getFutureDate(10)+")");
+        });
+
+        binding.returnSec.setOnClickListener(v->{
+            Helper.showBottomAction(ProductDetails.this, "Return Policy",
+                    Precautions.RETURN_POLICY_DES, "Terms & Conditions", null, true, new Helper.DialogButtonClickListener() {
+                        @Override
+                        public void onYesButtonClicked() {
+                            Helper.openLink(ProductDetails.this, "https://kuhokini.com/return-policy.php");
+                        }
+                        @Override
+                        public void onNoButtonClicked() {
+
+                        }
+                        @Override
+                        public void onCloseButtonClicked() {
+
+                        }
+                    });
+        });
+
+        binding.cashSec.setOnClickListener(v->{
+            Helper.showOnlyBottomMessage(ProductDetails.this, "Cash on Delivery", Precautions.COD_DES);
+        });
+
 
 //        getLifecycle().addObserver(binding.youtubePostView);
 //        binding.youtubePostView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
@@ -195,10 +338,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         imageSliders();
 
 
-        binding.cartBtn.setOnClickListener(v->{
-            //cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), 200);
-            binding.cartText.setText("Added");
-        });
+
 
         binding.buyBtn.setOnClickListener(v->{
             Intent i = new Intent(ProductDetails.this, CheckOut.class);
@@ -220,23 +360,166 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         binding.variantName.setText(variantDetails.getVarient_name());
         binding.normalPrice.setPaintFlags(binding.normalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
+        binding.addToCart.setOnClickListener(v->{
+            cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), details.getWeight());
+            binding.addToCart.setEnabled(false);
+            new CountDownTimer(3000, 1000) {
+                int count = 3;
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    binding.addToCartTxt.setText("Added (" + count + ")");
+                    count--;
+                }
+                @Override
+                public void onFinish() {
+                    binding.addToCart.setEnabled(true);
+                    binding.addToCartTxt.setText("Add Again");
+                }
+            }.start();
+        });
+
         Helper.startCounter(variantDetails.getNormal_price(), binding.normalPrice, "₹", "");
         Helper.startCounter(variantDetails.getSelling_price(), binding.sellingPrice, "₹", "");
 
         int saveAmount = variantDetails.getNormal_price() - variantDetails.getSelling_price();
+        productPrice = variantDetails.getSelling_price();
         int discount = (int)(
                 (saveAmount * 100) /variantDetails.getNormal_price()
         );
         binding.discountPrice.setText("Save ₹" + saveAmount);
-        Helper.startCounter(discount, binding.offer, "", "% off");
+        binding.offer.setText(discount+"% off");
+        //Helper.startCounter(discount, binding.offer, "", "% off");
 
-        LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
-        lnm.setOrientation(RecyclerView.HORIZONTAL);
-        binding.reviewImages.setLayoutManager(lnm);
-        PhotosAdapter adapter = new PhotosAdapter(ProductDetails.this, variantDetails.getImages());
-        binding.reviewImages.setAdapter(adapter);
+//        LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
+//        lnm.setOrientation(RecyclerView.HORIZONTAL);
+//        binding.reviewImages.setLayoutManager(lnm);
+//        PhotosAdapter adapter = new PhotosAdapter(ProductDetails.this, variantDetails.getImages());
+//        binding.reviewImages.setAdapter(adapter);
 
+        binding.whatsappEnq.setOnClickListener(v->{
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain"); // Use "text/plain" as WhatsApp might not support "text/html"
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, Precautions.generateShareMessage(ProductDetails.this, true, variantDetails, details.getProduct_name()));
+            sharingIntent.setPackage("com.whatsapp");
+            if (sharingIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(sharingIntent);
+            } else {
+                // Handle the case where WhatsApp is not installed
+                Toast.makeText(this, "WhatsApp is not installed on your device", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        binding.shareLin.setOnClickListener(v->binding.shareBtn.performClick());
+        binding.shareBtn.setOnClickListener(v->{
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("text/html");
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, Precautions.generateShareMessage(ProductDetails.this, false, variantDetails, details.getProduct_name()));
+            if (sharingIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(Intent.createChooser(sharingIntent,"Share using"));
+            }
+        });
+
+        setPrice();
+
+    }
+
+    private void setPrice() {
+        int fPrice = productPrice;
+
+        if (productPrice >= Precautions.FREE_DELIVERY_AFTER) {
+            fPrice += 0;
+            binding.freeDelivery.setText("Free Delivery");
+            binding.extraNote.setText("Free Delivery");
+            binding.deliveryPrice.setVisibility(View.GONE);
+        }else {
+            if (Precautions.REGULAR_DELIVERY) {
+                fPrice += Precautions.SURFACE_DELIVERY_CHARGES;
+                binding.deliveryPrice.setText(Precautions.SURFACE_DELIVERY_CHARGES + " only");
+                binding.extraNote.setText("Delivery charges ₹" + Precautions.SURFACE_DELIVERY_CHARGES + " only");
+            }else {
+                fPrice += Precautions.EXPRESS_DELIVERY_CHARGES;
+                binding.deliveryPrice.setText(Precautions.EXPRESS_DELIVERY_CHARGES + " only");
+                binding.extraNote.setText("Delivery charges ₹" + Precautions.EXPRESS_DELIVERY_CHARGES + " only");
+            }
+            binding.freeDelivery.setText("Delivery charges ");
+            binding.deliveryPrice.setVisibility(View.VISIBLE);
+        }
+
+        if (Precautions.CASH_PAYMENT) {
+            fPrice += Precautions.CASH_PAYMENT_CHARGES;
+        }
+
+        //binding.subtotal.setText(String.valueOf(fPrice));
+        binding.sellingPrice.setText(String.valueOf(fPrice));
+    }
+
+    void checkPinCode(String pin){
+        String type, payType;
+        if (Precautions.REGULAR_DELIVERY){
+            type = "S";
+        }else {
+            type = "E";
+        }
+
+        if (Precautions.CASH_PAYMENT){
+            payType = "COD";
+        }else {
+            payType = "Pre-paid";
+        }
+
+        Call<List<InvoiceResponse>> call = delhiveryApiService.getInvoiceCharges(
+                "Token a648f55858a9b418c8573b2dd7532cb2383e8360", type, "Delivered", pin, "743332", Precautions.WEIGHT, payType);
+        Log.d("PIN_CHECK", "Sending request to: " + call.request().url());
+        progressDialog.show();
+        call.enqueue(new Callback<List<InvoiceResponse>>() {
+            @Override
+            public void onResponse(Call<List<InvoiceResponse>> call, Response<List<InvoiceResponse>> response) {
+                progressDialog.dismiss();
+
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    InvoiceResponse response1 = response.body().get(0);  // get first item from array
+
+                    if (response1.isSuccessful()) {
+                        if (response1.getStatus() != null && response1.getStatus().equalsIgnoreCase("Delivered")) {
+
+                            binding.availablePinText.setText("Good to Go! Available in your pin-code...! 😃");
+
+                            try {
+                                double amount = response1.getTotal_amount();
+                                if (Precautions.CASH_PAYMENT){
+                                    if (type.equalsIgnoreCase("E")) {
+                                        Precautions.EXPRESS_DELIVERY_CHARGES = Math.toIntExact(Math.round(amount)) + Precautions.EXTRA_SAFETY_DELIVERY_CHARGES;
+                                    } else {
+                                        Precautions.SURFACE_DELIVERY_CHARGES = Math.toIntExact(Math.round(amount)) + Precautions.EXTRA_SAFETY_DELIVERY_CHARGES;
+                                    }
+                                }
+                                binding.deliveryPrice.setAnimation(AnimationUtils.loadAnimation(ProductDetails.this, R.anim.blink));
+                                setPrice();
+                            } catch (ArithmeticException e) {
+                                Helper.showOnlyMessage(ProductDetails.this, "Error", "Delivery charge too large");
+                            }
+                        } else {
+                            binding.availablePinText.setVisibility(View.GONE);
+                            Helper.showOnlyMessage(ProductDetails.this, "Error", "No delivery data available ");
+                        }
+                    } else {
+                        binding.availablePinText.setVisibility(View.GONE);
+                        Helper.showOnlyMessage(ProductDetails.this, "Failed", response1.toString());
+                    }
+                } else {
+                    binding.availablePinText.setVisibility(View.GONE);
+                    Helper.showOnlyMessage(ProductDetails.this, "Not Deliverable", "We're sorry but we are not available in your pin-code. May be in some other day.<br><br>Thank you,<br>Team Kuhokini");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<InvoiceResponse>> call, Throwable t) {
+                progressDialog.dismiss();
+                binding.availablePinText.setVisibility(View.GONE);
+                Helper.showOnlyMessage(ProductDetails.this, "Error",
+                        "Something went wrong. " + t.getLocalizedMessage() + " Please try again later");
+            }
+        });
 
 
     }
@@ -272,7 +555,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
     }
 
     void getPostData() {
-//        binding.loadMore.setVisibility(View.VISIBLE);
+        binding.loadMore.setVisibility(View.VISIBLE);
 //        binding.noData.setVisibility(View.GONE); // Hide noData initially
 
         if (nextPageToken == 0 && adapter != null) {
@@ -325,14 +608,14 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                         }
                     }
                 }
-                //binding.loadMore.setVisibility(View.GONE);
+                binding.loadMore.setVisibility(View.GONE);
                 isLoading = false;
             }
 
             @Override
             public void onFailure(Call<MainResponse> call, Throwable t) {
-//                binding.noData.setVisibility(View.VISIBLE);
-//                binding.loadMore.setVisibility(View.GONE);
+                //binding.noData.setVisibility(View.VISIBLE);
+                binding.loadMore.setVisibility(View.GONE);
                 binding.similarRecyclerView.hideShimmerAdapter();
                 binding.recyclerview.hideShimmerAdapter();
                 isLoading = false;
@@ -454,4 +737,5 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                     });
         }
     }
+
 }

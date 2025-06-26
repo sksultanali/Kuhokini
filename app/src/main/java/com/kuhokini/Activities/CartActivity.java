@@ -90,6 +90,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartL
 
     void refresh(){
         TinyCart cart = TinyCart.getInstance();
+        products.clear();
 
         // Load cart items
         for (Map.Entry<Object, CartItem> entry : cart.getItems().entrySet()) {

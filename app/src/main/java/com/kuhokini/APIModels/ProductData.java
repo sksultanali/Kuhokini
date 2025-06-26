@@ -1,26 +1,34 @@
 package com.kuhokini.APIModels;
 
+import com.kuhokini.Models.ReviewsModel;
+
 import java.util.List;
 
 public class ProductData {
     private int product_id;
     private String product_name;
     private String description;
-    private String weight;
+    private int weight;
     private int cat_id;
     private int sub_cat_id;
     private String delivery_charges;
     private ProductRatingData rating_info;
+    private List<ReviewsModel> latest_reviews;
     private String tags;
     private List<VariantResponse.Variant> variants;
 
     // Getters and Setters
 
+
+    public List<ReviewsModel> getLatest_reviews() {
+        return latest_reviews;
+    }
+
     public ProductRatingData getRating_info() {
         return rating_info;
     }
 
-    public String getWeight() {
+    public int getWeight() {
         return weight;
     }
 

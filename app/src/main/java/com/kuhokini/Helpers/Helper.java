@@ -4,17 +4,21 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -39,6 +43,8 @@ import com.kuhokini.Activities.CheckOut;
 import com.kuhokini.Activities.WebView;
 import com.kuhokini.R;
 import com.kuhokini.databinding.CustomDialogBinding;
+import com.kuhokini.databinding.DialogListShowBinding;
+import com.kuhokini.databinding.DialogMessageBoxBinding;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -47,6 +53,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -104,6 +111,43 @@ public class Helper {
         }
     }
 
+    public static String getFutureDate(int daysToAdd) {
+        // Get current date
+        LocalDate today = LocalDate.now();
+
+        // Add the specified number of days
+        LocalDate futureDate = today.plusDays(daysToAdd);
+
+        // Format the day with ordinal indicator (st, nd, rd, th)
+        int day = futureDate.getDayOfMonth();
+        String dayWithOrdinal = getOrdinal(day);
+
+        // Get month name
+        String month = futureDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+
+        // Get day of week
+        String dayOfWeek = futureDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+
+        // Combine all parts
+        return String.format("%s %s, %s", dayWithOrdinal, month, dayOfWeek);
+    }
+
+    private static String getOrdinal(int day) {
+        if (day >= 11 && day <= 13) {
+            return day + "th";
+        }
+        switch (day % 10) {
+            case 1:  return day + "st";
+            case 2:  return day + "nd";
+            case 3:  return day + "rd";
+            default: return day + "th";
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getFutureDate(7));  // Example: "7th July, Thursday"
+        System.out.println(getFutureDate(10)); // Example: "10th July, Sunday"
+    }
 
     public static String capitalizeWords(String sentence) {
         if (sentence == null || sentence.trim().isEmpty()) {
@@ -452,6 +496,18 @@ public class Helper {
                 });
     }
 
+    public static void showOnlyBottomMessage(Activity activity, String title, String content){
+        Helper.showBottomAction(activity, capitalizeFirstLetter(title), content, null, null, true,
+                new DialogButtonClickListener() {
+                    @Override
+                    public void onYesButtonClicked() {}
+                    @Override
+                    public void onNoButtonClicked() {}
+                    @Override
+                    public void onCloseButtonClicked() {}
+                });
+    }
+
     public static String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -540,5 +596,66 @@ public class Helper {
 
         dialog.show();
     }
+
+    public static void showBottomAction(
+            Activity activity, String title,
+            String content, String yesBtn, String noBtn, boolean closeBtn,
+            DialogButtonClickListener listener) { // Add listener parameter
+        DialogMessageBoxBinding dialogBinding = DialogMessageBoxBinding.inflate(activity.getLayoutInflater());
+
+        // Create a new dialog and set the custom layout
+        Dialog dialog = new Dialog(activity);
+        dialog.setContentView(dialogBinding.getRoot());
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        dialogBinding.titleText.setText(title);
+        dialogBinding.messageText.setText(Html.fromHtml(content));
+        if (yesBtn != null) {
+            dialogBinding.loginBtn.setVisibility(View.VISIBLE);
+            dialogBinding.yesBtnText.setText(yesBtn);
+        }else {
+            dialogBinding.loginBtn.setVisibility(View.GONE);
+        }
+
+        if (noBtn != null) {
+            dialogBinding.noBtn.setVisibility(View.VISIBLE);
+            dialogBinding.noBtnText.setText(noBtn);
+        }else {
+            dialogBinding.noBtn.setVisibility(View.GONE);
+        }
+
+        if (closeBtn){
+            dialogBinding.closeBtn.setVisibility(View.VISIBLE);
+        }else {
+            dialogBinding.closeBtn.setVisibility(View.GONE);
+        }
+
+        dialogBinding.noBtn.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onNoButtonClicked();
+            }
+            dialog.dismiss();
+        });
+
+        dialogBinding.loginBtn.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onYesButtonClicked();
+            }
+            dialog.dismiss();
+        });
+
+        dialogBinding.closeBtn.setOnClickListener(v->{
+            if (listener != null) {
+                listener.onCloseButtonClicked();
+            }
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
 
 }

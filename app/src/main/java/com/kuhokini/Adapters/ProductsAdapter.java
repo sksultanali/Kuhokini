@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,15 +151,36 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
 
 
-        holder.binding.addCart.setOnClickListener(v->{
-            cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), 200);
+//        holder.binding.addCart.setOnClickListener(v->{
+//            cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), 200);
+//            if (cartChangedListener != null) {
+//                cartChangedListener.onCartChanged();
+//            }
+//            holder.binding.addCart.setEnabled(false);
+//            holder.binding.addCart.setText("Added");
+//        });
+
+        holder.binding.addCart.setOnClickListener(v -> {
+            cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), details.getWeight());
             if (cartChangedListener != null) {
                 cartChangedListener.onCartChanged();
             }
             holder.binding.addCart.setEnabled(false);
-            holder.binding.addCart.setText("Added");
-
+            new CountDownTimer(3000, 1000) {
+                int count = 3;
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    holder.binding.addCart.setText("Added (" + count + ")");
+                    count--;
+                }
+                @Override
+                public void onFinish() {
+                    holder.binding.addCart.setEnabled(true);
+                    holder.binding.addCart.setText("Add Again");
+                }
+            }.start();
         });
+
 
 
     }

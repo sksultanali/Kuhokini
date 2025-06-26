@@ -46,6 +46,7 @@ import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.Helpers.TypeAnimation;
 import com.kuhokini.Helpers.UpdateManager;
 import com.kuhokini.Models.BannerModel;
+import com.kuhokini.Models.CategoryModel;
 import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityMainBinding;
 
@@ -264,7 +265,12 @@ public class MainActivity extends AppCompatActivity {
                     CategoryResponse categoryResponse = response.body();
                     if (categoryResponse.getStatus().equalsIgnoreCase("success")){
                         CategoryAdapter adapter = new CategoryAdapter(MainActivity.this,
-                                categoryResponse.getData(), "category_tbl");
+                                categoryResponse.getData(), "category_tbl", new CategoryAdapter.OnChangeListener() {
+                            @Override
+                            public void onSelect(CategoryModel categoryModel) {
+
+                            }
+                        });
                         binding.categoryRec.setAdapter(adapter);
                         binding.categoryRec.hideShimmerAdapter();
                     }
