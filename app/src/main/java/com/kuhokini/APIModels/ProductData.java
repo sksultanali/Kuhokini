@@ -9,6 +9,7 @@ public class ProductData {
     private String product_name;
     private String description;
     private int weight;
+    private int featured;
     private int cat_id;
     private int sub_cat_id;
     private String delivery_charges;
@@ -34,6 +35,14 @@ public class ProductData {
 
     public int getProduct_id() {
         return product_id;
+    }
+
+    public boolean isFeatured(){
+        if (featured == 0){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     public void setProduct_id(int product_id) {

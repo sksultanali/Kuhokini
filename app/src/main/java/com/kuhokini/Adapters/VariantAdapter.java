@@ -59,6 +59,12 @@ public class VariantAdapter extends RecyclerView.Adapter<VariantAdapter.ViewHold
                     .into(holder.binding.img);
         }
 
+        if (variant.getStock() == 0){
+            holder.binding.img.setAlpha(0.4F);
+        }else {
+            holder.binding.img.setAlpha(1.0F);
+        }
+
         holder.itemView.setOnClickListener(v->{
             onVariantClickListener.onChange(variant);
         });

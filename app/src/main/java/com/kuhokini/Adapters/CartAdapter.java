@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kuhokini.APIModels.ProductData;
 import com.kuhokini.APIModels.VariantResponse;
+import com.kuhokini.Activities.CartActivity;
 import com.kuhokini.Activities.CheckOut;
 import com.kuhokini.Activities.ProductDetails;
 import com.kuhokini.Helpers.ApiService;
@@ -101,6 +103,29 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.binding.normalPrice.setText(String.valueOf(product.getNormal_price()));
         holder.binding.price.setText(String.valueOf(product.getSelling_price()));
 
+        holder.binding.rating.setText(product.getRate() + " (" + product.getTotalRate()+")");
+        if (product.getRate() == 1){
+            holder.binding.star1.setVisibility(View.VISIBLE);
+        } else if (product.getRate() == 2) {
+            holder.binding.star1.setVisibility(View.VISIBLE);
+            holder.binding.star2.setVisibility(View.VISIBLE);
+        }else if (product.getRate() == 3) {
+            holder.binding.star1.setVisibility(View.VISIBLE);
+            holder.binding.star2.setVisibility(View.VISIBLE);
+            holder.binding.star3.setVisibility(View.VISIBLE);
+        }else if (product.getRate() == 4) {
+            holder.binding.star1.setVisibility(View.VISIBLE);
+            holder.binding.star2.setVisibility(View.VISIBLE);
+            holder.binding.star3.setVisibility(View.VISIBLE);
+            holder.binding.star4.setVisibility(View.VISIBLE);
+        }else if (product.getRate() == 5 || product.getRate() == 0) {
+            holder.binding.star1.setVisibility(View.VISIBLE);
+            holder.binding.star2.setVisibility(View.VISIBLE);
+            holder.binding.star3.setVisibility(View.VISIBLE);
+            holder.binding.star4.setVisibility(View.VISIBLE);
+            holder.binding.star5.setVisibility(View.VISIBLE);
+        }
+
         holder.binding.qtySpinner.setAdapter(obj);
         int selectedQty = cartItem.getQuantity();
         if (selectedQty >= 1 && selectedQty <= 10) {
@@ -117,8 +142,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                     return;
                 }
 
-                cart.updateItem(product, (position + 1), product.getSelling_price(), product.getWeight());
-                cartListener.onQuantityChanged();
+                int newQty = (position + 1);
+                if (product.getStock() >= newQty){
+                    cart.updateItem(product, newQty, product.getSelling_price(), product.getWeight());
+                    cartListener.onQuantityChanged();
+                }else {
+                    holder.binding.qtySpinner.setSelection(0);
+                    Toast.makeText(activity, "Maximum " + product.getStock() + " can be selected", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -135,6 +166,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         holder.binding.buyNow.setOnClickListener(v->{
             Intent i = new Intent(activity, CheckOut.class);
+            i.putExtra("totalAmt", (product.getSelling_price()*product.getQuantity()));
+            i.putExtra("totalWeight", (product.getWeight()*product.getQuantity()));
             activity.startActivity(i);
         });
 

@@ -1,9 +1,18 @@
 package com.kuhokini.Activities;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +27,13 @@ import com.kuhokini.Adapters.SearchAdapter;
 import com.kuhokini.Adapters.SearchHistoryAdapter;
 import com.kuhokini.Helpers.ApiService;
 import com.kuhokini.Helpers.DB_Helper_Search_History;
+import com.kuhokini.Helpers.Helper;
 import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.R;
 import com.kuhokini.databinding.ActivitySearchBinding;
+import com.kuhokini.databinding.CustomDialogBinding;
+import com.kuhokini.databinding.DialogMessageBoxBinding;
+import com.kuhokini.databinding.DialogSortOptionsBinding;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     private DB_Helper_Search_History dbHelper;
     ArrayList<String> searchArray = new ArrayList<>();
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +101,7 @@ public class SearchActivity extends AppCompatActivity {
             binding.searchTags.setText("");
             binding.closeBtn.setVisibility(View.GONE);
         });
+
 
 
 

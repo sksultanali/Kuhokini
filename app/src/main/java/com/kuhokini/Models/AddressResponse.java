@@ -4,7 +4,7 @@ import java.util.List;
 
 public class AddressResponse {
     private String status;
-    private List<AddressModel> addresses;
+    private List<AddressModel> data;
     private int cod_enable;
     public String getStatus() {
         return status;
@@ -15,7 +15,7 @@ public class AddressResponse {
     }
 
     public List<AddressModel> getAddresses() {
-        return addresses;
+        return data;
     }
 
     public class AddressModel {

@@ -55,6 +55,10 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.ViewHo
         ProductData details = models.get(position);
         VariantResponse.Variant variantDetails = details.getVariants().get(0);
 
+        variantDetails.setRate(details.getRating_info().getAverage_rating());
+        variantDetails.setTotalRate(details.getRating_info().getTotal_ratings());
+        variantDetails.setWeight(details.getWeight());
+
         holder.binding.wishListBtn.setLiked(wishList.isHotelInWishlist(
                 String.valueOf(details.getProduct_id())
         ));

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/_10mdp"
+    android:paddingBottom="@dimen/_10mdp">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:cardCornerRadius="@dimen/_5mdp"
+        android:layout_margin="@dimen/_16mdp"
+        android:elevation="@dimen/_5mdp"
+        android:background="@drawable/bg_white_round_corner">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10mdp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Sort Options"
+                    android:textSize="@dimen/_12font_mdp"
+                    android:textColor="@color/black"/>
+                <ImageView
+                    android:id="@+id/close"
+                    android:layout_width="@dimen/_20mdp"
+                    android:layout_height="@dimen/_20mdp"
+                    app:tint="@color/black"
+                    android:src="@drawable/close_24"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:layout_marginBottom="@dimen/_5mdp"
+                android:background="@color/darkGray"/>
+            <RadioGroup
+                android:id="@+id/sortGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/relevant"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tab_effect_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:paddingStart="@dimen/_20mdp"
+                    android:paddingEnd="@dimen/_20mdp"
+                    android:text="Relevant"
+                    android:textColor="@drawable/text_color_selector_tab"
+                    android:textSize="@dimen/_10font_mdp"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/price_low_high"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:background="@drawable/tab_effect_selector"
+                    android:button="@null"
+                    android:checked="false"
+                    android:paddingStart="@dimen/_20mdp"
+                    android:paddingEnd="@dimen/_20mdp"
+                    android:text="Price: Low to High"
+                    android:textColor="@drawable/text_color_selector_tab"
+                    android:textSize="@dimen/_10font_mdp"
+                    android:textStyle="bold" />
+
+                <RadioButton
+                    android:id="@+id/price_high_low"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:background="@drawable/tab_effect_selector"
+                    android:button="@null"
+                    android:checked="false"
+                    android:paddingStart="@dimen/_20mdp"
+                    android:paddingEnd="@dimen/_20mdp"
+                    android:text="Price: High to Low"
+                    android:textColor="@drawable/text_color_selector_tab"
+                    android:textSize="@dimen/_10font_mdp"
+                    android:textStyle="bold" />
+            </RadioGroup>
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

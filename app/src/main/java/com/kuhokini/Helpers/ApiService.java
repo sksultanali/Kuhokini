@@ -8,6 +8,7 @@ import com.kuhokini.APIModels.CouponResponse;
 import com.kuhokini.APIModels.ImageUploadResponse;
 import com.kuhokini.APIModels.MainResponse;
 import com.kuhokini.APIModels.ProductResponse;
+import com.kuhokini.APIModels.ReviewResponse;
 import com.kuhokini.APIModels.RoomImagesResponse;
 import com.kuhokini.APIModels.SearchKeywordResponse;
 import com.kuhokini.APIModels.SingleUserResponse;
@@ -235,7 +236,31 @@ public interface ApiService {
     @GET("apis/api.php?action=fetchProducts")
     Call<MainResponse> fetchProducts(
             @Query("nextPageToken") int nextPageToken,
-            @Query("keyword")@Nullable String keyword
+            @Query("keyword")@Nullable String keyword,
+            @Query("extraquery")@Nullable String extraquery
+    );
+
+    @GET("apis/api.php?action=fetchProducts")
+    Call<MainResponse> fetchProducts(
+            @Query("nextPageToken") int nextPageToken,
+            @Query("keyword")@Nullable String keyword,
+            @Query("sort")@Nullable String sort,
+            @Query("extraquery")@Nullable String extraquery
+    );
+
+    @GET("apis/api.php?action=fetchReviews")
+    Call<ReviewResponse> fetchReviews(
+            @Query("nextPageToken") int nextPageToken,
+            @Query("keyword")@Nullable String keyword,
+            @Query("userId")@Nullable String userId,
+            @Query("productId")@Nullable String productId
+    );
+
+    @GET("apis/api.php?action=fetchProductsByCategory")
+    Call<MainResponse> fetchProductsByCategory(
+            @Query("nextPageToken") int nextPageToken,
+            @Query("cat_id")@Nullable String cat_id,
+            @Query("sub_cat_id")@Nullable String sub_cat_id
     );
 
     @GET("apis/api.php?action=fetchProductNamesOnly")

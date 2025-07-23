@@ -84,6 +84,8 @@ public class Helper {
     public static String Selected_Phone;
     public static String Selected_Email;
     public static String RoomNo;
+    public static String SORT_OPTION;
+    public static String FILTER_OPTION;
     public static String dateWiseChange;
     public static int selectedPosition = -1;
     public static ArrayList<String> list = new ArrayList<>();
@@ -386,7 +388,7 @@ public class Helper {
     }
     public static void openChromeTab(String link, Activity activity){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(ContextCompat.getColor(activity, R.color.purple));
+        builder.setToolbarColor(ContextCompat.getColor(activity, R.color.white));
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(activity, Uri.parse(link));
     }
@@ -445,7 +447,7 @@ public class Helper {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 ApiResponse apiResponse = response.body();
                 if (!apiResponse.getStatus().equalsIgnoreCase("success")){
-                    Helper.showActionDialog(activity, apiResponse.getStatus(), apiResponse.getMessage(), "Okay",
+                    Helper.showActionDialog(activity, Helper.capitalizeFirstLetter(apiResponse.getStatus()), apiResponse.getMessage(), "Okay",
                             null, false, new Helper.DialogButtonClickListener() {
                                 @Override
                                 public void onYesButtonClicked() {}

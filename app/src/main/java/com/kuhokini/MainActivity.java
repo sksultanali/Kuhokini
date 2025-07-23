@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         setupRecyclerView();
         if (isInitialLoad) {
             getPostData();
+            getFeaturedPost();
             isInitialLoad = false; // Mark initial load as complete
         }
 
@@ -187,11 +188,10 @@ public class MainActivity extends AppCompatActivity {
 //        binding.noData.setVisibility(View.GONE); // Hide noData initially
         if (nextPageToken == 0 && adapter != null) {
             adapter.clearItems(); // clear old data on new search
-            binding.featuredRec.showShimmerAdapter();
             binding.recyclerview.showShimmerAdapter();
         }
 
-        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null);
+        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null, null);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
@@ -208,14 +208,8 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
                                 binding.recyclerview.setAdapter(adapter);
-                                binding.featuredRec.hideShimmerAdapter();
                                 binding.recyclerview.hideShimmerAdapter();
 
-                                LinearLayoutManager lnm = new LinearLayoutManager(MainActivity.this);
-                                lnm.setOrientation(RecyclerView.HORIZONTAL);
-                                binding.featuredRec.setLayoutManager(lnm);
-                                FeaturedAdapter adapter1 = new FeaturedAdapter(MainActivity.this, apiResponse.getData());
-                                binding.featuredRec.setAdapter(adapter1);
                             } else {
                                 if (nextPageToken == 0) {
                                     adapter.setItems(apiResponse.getData()); // replace data
@@ -243,9 +237,37 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<MainResponse> call, Throwable t) {
 //                binding.noData.setVisibility(View.VISIBLE);
 //                binding.loadMore.setVisibility(View.GONE);
-                binding.featuredRec.hideShimmerAdapter();
                 binding.recyclerview.hideShimmerAdapter();
                 isLoading = false;
+            }
+        });
+    }
+
+    void getFeaturedPost(){
+        LinearLayoutManager lnm = new LinearLayoutManager(MainActivity.this);
+        lnm.setOrientation(RecyclerView.HORIZONTAL);
+        binding.featuredRec.setLayoutManager(lnm);
+        binding.featuredRec.showShimmerAdapter();
+
+        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null, " AND p.featured = 1 ");
+        call.enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    MainResponse apiResponse = response.body();
+                    if (apiResponse.getStatus().equalsIgnoreCase("success")) {
+                        if (apiResponse.getData() != null && !apiResponse.getData().isEmpty()) {
+                            FeaturedAdapter adapter1 = new FeaturedAdapter(MainActivity.this, apiResponse.getData());
+                            binding.featuredRec.setAdapter(adapter1);
+                            binding.featuredRec.hideShimmerAdapter();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                binding.featuredRec.hideShimmerAdapter();
             }
         });
     }

@@ -47,6 +47,9 @@ public class VariantResponse {
         private int normal_price;
         private int weight;
         private int quantity;
+        private int rate;
+        private int totalRate;
+
         ArrayList<SlideModel> images; // You can use List<String> if images is a comma-separated string of URLs
 
         // Getters and setters
@@ -56,6 +59,22 @@ public class VariantResponse {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public int getRate() {
+            return rate;
+        }
+
+        public void setRate(int rate) {
+            this.rate = rate;
+        }
+
+        public int getTotalRate() {
+            return totalRate;
+        }
+
+        public void setTotalRate(int totalRate) {
+            this.totalRate = totalRate;
         }
 
         public int getProduct_id() {
@@ -122,20 +141,20 @@ public class VariantResponse {
             return images;
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Variant variant = (Variant) o;
-
-            return getId() != null ? getId().equals(variant.getId()) : variant.getId() == null;
-        }
-
-        @Override
-        public int hashCode() {
-            return getId() != null ? getId().hashCode() : 0;
-        }
+//        @Override
+//        public boolean equals(Object o) {
+//            if (this == o) return true;
+//            if (o == null || getClass() != o.getClass()) return false;
+//
+//            Variant variant = (Variant) o;
+//
+//            return getId() != null ? getId().equals(variant.getId()) : variant.getId() == null;
+//        }
+//
+//        @Override
+//        public int hashCode() {
+//            return getId() != null ? getId().hashCode() : 0;
+//        }
 
 
 //        @Override

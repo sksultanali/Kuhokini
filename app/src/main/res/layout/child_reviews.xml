@@ -74,7 +74,7 @@
                 android:paddingBottom="@dimen/_2mdp"
                 android:background="@drawable/bg_red_red"
                 android:textStyle="bold"
-                android:textSize="@dimen/_11font_mdp"/>
+                android:textSize="@dimen/_9font_mdp"/>
 <!--            <TextView-->
 <!--                android:id="@+id/amount"-->
 <!--                android:layout_width="wrap_content"-->

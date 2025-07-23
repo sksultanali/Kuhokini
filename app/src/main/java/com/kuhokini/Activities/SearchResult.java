@@ -1,9 +1,19 @@
 package com.kuhokini.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -18,11 +28,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kuhokini.APIModels.MainResponse;
 import com.kuhokini.Adapters.ProductsAdapter;
 import com.kuhokini.Helpers.ApiService;
+import com.kuhokini.Helpers.Helper;
 import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.MainActivity;
 import com.kuhokini.R;
 import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivitySearchResultBinding;
+import com.kuhokini.databinding.DialogFilterOptionsBinding;
+import com.kuhokini.databinding.DialogSortOptionsBinding;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +51,7 @@ public class SearchResult extends AppCompatActivity implements ProductsAdapter.O
     private boolean isLoading = false;
     ProductsAdapter adapter;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +94,159 @@ public class SearchResult extends AppCompatActivity implements ProductsAdapter.O
         }
 
 
+        binding.sort.setOnClickListener(v->{
+            DialogSortOptionsBinding listsBinding = DialogSortOptionsBinding.inflate(LayoutInflater.from(SearchResult.this));
+
+            AlertDialog dialog = new AlertDialog.Builder(SearchResult.this)
+                    .setView(listsBinding.getRoot())
+                    .create();
+
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+
+            if (Helper.SORT_OPTION != null && !Helper.SORT_OPTION.isEmpty()){
+                if (Helper.SORT_OPTION.equalsIgnoreCase("Relevant")){
+                    listsBinding.relevant.setChecked(true);
+                }else if (Helper.SORT_OPTION.equalsIgnoreCase("LowToHigh")){
+                    listsBinding.priceLowHigh.setChecked(true);
+                }else if (Helper.SORT_OPTION.equalsIgnoreCase("HighToLow")){
+                    listsBinding.priceHighLow.setChecked(true);
+                }
+            }else {
+                listsBinding.sortGroup.clearCheck();
+            }
+
+            listsBinding.sortGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    if (listsBinding.relevant.isChecked()){
+                        Helper.SORT_OPTION = "Relevant";
+                    } else if (listsBinding.priceLowHigh.isChecked()) {
+                        Helper.SORT_OPTION = "LowToHigh";
+                    }else if (listsBinding.priceHighLow.isChecked()) {
+                        Helper.SORT_OPTION = "HighToLow";
+                    }else{
+                        Helper.SORT_OPTION = "Relevant";
+                    }
+                    nextPageToken = 0;
+                    getPostData();
+                    binding.sortTxt.setText("Sort: " + Helper.SORT_OPTION);
+                    dialog.dismiss();
+                }
+            });
+
+            listsBinding.close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        });
+        binding.filter.setOnClickListener(v->{
+            DialogFilterOptionsBinding listsBinding = DialogFilterOptionsBinding.inflate(LayoutInflater.from(SearchResult.this));
+
+            AlertDialog dialog = new AlertDialog.Builder(SearchResult.this)
+                    .setView(listsBinding.getRoot())
+                    .create();
+
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+
+            if (Helper.FILTER_OPTION != null && !Helper.FILTER_OPTION.isEmpty()){
+                if (Helper.FILTER_OPTION.equalsIgnoreCase("Under 500")){
+                    listsBinding.under500.setChecked(true);
+                }else if (Helper.FILTER_OPTION.equalsIgnoreCase("Under 1000")){
+                    listsBinding.under1000.setChecked(true);
+                }else if (Helper.FILTER_OPTION.equalsIgnoreCase("Under 1500")){
+                    listsBinding.under1500.setChecked(true);
+                }else if (Helper.FILTER_OPTION.equalsIgnoreCase("Under 2000")){
+                    listsBinding.under2000.setChecked(true);
+                }else if (Helper.FILTER_OPTION.equalsIgnoreCase("ShowAll")){
+                    listsBinding.showAll.setChecked(true);
+                }
+            }else {
+                listsBinding.sortGroup.clearCheck();
+            }
+
+            listsBinding.sortGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    binding.filterTxt.setText("Filtered");
+                    if (listsBinding.under500.isChecked()){
+                        Helper.FILTER_OPTION = "Under 500";
+                    } else if (listsBinding.under1000.isChecked()) {
+                        Helper.FILTER_OPTION = "Under 1000";
+                    }else if (listsBinding.under1500.isChecked()) {
+                        Helper.FILTER_OPTION = "Under 1500";
+                    }else if (listsBinding.under2000.isChecked()) {
+                        Helper.FILTER_OPTION = "Under 2000";
+                    }else if (listsBinding.showAll.isChecked()) {
+                        Helper.FILTER_OPTION = "ShowAll";
+                        binding.filterTxt.setText("Filter");
+                    }
+                    nextPageToken = 0;
+                    getPostData();
+                    dialog.dismiss();
+                }
+            });
+
+            listsBinding.close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        });
+
+    }
+
+    private String buildExtraQuery() {
+        StringBuilder extraQuery = new StringBuilder();
+
+        if (Helper.FILTER_OPTION != null && !Helper.FILTER_OPTION.isEmpty()) {
+            switch (Helper.FILTER_OPTION.toLowerCase()) {
+                case "under 500":
+                    extraQuery.append(" AND v.selling_price < 500");
+                    break;
+                case "under 1000":
+                    extraQuery.append(" AND v.selling_price < 1000");
+                    break;
+                case "under 1500":
+                    extraQuery.append(" AND v.selling_price < 1500");
+                    break;
+                case "under 2000":
+                    extraQuery.append(" AND v.selling_price < 2000");
+                    break;
+                case "showall":
+                    //extraQuery.append("");
+                    break;
+                default:
+                    extraQuery.append(" AND v.selling_price < 500");
+                    break;
+            }
+        }
+
+//        if (Helper.SORT_OPTION != null && !Helper.SORT_OPTION.isEmpty()) {
+//            switch (Helper.SORT_OPTION.toLowerCase()) {
+//                case "hightolow":
+//                    extraQuery.append(" ORDER BY v.selling_price desc");
+//                    break;
+//                case "lowtohigh":
+//                    extraQuery.append(" ORDER BY v.selling_price asc");
+//                    break;
+//                default:
+//                    //extraQuery.append("");
+//                    break;
+//            }
+//        }
+
+        return extraQuery.length() > 0 ? extraQuery.toString() : "";
     }
 
     private void setupRecyclerView() {
@@ -115,7 +282,13 @@ public class SearchResult extends AppCompatActivity implements ProductsAdapter.O
             adapter.clearItems(); // clear old data on new search
         }
 
-        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, keyword);
+        if (Helper.SORT_OPTION == null){
+            Helper.SORT_OPTION = "R";
+        }
+
+        String sOp = Helper.SORT_OPTION.toLowerCase();
+
+        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, keyword, sOp, buildExtraQuery());
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {

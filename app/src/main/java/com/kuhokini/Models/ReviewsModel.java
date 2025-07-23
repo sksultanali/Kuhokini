@@ -1,7 +1,7 @@
 package com.kuhokini.Models;
 
 public class ReviewsModel {
-    String user_name, comment, created_at, img;
+    String user_name, comment, created_at, img, attach_file;
     int rating;
 
     public String getUser_name() {
@@ -10,6 +10,14 @@ public class ReviewsModel {
 
     public void setUser_name(String user_name) {
         this.user_name = user_name;
+    }
+
+    public String getAttach_link() {
+        return attach_file;
+    }
+
+    public void setAttach_link(String attach_link) {
+        this.attach_file = attach_link;
     }
 
     public String getComment() {

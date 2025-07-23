@@ -5,6 +5,7 @@ import java.util.List;
 public class ProductRatingData {
     private int average_rating;
     private String actual_rating;
+    private String rating_label;
     private int total_ratings;
     private int review_count;
     private RatingDistribution rating_distribution;
@@ -19,6 +20,10 @@ public class ProductRatingData {
 
     public int getTotal_ratings() {
         return total_ratings;
+    }
+
+    public String getRating_label() {
+        return rating_label;
     }
 
     public int getReview_count() {

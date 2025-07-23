@@ -53,19 +53,62 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <com.cooltechworks.views.shimmer.ShimmerRecyclerView
-                    android:id="@+id/categoryRec"
+                <LinearLayout
+                    android:id="@+id/selLay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5mdp"
-                    android:orientation="horizontal"
-                    app:shimmer_demo_child_count="10"
-                    app:shimmer_demo_layout="@layout/demo_category"
-                    app:shimmer_demo_layout_manager_type="linear_horizontal"
-                    app:shimmer_demo_angle="20"
-                    tools:layout_editor_absoluteX="6dp"
+                    android:layout_margin="@dimen/_5mdp"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/child_category" />
+                    android:orientation="vertical">
+                    <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+                        android:id="@+id/categoryRec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:shimmer_demo_child_count="10"
+                        android:visibility="visible"
+                        app:shimmer_demo_layout="@layout/demo_category"
+                        app:shimmer_demo_layout_manager_type="linear_horizontal"
+                        app:shimmer_demo_angle="20"
+                        tools:layout_editor_absoluteX="6dp"
+                        tools:listitem="@layout/child_category" />
+
+                    <LinearLayout
+                        android:id="@+id/noSubCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5mdp"
+                        android:padding="@dimen/_10mdp"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@drawable/back_white_border_grey_corner"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="@dimen/_35mdp"
+                            android:layout_height="@dimen/_35mdp"
+                            android:src="@drawable/no_image"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="@dimen/_11font_mdp"
+                                android:text="This Category has no Sub Categories"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/_11font_mdp"
+                                android:text="but, listed products are below"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/newArrivalTxt"
                     android:layout_width="wrap_content"
@@ -73,15 +116,15 @@
                     android:paddingStart="@dimen/_10mdp"
                     android:paddingTop="@dimen/_3mdp"
                     android:paddingBottom="@dimen/_3mdp"
+                    android:layout_marginTop="@dimen/_5mdp"
                     android:paddingEnd="@dimen/_5mdp"
                     android:background="@color/text_back_color"
-                    android:layout_marginTop="@dimen/_10mdp"
                     android:text="New Arrivals"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_10font_mdp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/categoryRec" />
+                    app:layout_constraintTop_toBottomOf="@+id/selLay" />
 
                 <com.cooltechworks.views.shimmer.ShimmerRecyclerView
                     android:id="@+id/recyclerview"
@@ -111,7 +154,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_35mdp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/newArrivalTxt"
                     android:visibility="gone"
                     android:orientation="vertical">
                     <com.airbnb.lottie.LottieAnimationView

@@ -84,6 +84,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         ProductData details = models.get(position);
         VariantResponse.Variant variantDetails = details.getVariants().get(0);
 
+        variantDetails.setRate(details.getRating_info().getAverage_rating());
+        variantDetails.setTotalRate(details.getRating_info().getTotal_ratings());
+        variantDetails.setWeight(details.getWeight());
+
         holder.binding.wishListBtn.setLiked(wishList.isHotelInWishlist(
                 String.valueOf(details.getProduct_id())
         ));
@@ -92,6 +96,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             holder.binding.imageView.setImageList(variantDetails.getImages(), ScaleTypes.CENTER_CROP);
         }else {
             holder.binding.imageView.setImageList(images, ScaleTypes.CENTER_CROP);
+        }
+
+        if (details.isFeatured()){
+            holder.binding.featured.setVisibility(View.VISIBLE);
+        }else {
+            holder.binding.featured.setVisibility(View.GONE);
         }
 
         if (details.getRating_info().getAverage_rating() == 1){

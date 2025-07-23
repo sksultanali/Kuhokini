@@ -76,15 +76,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartL
         // Back button
         binding.goBack.setOnClickListener(v -> onBackPressed());
 
-        // Continue to checkout button
-        binding.continueBtn.setOnClickListener(view -> {
-            if (!cart.getItems().isEmpty()) {
-                Intent i = new Intent(CartActivity.this, CheckOut.class);
-                startActivity(i);
-            } else {
-                Toast.makeText(activity, "Cart is empty!", Toast.LENGTH_SHORT).show();
-            }
-        });
+
 
     }
 
@@ -118,6 +110,20 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartL
 
         // Initial total update
         binding.subtotal.setText(String.format("₹%.2f", cart.getTotalPrice()));
+
+        // Continue to checkout button
+        binding.continueBtn.setOnClickListener(view -> {
+            if (!cart.getItems().isEmpty()) {
+                Intent i = new Intent(CartActivity.this, CheckOut.class);
+                int totalAmount = (int) Math.round(cart.getTotalPrice());
+                int totalWeight = (int) Math.round(cart.getTotalWeight());
+                i.putExtra("totalAmt", totalAmount);
+                i.putExtra("totalWeight", totalWeight);
+                startActivity(i);
+            } else {
+                Toast.makeText(activity, "Cart is empty!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

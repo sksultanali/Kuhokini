@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.kuhokini.APIModels.ProductData;
 import com.kuhokini.Helpers.Helper;
 import com.kuhokini.Models.ReviewsModel;
 import com.kuhokini.R;
@@ -85,6 +86,23 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         
         
+    }
+
+    public void addItems(List<ReviewsModel> newItems) {
+        int startPosition = models.size();
+        models.addAll(newItems);
+        notifyItemRangeInserted(startPosition, newItems.size());
+    }
+
+    public void clearItems() {
+        models.clear();
+        notifyDataSetChanged();
+    }
+
+    public void setItems(List<ReviewsModel> newItems) {
+        models.clear();
+        models.addAll(newItems);
+        notifyDataSetChanged();
     }
 
     @Override

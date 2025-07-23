@@ -71,6 +71,7 @@
             android:id="@+id/no_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_50mdp"
             app:layout_constraintTop_toBottomOf="@+id/firstLn"
             android:orientation="vertical">
             <com.airbnb.lottie.LottieAnimationView

@@ -25,6 +25,22 @@
             app:iss_period="800"
             app:iss_placeholder="@color/black"
             app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/featured"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_background_orange"
+            android:paddingStart="@dimen/_5mdp"
+            android:paddingTop="@dimen/_2mdp"
+            android:paddingEnd="@dimen/_5mdp"
+            android:paddingBottom="@dimen/_2mdp"
+            android:visibility="gone"
+            android:text="Featured"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_9font_mdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -38,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Product Name"
+                android:maxLines="2"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11font_mdp"
                 android:textStyle="bold" />

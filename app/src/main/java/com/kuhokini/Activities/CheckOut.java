@@ -45,6 +45,7 @@ import com.kuhokini.Adapters.AddressAdapter;
 import com.kuhokini.Adapters.CategoryAdapter;
 import com.kuhokini.Helpers.ApiService;
 import com.kuhokini.Helpers.Helper;
+import com.kuhokini.Helpers.Precautions;
 import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.Models.AddressResponse;
 import com.kuhokini.Models.CouponModel;
@@ -76,6 +77,7 @@ public class CheckOut extends AppCompatActivity {
     ApiService apiService;
     TinyCart cart;
     ProgressDialog progressDialog;
+    int price, weight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,11 @@ public class CheckOut extends AppCompatActivity {
         progressDialog = new ProgressDialog(CheckOut.this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Connecting server...");
+
+        price = getIntent().getIntExtra("totalAmt", 0);
+        weight = getIntent().getIntExtra("totalWeight", 0);
+
+        Toast.makeText(this, price + " : " +weight, Toast.LENGTH_SHORT).show();
 
         cart = TinyCart.getInstance();
         binding.payNow.setOnClickListener(v->{
@@ -134,6 +141,8 @@ public class CheckOut extends AppCompatActivity {
                 }
             }
         });
+
+
 
 
         binding.applyCode.setOnClickListener(v -> {
@@ -182,6 +191,39 @@ public class CheckOut extends AppCompatActivity {
 
     }
 
+    private void setPrice() {
+        int fPrice = price;
+        binding.basePrice.setText(price+"");
+
+        if (price >= Precautions.FREE_DELIVERY_AFTER) {
+            fPrice += 0;
+            binding.deliveryCharge.setText("0");
+        }else {
+            if (Precautions.REGULAR_DELIVERY) {
+                fPrice += Precautions.SURFACE_DELIVERY_CHARGES;
+                binding.deliveryCharge.setText(Precautions.SURFACE_DELIVERY_CHARGES+"");
+                //binding.extraNote.setText("Delivery charges ₹" + Precautions.SURFACE_DELIVERY_CHARGES + " only");
+            }else {
+                fPrice += Precautions.EXPRESS_DELIVERY_CHARGES;
+                binding.deliveryCharge.setText(Precautions.EXPRESS_DELIVERY_CHARGES+"");
+                //binding.extraNote.setText("Delivery charges ₹" + Precautions.EXPRESS_DELIVERY_CHARGES + " only");
+            }
+            //binding.freeDelivery.setText("Delivery charges ");
+            //binding.deliveryPrice.setVisibility(View.VISIBLE);
+        }
+
+        if (Precautions.CASH_PAYMENT) {
+            fPrice += Precautions.CASH_PAYMENT_CHARGES;
+            binding.codAmountText.setText(Precautions.CASH_PAYMENT_CHARGES+"");
+            binding.codChargesLayout.setVisibility(View.VISIBLE);
+        }else {
+            binding.codChargesLayout.setVisibility(View.GONE);
+        }
+
+        //binding.subtotal.setText(String.valueOf(fPrice));
+        binding.sellingPrice.setText(String.valueOf(fPrice));
+    }
+
     private void applyCoupon(CouponModel coupon) {
 //        if ("Percentage".equalsIgnoreCase(coupon.getType())) {
 //            Helper.FLAT_DISCOUNT = 0;
@@ -219,7 +261,7 @@ public class CheckOut extends AppCompatActivity {
                     }
 
                     if (addressResponse.getStatus().equalsIgnoreCase("success")){
-                        if (addressResponse.getAddresses().isEmpty()){
+                        if (addressResponse.getAddresses() == null || addressResponse.getAddresses().isEmpty()){
                             noAddress();
                         }else {
                             AddressResponse.AddressModel addressModel = addressResponse.getAddresses().get(0);

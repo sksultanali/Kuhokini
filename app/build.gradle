@@ -11,8 +11,8 @@ android {
         applicationId "com.kuhokini"
         minSdk 26
         targetSdk 35
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,6 +27,11 @@ android {
             shrinkResources true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Add these flags
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
 
@@ -48,7 +53,17 @@ android {
     }
 
     packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/*.version'
+        exclude 'META-INF/proguard/*'
+    }
+
+    lint {
+        disable 'DuplicatePlatformClasses'
     }
 }
 

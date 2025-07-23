@@ -36,7 +36,7 @@ public class SubCategoryActivity extends AppCompatActivity {
     ActivitySubCategoryBinding binding;
     ApiService apiService;
     Activity activity;
-    String catId, catName;
+    String catId, catName, subCatId;
     int nextPageToken, currentPage = 0;
     private boolean isInitialLoad = true;
     private boolean isLoading = false;
@@ -66,7 +66,7 @@ public class SubCategoryActivity extends AppCompatActivity {
         loadCategory();
         setupRecyclerView();
         if (isInitialLoad) {
-            getPostData();
+            getPostData(catId, subCatId);
             isInitialLoad = false; // Mark initial load as complete
         }
 
@@ -97,13 +97,13 @@ public class SubCategoryActivity extends AppCompatActivity {
 
                 if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && nextPageToken != 0) {
                     isLoading = true;
-                    getPostData();
+                    getPostData(catId, subCatId);
                 }
             }
         });
     }
 
-    void getPostData() {
+    void getPostData(String catId, String subCatId) {
         binding.loadMore.setVisibility(View.VISIBLE);
         binding.noData.setVisibility(View.GONE); // Hide noData initially
         if (nextPageToken == 0 && adapter != null) {
@@ -111,7 +111,7 @@ public class SubCategoryActivity extends AppCompatActivity {
             binding.recyclerview.showShimmerAdapter();
         }
 
-        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null);
+        Call<MainResponse> call = apiService.fetchProductsByCategory(nextPageToken, catId, subCatId);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
@@ -146,7 +146,15 @@ public class SubCategoryActivity extends AppCompatActivity {
                             if (apiResponse.getData().size() < 15) {
                                 nextPageToken = 0; // No more data to load
                             }
+                        }else {
+                            binding.noData.setVisibility(View.VISIBLE);
+                            binding.loadMore.setVisibility(View.GONE);
+                            binding.recyclerview.hideShimmerAdapter();
                         }
+                    }else {
+                        binding.noData.setVisibility(View.VISIBLE);
+                        binding.loadMore.setVisibility(View.GONE);
+                        binding.recyclerview.hideShimmerAdapter();
                     }
                 }
                 binding.loadMore.setVisibility(View.GONE);
@@ -177,16 +185,25 @@ public class SubCategoryActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response != null){
                     CategoryResponse categoryResponse = response.body();
                     if (categoryResponse.getStatus().equalsIgnoreCase("success")){
+                        if (categoryResponse.getData() != null && !categoryResponse.getData().isEmpty()) {
+                            binding.newArrivalTxt.setText("From " + categoryResponse.getData().get(0).getName());
+                            binding.noSubCategory.setVisibility(View.GONE);
+                        }else {
+                            binding.noSubCategory.setVisibility(View.VISIBLE);
+                            binding.newArrivalTxt.setText("From " + catName);
+                        }
                         CategoryAdapter adapter = new CategoryAdapter(SubCategoryActivity.this,
                                 categoryResponse.getData(), "sub_category_tbl", new CategoryAdapter.OnChangeListener() {
                             @Override
                             public void onSelect(CategoryModel categoryModel) {
-                                getPostData();
+                                getPostData(catId, categoryModel.getId());
                                 binding.newArrivalTxt.setText("From " + categoryModel.getName());
                             }
                         });
                         binding.categoryRec.setAdapter(adapter);
                         binding.categoryRec.hideShimmerAdapter();
+                    }else {
+                        binding.noSubCategory.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -194,6 +211,7 @@ public class SubCategoryActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<CategoryResponse> call, Throwable t) {
                 binding.categoryRec.hideShimmerAdapter();
+                binding.noSubCategory.setVisibility(View.VISIBLE);
             }
         });
     }

@@ -109,6 +109,12 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Checking availability...");
 
+        binding.seeAllReview.setOnClickListener(v->{
+            Intent i = new Intent(ProductDetails.this, ReviewsActivity.class);
+            i.putExtra("id", productId);
+            startActivity(i);
+        });
+
         LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
         lnm.setOrientation(RecyclerView.HORIZONTAL);
         binding.variantRec.setLayoutManager(lnm);
@@ -130,6 +136,11 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                         variantDetails = details.getVariants().get(0);
                         Precautions.WEIGHT = details.getWeight();
                         setVariantInfo(variantDetails);
+                        getSimilarPost(String.valueOf(details.getCat_id()), String.valueOf(details.getSub_cat_id()));
+
+                        variantDetails.setRate(details.getRating_info().getAverage_rating());
+                        variantDetails.setTotalRate(details.getRating_info().getTotal_ratings());
+                        variantDetails.setWeight(details.getWeight());
 
                         if (details.getRating_info().getAverage_rating() == 1){
                             binding.star1.setVisibility(View.VISIBLE);
@@ -154,6 +165,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                             binding.star5.setVisibility(View.VISIBLE);
                         }
 
+                        binding.ratingLabel.setText(details.getRating_info().getRating_label());
 
                         binding.name.setText(details.getProduct_name());
                         binding.rating.setText(details.getRating_info().getAverage_rating() + " ("
@@ -180,10 +192,6 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                         }else {
                             binding.seeAllReview.setVisibility(View.VISIBLE);
                             binding.sellAllReviewTxt.setText("See All "+ details.getRating_info().getReview_count() +" Reviews");
-
-                            binding.seeAllReview.setOnClickListener(v->{
-                                startActivity(new Intent(ProductDetails.this, ReviewsActivity.class));
-                            });
                         }
 
                         binding.Star1.setText(String.valueOf(details.getRating_info().getRating_distribution().getOne_star()));
@@ -337,17 +345,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         }
         imageSliders();
 
-
-
-
-        binding.buyBtn.setOnClickListener(v->{
-            Intent i = new Intent(ProductDetails.this, CheckOut.class);
-            startActivity(i);
-        });
-
-
     }
-
 
 
     private void setVariantInfo(VariantResponse.Variant variantDetails) {
@@ -356,6 +354,21 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         }else {
             binding.imageView.setImageList(images, ScaleTypes.CENTER_CROP);
         }
+
+        if (variantDetails.getStock() > 0){
+            binding.stockAvailable.setVisibility(View.VISIBLE);
+            binding.outOfStock.setVisibility(View.GONE);
+        }else {
+            binding.stockAvailable.setVisibility(View.GONE);
+            binding.outOfStock.setVisibility(View.VISIBLE);
+        }
+
+        binding.buyBtn.setOnClickListener(v->{
+            Intent i = new Intent(ProductDetails.this, CheckOut.class);
+            i.putExtra("price", variantDetails.getSelling_price());
+            i.putExtra("weight", details.getWeight());
+            startActivity(i);
+        });
 
         binding.variantName.setText(variantDetails.getVarient_name());
         binding.normalPrice.setPaintFlags(binding.normalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -554,6 +567,40 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         });
     }
 
+    void getSimilarPost(String catId, String subCatId) {
+        LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
+        lnm.setOrientation(RecyclerView.HORIZONTAL);
+        binding.similarRecyclerView.setLayoutManager(lnm);
+        binding.similarRecyclerView.showShimmerAdapter();
+
+        Call<MainResponse> call = apiService.fetchProductsByCategory(0, catId, subCatId);
+        call.enqueue(new Callback<MainResponse>() {
+            @Override
+            public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    MainResponse apiResponse = response.body();
+                    if (apiResponse.getStatus().equalsIgnoreCase("success")) {
+                        if (apiResponse.getData() != null && !apiResponse.getData().isEmpty()) {
+                            FeaturedAdapter simAdapter = new FeaturedAdapter(ProductDetails.this, apiResponse.getData());
+                            binding.similarRecyclerView.setAdapter(simAdapter);
+                            binding.similarLin.setVisibility(View.VISIBLE);
+                        }else {
+                            binding.similarLin.setVisibility(View.GONE);
+                        }
+                    }else {
+                        binding.similarLin.setVisibility(View.GONE);
+                    }
+                }
+                binding.similarRecyclerView.hideShimmerAdapter();
+            }
+
+            @Override
+            public void onFailure(Call<MainResponse> call, Throwable t) {
+                binding.similarLin.setVisibility(View.GONE);
+            }
+        });
+    }
+
     void getPostData() {
         binding.loadMore.setVisibility(View.VISIBLE);
 //        binding.noData.setVisibility(View.GONE); // Hide noData initially
@@ -564,7 +611,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
             binding.recyclerview.showShimmerAdapter();
         }
 
-        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null);
+        Call<MainResponse> call = apiService.fetchProducts(nextPageToken, null, null);
         call.enqueue(new Callback<MainResponse>() {
             @Override
             public void onResponse(Call<MainResponse> call, Response<MainResponse> response) {
@@ -583,12 +630,6 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
                                 binding.recyclerview.setAdapter(adapter);
                                 binding.similarRecyclerView.hideShimmerAdapter();
                                 binding.recyclerview.hideShimmerAdapter();
-
-                                LinearLayoutManager lnm = new LinearLayoutManager(ProductDetails.this);
-                                lnm.setOrientation(RecyclerView.HORIZONTAL);
-                                binding.similarRecyclerView.setLayoutManager(lnm);
-                                FeaturedAdapter adapter1 = new FeaturedAdapter(ProductDetails.this, apiResponse.getData());
-                                binding.similarRecyclerView.setAdapter(adapter1);
                             } else {
                                 if (nextPageToken == 0) {
                                     adapter.setItems(apiResponse.getData()); // replace data
