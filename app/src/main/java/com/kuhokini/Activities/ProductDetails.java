@@ -53,6 +53,7 @@ import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.MainActivity;
 import com.kuhokini.Models.AddressResponse;
 import com.kuhokini.Models.BannerModel;
+import com.kuhokini.Models.OrderRequest;
 import com.kuhokini.R;
 import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityProductDetailsBinding;
@@ -84,6 +85,7 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
     ProductData details;
     ProductsAdapter adapter;
     ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -364,10 +366,8 @@ public class ProductDetails extends AppCompatActivity implements VariantAdapter.
         }
 
         binding.buyBtn.setOnClickListener(v->{
-            Intent i = new Intent(ProductDetails.this, CheckOut.class);
-            i.putExtra("price", variantDetails.getSelling_price());
-            i.putExtra("weight", details.getWeight());
-            startActivity(i);
+            cart.addItem(variantDetails, details.getProduct_name(), variantDetails.getSelling_price(), details.getWeight());
+            startActivity(new Intent(ProductDetails.this, CartActivity.class));
         });
 
         binding.variantName.setText(variantDetails.getVarient_name());

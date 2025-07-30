@@ -16,6 +16,7 @@ import com.kuhokini.APIModels.TagsResponse;
 import com.kuhokini.APIModels.UserResponse;
 import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Models.AddressResponse;
+import com.kuhokini.Models.OrderRequest;
 import com.kuhokini.Notification.NotificationRequest;
 import com.kuhokini.Notification.NotificationRequestToken;
 
@@ -24,6 +25,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -182,6 +184,10 @@ public interface ApiService {
             @Part MultipartBody.Part image
     );
 
+    @Headers("Content-Type: application/json")
+    @POST("apis/post_api.php?action=createOrder")
+    Call<ApiResponse> createOrder(@Body OrderRequest request);
+
     @GET("apis/api.php?action=addCoupon")
     Call<ApiResponse> addCoupon(
             @Query("homeId")@Nullable String homeId,
@@ -208,7 +214,7 @@ public interface ApiService {
             @Query("keyword")@Nullable String keyword
     );
 
-    @GET("testApis/api.php?action=checkCouponCode")
+    @GET("apis/api.php?action=checkCouponCode")
     Call<CouponResponse> checkCouponCode(
             @Query("code") String code
     );

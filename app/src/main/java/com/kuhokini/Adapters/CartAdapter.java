@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
 import com.kuhokini.APIModels.ProductData;
 import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Activities.CartActivity;
@@ -26,12 +27,14 @@ import com.kuhokini.Activities.CheckOut;
 import com.kuhokini.Activities.ProductDetails;
 import com.kuhokini.Helpers.ApiService;
 import com.kuhokini.Helpers.RetrofitClient;
+import com.kuhokini.Models.OrderRequest;
 import com.kuhokini.R;
 import com.kuhokini.TinyCart.CartItem;
 import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ItemCartBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder>{
 
@@ -164,10 +167,26 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             cartListener.onQuantityChanged();
         });
 
-        holder.binding.buyNow.setOnClickListener(v->{
+        holder.binding.buyNow.setOnClickListener(v -> {
+            List<OrderRequest.ProductDetailsModel> details = new ArrayList<>();
+
+            int quantity = cartItem.getQuantity();
+            double totalAmt = product.getSelling_price() * quantity;
+            double totalWeight = product.getWeight() * quantity;
+
+            OrderRequest.ProductDetailsModel productDetails = new OrderRequest.ProductDetailsModel(
+                    product.getProduct_id(),
+                    product.getId(),
+                    cartItem.getName(),
+                    product.getSelling_price(),
+                    quantity
+            );
+            details.add(productDetails);
+
             Intent i = new Intent(activity, CheckOut.class);
-            i.putExtra("totalAmt", (product.getSelling_price()*product.getQuantity()));
-            i.putExtra("totalWeight", (product.getWeight()*product.getQuantity()));
+            i.putExtra("totalAmt", (int) totalAmt);
+            i.putExtra("totalWeight", (int) totalWeight);
+            i.putExtra("product_details", new Gson().toJson(details));
             activity.startActivity(i);
         });
 

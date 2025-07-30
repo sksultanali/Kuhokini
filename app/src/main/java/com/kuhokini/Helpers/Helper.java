@@ -88,6 +88,9 @@ public class Helper {
     public static String FILTER_OPTION;
     public static String dateWiseChange;
     public static int selectedPosition = -1;
+    public static String DISCOUNT;
+    public static int FLAT_DISCOUNT;
+    public static int COUPON_CODE;
     public static ArrayList<String> list = new ArrayList<>();
 
     public static void setWhiteStatusBarWithDarkIcons(Window window, int whiteColorResId) {
@@ -508,6 +511,7 @@ public class Helper {
                     @Override
                     public void onCloseButtonClicked() {}
                 });
+
     }
 
     public static String capitalizeFirstLetter(String input) {

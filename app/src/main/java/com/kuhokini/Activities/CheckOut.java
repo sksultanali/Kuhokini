@@ -38,6 +38,8 @@ import com.google.android.gms.tasks.Task;
 //import com.hishd.tinycart.model.Cart;
 //import com.hishd.tinycart.model.Item;
 //import com.hishd.tinycart.util.TinyCartHelper;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.kuhokini.APIModels.CategoryResponse;
 import com.kuhokini.APIModels.CouponResponse;
 import com.kuhokini.Account.Login;
@@ -49,6 +51,7 @@ import com.kuhokini.Helpers.Precautions;
 import com.kuhokini.Helpers.RetrofitClient;
 import com.kuhokini.Models.AddressResponse;
 import com.kuhokini.Models.CouponModel;
+import com.kuhokini.Models.OrderRequest;
 import com.kuhokini.R;
 import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityCheckOutBinding;
@@ -56,6 +59,7 @@ import com.kuhokini.databinding.AddressDialogBoxBinding;
 import com.kuhokini.databinding.DialogListShowBinding;
 
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,6 +82,7 @@ public class CheckOut extends AppCompatActivity {
     TinyCart cart;
     ProgressDialog progressDialog;
     int price, weight;
+    List<OrderRequest.ProductDetailsModel> productList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,7 @@ public class CheckOut extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Helper.COUPON_CODE = 0;
         binding.goBack.setOnClickListener(v->onBackPressed());
         progressDialog = new ProgressDialog(CheckOut.this);
         progressDialog.setCancelable(false);
@@ -99,8 +105,11 @@ public class CheckOut extends AppCompatActivity {
 
         price = getIntent().getIntExtra("totalAmt", 0);
         weight = getIntent().getIntExtra("totalWeight", 0);
+        String productDetailsJson = getIntent().getStringExtra("product_details");
+        Type listType = new TypeToken<List<OrderRequest.ProductDetailsModel>>() {}.getType();
+        productList = new Gson().fromJson(productDetailsJson, listType);
 
-        Toast.makeText(this, price + " : " +weight, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, price + " : " + weight + " : " + productList.size() + " items", Toast.LENGTH_SHORT).show();
 
         cart = TinyCart.getInstance();
         binding.payNow.setOnClickListener(v->{
@@ -143,8 +152,6 @@ public class CheckOut extends AppCompatActivity {
         });
 
 
-
-
         binding.applyCode.setOnClickListener(v -> {
             String couponCode = binding.ccEdText.getText().toString().trim();
             if (couponCode.isEmpty()) {
@@ -164,6 +171,9 @@ public class CheckOut extends AppCompatActivity {
                             Helper.showOnlyMessage(CheckOut.this, "Failed ",
                                     couponResponse.getMessage());
                         }
+                    }else{
+                        Toast.makeText(CheckOut.this, "Error", Toast.LENGTH_SHORT).show();
+                        Log.d("COUPON", call.request().url().toString());
                     }
                 }
 
@@ -180,12 +190,12 @@ public class CheckOut extends AppCompatActivity {
             public void onClick(View v) {
                 binding.appliedCoupon.setVisibility(View.GONE);
                 binding.PerDis.setText("");
-//                binding.coupons.setTextColor(getColor(R.color.icon_color));
-//                binding.coupons.setText(" | Coupon can be applied");
-//                Helper.COUPON_CODE = 0;
-//                Helper.FLAT_DISCOUNT = 0;
-//                binding.ccEdText.setText("");
-//                setPrice();
+                binding.coupons.setTextColor(getColor(R.color.icon_color));
+                binding.coupons.setText(" | Coupon can be applied");
+                Helper.COUPON_CODE = 0;
+                Helper.FLAT_DISCOUNT = 0;
+                binding.ccEdText.setText("");
+                setPrice();
             }
         });
 
@@ -193,6 +203,7 @@ public class CheckOut extends AppCompatActivity {
 
     private void setPrice() {
         int fPrice = price;
+        int firstPrice = price;
         binding.basePrice.setText(price+"");
 
         if (price >= Precautions.FREE_DELIVERY_AFTER) {
@@ -212,6 +223,15 @@ public class CheckOut extends AppCompatActivity {
             //binding.deliveryPrice.setVisibility(View.VISIBLE);
         }
 
+        //calculating discount price
+        int couponDiscount = 0;
+        if (Helper.COUPON_CODE > 1){
+            couponDiscount = (int) ((firstPrice * Helper.COUPON_CODE)/100);
+        } else if (Helper.COUPON_CODE == -1) {
+            couponDiscount = Helper.FLAT_DISCOUNT;
+        }
+        binding.coupon.setText(String.valueOf(couponDiscount));
+
         if (Precautions.CASH_PAYMENT) {
             fPrice += Precautions.CASH_PAYMENT_CHARGES;
             binding.codAmountText.setText(Precautions.CASH_PAYMENT_CHARGES+"");
@@ -225,21 +245,21 @@ public class CheckOut extends AppCompatActivity {
     }
 
     private void applyCoupon(CouponModel coupon) {
-//        if ("Percentage".equalsIgnoreCase(coupon.getType())) {
-//            Helper.FLAT_DISCOUNT = 0;
-//            Helper.COUPON_CODE = coupon.getPercentageOrAmount();
-//            binding.coupons.setText(" | " + Helper.COUPON_CODE + "% Coupon code applied");
-//            binding.PerDis.setText(Helper.COUPON_CODE + "% OFF applied");
-//        } else {
-//            Helper.COUPON_CODE = -1;
-//            Helper.FLAT_DISCOUNT = coupon.getPercentageOrAmount();
-//            binding.coupons.setText(" | ₹" + Helper.FLAT_DISCOUNT + "/- Flat Off");
-//            binding.PerDis.setText("₹" + Helper.FLAT_DISCOUNT + "/- Flat Off");
-//        }
-//
-//        binding.appliedCoupon.setVisibility(View.VISIBLE);
-//        binding.coupons.setTextColor(getColor(R.color.blue_purple));
-//        setPrice();
+        if ("Percentage".equalsIgnoreCase(coupon.getType())) {
+            Helper.FLAT_DISCOUNT = 0;
+            Helper.COUPON_CODE = coupon.getPercentageOrAmount();
+            binding.coupons.setText(" | " + Helper.COUPON_CODE + "% Coupon code applied");
+            binding.PerDis.setText(Helper.COUPON_CODE + "% OFF applied");
+        } else {
+            Helper.COUPON_CODE = -1;
+            Helper.FLAT_DISCOUNT = coupon.getPercentageOrAmount();
+            binding.coupons.setText(" | ₹" + Helper.FLAT_DISCOUNT + "/- Flat Off");
+            binding.PerDis.setText("₹" + Helper.FLAT_DISCOUNT + "/- Flat Off");
+        }
+
+        binding.appliedCoupon.setVisibility(View.VISIBLE);
+        binding.coupons.setTextColor(getColor(R.color.blue_purple));
+        setPrice();
     }
 
     private void loadAddresses() {

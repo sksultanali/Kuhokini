@@ -828,7 +828,7 @@
 <!--                        android:layout_marginEnd="@dimen/_5mdp"-->
 <!--                        android:textSize="@dimen/_12font_mdp"/>-->
                     <TextView
-                        android:id="@+id/CouponNormal"
+                        android:id="@+id/coupons"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="No Coupon Applied"

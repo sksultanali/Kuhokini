@@ -23,14 +23,17 @@ import android.widget.Toast;
 //import com.hishd.tinycart.model.Cart;
 //import com.hishd.tinycart.model.Item;
 //import com.hishd.tinycart.util.TinyCartHelper;
+import com.google.gson.Gson;
 import com.kuhokini.APIModels.VariantResponse;
 import com.kuhokini.Adapters.CartAdapter;
+import com.kuhokini.Models.OrderRequest;
 import com.kuhokini.R;
 import com.kuhokini.TinyCart.CartItem;
 import com.kuhokini.TinyCart.TinyCart;
 import com.kuhokini.databinding.ActivityCartBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class CartActivity extends AppCompatActivity implements CartAdapter.CartListener{
@@ -111,19 +114,33 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.CartL
         // Initial total update
         binding.subtotal.setText(String.format("₹%.2f", cart.getTotalPrice()));
 
-        // Continue to checkout button
         binding.continueBtn.setOnClickListener(view -> {
-            if (!cart.getItems().isEmpty()) {
+            List<OrderRequest.ProductDetailsModel> details = new ArrayList<>();
+
+            // Iterate over the cart items
+            for (CartItem item : cart.getItems().values()) {
+                VariantResponse.Variant variant = (VariantResponse.Variant) item.getItem();
+                OrderRequest.ProductDetailsModel productDetails = new OrderRequest.ProductDetailsModel(
+                        variant.getProduct_id(), // You'll need this getter in CartItem
+                        variant.getId(),        // If this exists
+                        item.getName(),
+                        (int) item.getPrice(),
+                        item.getQuantity()
+                );
+                details.add(productDetails);
+            }
+
+            if (!details.isEmpty()) {
                 Intent i = new Intent(CartActivity.this, CheckOut.class);
-                int totalAmount = (int) Math.round(cart.getTotalPrice());
-                int totalWeight = (int) Math.round(cart.getTotalWeight());
-                i.putExtra("totalAmt", totalAmount);
-                i.putExtra("totalWeight", totalWeight);
+                i.putExtra("totalAmt", (int) Math.round(cart.getTotalPrice()));
+                i.putExtra("totalWeight", (int) Math.round(cart.getTotalWeight()));
+                i.putExtra("product_details", new Gson().toJson(details)); // or use Serializable/Parcelable
                 startActivity(i);
             } else {
-                Toast.makeText(activity, "Cart is empty!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartActivity.this, "Cart is empty!", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
